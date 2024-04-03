@@ -1,4 +1,4 @@
-export const FormInput = ({register, error, name, placeholder, ...otherProperties}) => {
+const FormInput = ({register, error, name, placeholder, ...otherProperties}) => {
   return (
     <div className="mt-8 content-center dark:text-dark_text_1 space-y-1">
         <label htmlFor={name} className="text-sm font-bold tracking-wide">{placeholder}</label>
@@ -8,3 +8,5 @@ export const FormInput = ({register, error, name, placeholder, ...otherPropertie
 
   );
 };
+
+export default FormInput;

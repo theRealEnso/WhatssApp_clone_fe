@@ -33,3 +33,12 @@ export const registerFormSchema = yup.object().shape({
     .max(64, "Status cannot exceed 64 characters")
 
 });
+
+export const loginFormSchema = yup.object().shape({
+    email: yup.string()
+    .required("An email address is required")
+    .email("Please provide a valid email address"),
+
+    password: yup.string()
+    .required("Please enter your password")
+});

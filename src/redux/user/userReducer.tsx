@@ -7,11 +7,9 @@ type User = {
     firstName: string;
     lastName: string;
     email: string;
-    password: string;
-    confirmPassword: string;
     picture?: string;
     status?: string;
-    token: string;
+    access_token: string;
 };
 
 type UserState = {
@@ -27,11 +25,9 @@ const USER_INITIAL_STATE: UserState = {
     firstName: "",
     lastName: "",
     email: "",
-    password: "",
-    confirmPassword: "",
     picture: "",
     status: "",
-    token: "",
+    access_token: "",
    } 
 }
 
@@ -46,11 +42,9 @@ export const userReducer = createSlice({
                 firstName: "",
                 lastName: "",
                 email: "",
-                password: "",
-                confirmPassword: "",
                 picture: "",
                 status: "",
-                token: "",
+                access_token: "",
             }
         }
     },
@@ -59,13 +53,26 @@ export const userReducer = createSlice({
         builder
         .addCase(registerUser.pending, (state, action) => {
             state.status = "loading"
+            state.error = "";
         })
         .addCase(registerUser.fulfilled, (state, action) => {
             state.status = "succeeded";
             state.error = "";
-            state.user = action.payload.user; // server sends back a response that contains a user object
+            state.user = action.payload.user; // server sends back a response object  that contains a nested user object
         })
         .addCase(registerUser.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.payload;
+        })
+        .addCase(loginUser.pending, (state, action) => {
+            state.status = "loading";
+        })
+        .addCase(loginUser.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.error = "";
+            state.user = action.payload.user; // server sends back a response object that contains a nested user object
+        })
+        .addCase(loginUser.rejected, (state, action) => {
             state.status = "failed";
             state.error = action.payload;
         })
@@ -76,10 +83,23 @@ export const {logout} = userReducer.actions;
 
 export const registerUser = createAsyncThunk("auth/register", async (payloadData, {rejectWithValue}) => {
     try {
+        // const response = await axios.post(`${AUTH_ENDPOINT}/register`, payloadData);
+        // console.log(response);
         const {data} = await axios.post(`${AUTH_ENDPOINT}/register`, payloadData);
         return data;
     } catch(error) {
         return rejectWithValue(error.response.data.error.message);
+    }
+});
+
+export const loginUser = createAsyncThunk("auth/login", async (payloadData, {rejectWithValue}) => {
+    try {
+        // const response = await axios.post(`${AUTH_ENDPOINT}/login`, payloadData);
+        // console.log(response);
+        const {data} = await axios.post(`${AUTH_ENDPOINT}/login`, payloadData)
+        return data;
+    } catch(error) {
+        rejectWithValue(error);
     }
 });
 

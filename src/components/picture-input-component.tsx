@@ -1,22 +1,22 @@
 import { useRef, useState } from "react";
 
-export const PictureInput = ({readableImage, setReadableImage, setImage}) => {
+const PictureInput = ({readablePicture, setReadablePicture, setPicture}) => {
     const [error, setError] = useState("");
     const inputRef = useRef();
 
     const handleImageSelection = (event) => {
-        // const selectedImageData = event.target.files;
+        // const selectedPictureData = event.target.files;
         // console.log(pictureData);
-        const selectedImageData = event.target.files[0];
+        const selectedPictureData = event.target.files[0];
 
-        if(selectedImageData.type !== "image/jpeg" && selectedImageData.type !== "image/png" && selectedImageData.type !== "image/webp"){
-            setError(`${selectedImageData.name} format is not supported! Please use jpeg or png files only`);
+        if(selectedPictureData.type !== "image/jpeg" && selectedPictureData.type !== "image/png" && selectedPictureData.type !== "image/webp"){
+            setError(`${selectedPictureData.name} format is not supported! Please use jpeg or png files only`);
             return;
-        } else if (selectedImageData.size > 1024 * 1024 * 5) {
-            setError(`${selectedImageData.size} exceeds 5 MB file size limit`);
+        } else if (selectedPictureData.size > 1024 * 1024 * 5) {
+            setError(`${selectedPictureData.size} exceeds 5 MB file size limit`);
             return;
         } else {
-            setImage(selectedImageData)
+            setPicture(selectedPictureData)
             setError("")
         }
 
@@ -27,8 +27,8 @@ export const PictureInput = ({readableImage, setReadableImage, setImage}) => {
         //With data URLs, the location of the original file doesn't matter once the file's data is embedded into the URL. Data URLs encode the actual data of the file directly into the URL itself, so they are self-contained and don't rely on the original file location. Therefore, even if the original file is moved or deleted, the embedded data in the data URL remains intact. This is one of the advantages of using data URLs for embedding resources like images, videos, or audio files. It makes the embedding process more self-contained and independent of the file's location or availability on a server. However, it's important to note that embedding large files using data URLs can increase the size of the HTML or CSS file, potentially affecting load times and performance.
 
         const reader = new FileReader(); // create a new file reader object, which provides methods to read contents of files
-        reader.readAsDataURL(selectedImageData); // readAsDataURL is a method on FileReader. Reads content of the specified file and creates a data URL representing the file's data
-        reader.onload = (event) => setReadableImage(event.target.result); //onload event fires right after when the data is successfully read and the data URL is created => set data URL in state variable
+        reader.readAsDataURL(selectedPictureData); // readAsDataURL is a method on FileReader. Reads content of the specified file and creates a data URL representing the file's data
+        reader.onload = (event) => setReadablePicture(event.target.result); //onload event fires right after when the data is successfully read and the data URL is created => set data URL in state variable
 
     };
 
@@ -36,7 +36,7 @@ export const PictureInput = ({readableImage, setReadableImage, setImage}) => {
 
     const handleImageChange = () => {
         setImage("");
-        setReadableImage("");
+        setReadablePicture("");
         toggleImageUpload();
     }
 
@@ -44,9 +44,9 @@ export const PictureInput = ({readableImage, setReadableImage, setImage}) => {
     <div className="mt-8 content-center dark:text-dark_text_1 space-y-1">
         <label className="text-sm font-bold tracking-wide">Picture (optional)</label>
 
-        {readableImage ? 
+        {readablePicture ? 
             (<div>
-                <img src={readableImage} alt="profile picture" className="w-20 h-20 object-cover rounded-full"></img>
+                <img src={readablePicture} alt="profile picture" className="w-20 h-20 object-cover rounded-full"></img>
                 <div className="w-40 mt-2 py-1 dark:bg-dark_bg_3 rounded-md text-xs flex items-center justify-center cursor-pointer" onClick={handleImageChange}>Change Picture</div>
             </div>
             )
@@ -67,3 +67,5 @@ export const PictureInput = ({readableImage, setReadableImage, setImage}) => {
     </div>
   );
 };
+
+export default PictureInput;
