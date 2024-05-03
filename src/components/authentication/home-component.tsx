@@ -1,7 +1,12 @@
+import { Sidebar } from "../sidebar/sidebar-component";
+
 const Home = () => {
     return (
-        <div>
-            <h1>I am the home component!</h1>
+        <div className="min-h-screen dark:bg-dark_bg_1">
+            <div>
+                <Sidebar></Sidebar>
+            </div>
+
         </div>
     );
 };

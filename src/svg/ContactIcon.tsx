@@ -5,15 +5,15 @@ import { ClassName } from "../App";
 const ContactIcon: FC<ClassName> = () => {
   return (
     <svg
-      viewBox="0 0 53 53"
-      height="53"
-      width="53"
+      viewBox="0 0 60 60"
+      height="60"
+      width="60"
       preserveAspectRatio="xMidYMid meet"
       className=""
       version="1.1"
       x="0px"
       y="0px"
-      enable-background="new 0 0 53 53"
+      enable-background="new 0 0 60 60"
     >
       <g>
         <defs>

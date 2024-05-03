@@ -15,7 +15,7 @@ const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const currentUserStatus = useSelector(selectCurrentUserStatus);
-    const currentUser = useSelector(selectCurrentUser)
+    // const currentUser = useSelector(selectCurrentUser)
 
     const {register, handleSubmit, formState: {errors}, reset} = useForm({
         resolver: yupResolver(loginFormSchema),
