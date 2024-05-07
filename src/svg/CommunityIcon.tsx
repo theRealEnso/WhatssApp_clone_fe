@@ -8,9 +8,9 @@ const CommunityIcon: FC<ClassName> = ({ className }) => {
   const [isHovered, setIsHovered] = useState(false)
   return (
     <svg
-      viewBox="0 0 28 28"
-      height={40}
-      width={40}
+      viewBox="0 0 28 28 "
+      height={28}
+      width={28}
       preserveAspectRatio="xMidYMid meet"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

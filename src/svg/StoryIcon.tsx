@@ -36,8 +36,8 @@ const StoryIcon: FC<ActiveClass> = ({ className, active }) => {
     return (
       <svg
         viewBox="0 0 24 24"
-        height={35}
-        width={35}
+        height={24}
+        width={24}
         preserveAspectRatio="xMidYMid meet"
         version="1.1"
         id="ee51d023-7db6-4950-baf7-c34874b80976"

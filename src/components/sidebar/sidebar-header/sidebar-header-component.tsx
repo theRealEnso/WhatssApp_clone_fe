@@ -31,14 +31,14 @@ export const SidebarHeader = () => {
     }, [isMenuOpen])
 
   return (
-    <div className="h-[60px] w-full flex items-center justify-between dark:bg-dark_bg_2">
+    <div className="h-[70px] w-full flex items-center justify-between dark:bg-dark_bg_2 px-[16px]">
         {/* profile picture */}
-        <div className="">
-            <img src={picture} alt={`${currentUser.firstName} ${currentUser.lastName}'s profile picture`} className="object-cover h-[45px] w-full px-2"></img>
+        <div className="flex items-center justify-center h-[50px] w-[50px] rounded-full overflow-hidden">
+            <img src={picture} alt={`${currentUser.firstName} ${currentUser.lastName}'s profile picture`} className="object-cover rounded-full w-full h-full"></img>
         </div>
 
         {/* icons */}
-        <div className="flex relative">
+        <div className="relative">
             <ul className="flex align-center justify-center items-center px-4 list-none">
                 <li className="px-2 cursor-pointer">
                     <CommunityIcon className="dark:fill-dark_svg_1"></CommunityIcon>
