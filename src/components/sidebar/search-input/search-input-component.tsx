@@ -1,10 +1,18 @@
 import { useState } from "react";
 
 import axios from "axios";
+
 import { SearchIcon, ReturnIcon, FilterIcon } from "../../../svg";
 
-export const SearchInput = () => {
+export const SearchInput = ({searchResults, setSearchResults}) => {
   const [returnIcon, setReturnIcon] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+
+  const handleInputChange = (event) => {
+    const typedInput = event.target.value;
+    setSearchInput(typedInput);
+    console.log(searchInput);
+  }
 
   const showReturnIcon = () => setReturnIcon(true);
   const hideReturnIcon = () => setReturnIcon(false);
@@ -12,12 +20,12 @@ export const SearchInput = () => {
     <div className="w-full flex items-center justify-center">
         <div className="h-[50px] flex items-center dark:bg-dark_bg_2 rounded-lg">
           {
-            returnIcon 
+            returnIcon || searchInput.length > 0 
               ? <div className="flex items-center justify-center px-2 rotateAnimation cursor-pointer">
                   <ReturnIcon className="dark:fill-green_1 h-full w-full"></ReturnIcon>
                 </div>
               : <div className="flex items-center justify-center px-2">
-                  <SearchIcon className="dark:fill-dark_svg_2 dark:bg_dark_bg_2 h-full w-full"></SearchIcon>
+                  <SearchIcon className="dark:fill-dark_svg_2 dark:bg_dark_bg_2"></SearchIcon>
                 </div>
           }
 
@@ -27,6 +35,9 @@ export const SearchInput = () => {
                 className="h-[40px] rounded-lg px-2 dark:bg-dark_bg_2 outline-none text-white"
                 onFocus={showReturnIcon}
                 onBlur={hideReturnIcon}
+                name="searchInput"
+                value={searchInput}
+                onChange={handleInputChange}
                 >
             </input>
         </div>

@@ -73,7 +73,7 @@ export const logoutUser = createAsyncThunk("auth/logout", async (payloadData, {r
     }
 })
 
-export const userReducer = createSlice({
+export const userSlice = createSlice({
     name: "users",
     initialState: USER_INITIAL_STATE,
     reducers: {
@@ -141,6 +141,6 @@ export const userReducer = createSlice({
     },
 });
 
-export const {logout} = userReducer.actions;
+export const {logout} = userSlice.actions;
 
-export default userReducer.reducer;
+export const userReducer = userSlice.reducer;

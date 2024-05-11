@@ -10,6 +10,12 @@ body {
 /* define custom styled components using tailwind */
 @layer components {
   /* define custom classes here prefaced with @apply */
+  
+  .convos {
+    height: calc(100vh - 220px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 }
 
 /* Animations */

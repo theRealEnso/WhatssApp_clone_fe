@@ -33,8 +33,8 @@ export const SidebarHeader = () => {
   return (
     <div className="h-[70px] w-full flex items-center justify-between dark:bg-dark_bg_2 px-[16px]">
         {/* profile picture */}
-        <div className="flex items-center justify-center h-[50px] w-[50px] rounded-full overflow-hidden">
-            <img src={picture} alt={`${currentUser.firstName} ${currentUser.lastName}'s profile picture`} className="object-cover rounded-full w-full h-full"></img>
+        <div className="flex items-center justify-center overflow-hidden">
+            <img src={picture} alt={`${currentUser.firstName} ${currentUser.lastName}'s profile picture`} className="h-[50px] w-[50px] rounded-full object-cover"></img>
         </div>
 
         {/* icons */}
