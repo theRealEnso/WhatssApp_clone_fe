@@ -1,26 +1,44 @@
 import moment from "moment";
 import { truncate } from "../../../utilities/truncateString";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../../redux/user/userSelector";
+
+import { openConversation } from "../../../redux/chat/chatReducer";
 
 import { timestampHandler } from "../../../utilities/date";
 
 export const Conversation = ({conversation}) => {
-    console.log(conversation);
+    // console.log(conversation);
+    const dispatch = useDispatch();
 
     const currentUser = useSelector(selectCurrentUser);
     // console.log(currentUser);
     const currentUserId = currentUser._id;
+    const {access_token} = currentUser;
 
     // need to filter through the users array and extract the data of the other user (ie user that the currently signed in user is communicating with)
     const usersArray = conversation.users;
     const recipientUserData = usersArray.filter((user) => user._id !== currentUserId);
     const recipientUser = recipientUserData[0];
-    console.log(recipientUser);
+    const recipient_id = recipientUser._id;
+    // console.log(recipientUser);
+
+    const values = {
+        access_token,
+        recipient_id
+    }
+
+    //already have list of conversations in the state. We need to somehow write code that, when user clicks on a conversation in the list, that conversation gets added to the activeConversation state in order to displayed in the chat window.
+    // Since we already have the entire conversations array in the state, maybe we can try filtering through that array and extract the conversation being focused
+    //Can we filter out using the conversation id? or the recipient id? Our backend api endpoint is expecting to receive a recipient_id in the body... so if this is the case, we already have the recipient user data in this component
+    const openConvo = async () => {
+        await dispatch(openConversation(values))
+    }
+
   return (
-    <div className="flex mt-8 outline-0 p-2 cursor-pointer rounded-lg hover:bg-dark_bg_5 hover:border-2 hover:border-green_1 transition-all duration-75">
-        <div className="flex items-center w-14 mr-4">
+    <div className="flex flex-auto mt-8 outline-0 p-2 cursor-pointer rounded-lg hover:bg-dark_bg_5 hover:border-2 hover:border-green_1 shadow-inner shadow-2xl shadow-dark_bg_5 focus:ring-2 focus:ring-green_1 active:ring-2 active:ring-green_1 active:transition-shadow duration-75" onClick={openConvo}>
+        <div className="flex flex-none items-center w-14 mr-4">
             <img src={recipientUser.picture} className="w-[45px] h-[45px] rounded-full object-cover"></img>
         </div>
 
@@ -47,3 +65,8 @@ export const Conversation = ({conversation}) => {
     </div>
   );
 };
+
+{/* <div className="flex flex-auto mt-8 outline-0 p-2 cursor-pointer rounded-lg hover:bg-dark_bg_5 hover:border-2 hover:border-green_1 shadow-inner shadow-2xl shadow-dark_bg_5 focus:ring-2 focus:ring-green_1 active:ring-2 active:ring-green_1 active:transition-shadow duration-75" onClick={openConvo}>
+    <!-- Your existing content here -->
+</div> */}
+

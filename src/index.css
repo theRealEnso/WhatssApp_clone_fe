@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
   margin: 0;
 }
@@ -10,12 +21,18 @@ body {
 /* define custom styled components using tailwind */
 @layer components {
   /* define custom classes here prefaced with @apply */
-  
+
   .convos {
     height: calc(100vh - 220px);
     overflow-y: auto;
     overflow-x: hidden;
-}
+  }
+
+  .message-window {
+    height: calc(100vh - 155px);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 }
 
 /* Animations */
@@ -34,14 +51,17 @@ body {
   animation: rotate 0.3s forwards;
 }
 
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/*----Custom scrollbar----*/
+/*--Width--*/
+.scrollbar::-webkit-scrollbar {
+  width: 3px;
+}
+/*--Track--*/
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+/*--Thumb--*/
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #444e54;
 }
 

@@ -61,8 +61,10 @@ export const timestampHandler = (time) => {
         const numberOfDays = timeElapsed.split(" ")[0];
         if(Number(numberOfDays) < 7){
             return timeByDayOfWeek;
+        } else if (Number(numberOfDays) === 7) {
+            return "1 week ago";
         } else {
-            return datedTimestamp
+            return datedTimestamp;
         }
     }
 }

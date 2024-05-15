@@ -17,8 +17,8 @@ export const SearchInput = ({searchResults, setSearchResults}) => {
   const showReturnIcon = () => setReturnIcon(true);
   const hideReturnIcon = () => setReturnIcon(false);
   return (
-    <div className="w-full flex items-center justify-center">
-        <div className="h-[50px] flex items-center dark:bg-dark_bg_2 rounded-lg">
+    <div className="w-full flex flex-auto items-center justify-center mt-2">
+        <div className="h-[50px] flex flex-auto items-center dark:bg-dark_bg_2 rounded-lg">
           {
             returnIcon || searchInput.length > 0 
               ? <div className="flex items-center justify-center px-2 rotateAnimation cursor-pointer">

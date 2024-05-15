@@ -3,6 +3,7 @@ import {forwardRef} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import { selectCurrentUser } from "../../../redux/user/userSelector";
 import { logoutUser } from "../../../redux/user/userReducer";
+import { clearActiveConversation } from "../../../redux/chat/chatReducer";
 
 export const Menu = forwardRef(({isMenuOpen, setIsMenuOpen}, ref) => {
     const dispatch = useDispatch();
@@ -11,6 +12,7 @@ export const Menu = forwardRef(({isMenuOpen, setIsMenuOpen}, ref) => {
     const {access_token} = currentUser;
 
     const signOut = async () => {
+        await dispatch(clearActiveConversation());
         await dispatch(logoutUser({access_token}));
     };
 

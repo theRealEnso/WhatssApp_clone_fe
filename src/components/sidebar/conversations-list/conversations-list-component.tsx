@@ -6,7 +6,7 @@ export const ConversationsList = () => {
     const conversations = useSelector(selectAllUserConversations);
 
   return (
-    <div className="convos">
+    <div className="convos scrollbar">
         {
             conversations && conversations.map((conversation => (
                 <Conversation key={conversation._id} conversation={conversation}></Conversation>
