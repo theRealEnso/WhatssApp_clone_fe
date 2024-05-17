@@ -29,8 +29,8 @@ const Home = () => {
     },[currentUser, access_token, dispatch])
 
     return (
-        <div className="w-full h-screen dark:bg-dark_bg_1 flex flex overflow-hidden items-center justify-center">
-            <div className="w-[1700px] h-full min-h-screen flex items-center justify-center p-20">
+        <div className="w-full h-screen dark:bg-dark_bg_1 flex items-center justify-center overflow-hidden">
+            <div className="w-[1700px] h-full min-h-screen flex">
                 <Sidebar></Sidebar>
 
                 {

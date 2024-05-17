@@ -1,9 +1,10 @@
 // import React from "react";
-import {FC} from 'react';
+import {FC, useState} from 'react';
 
 import { ClassName } from "../App";
 
 const ReturnIcon: FC<ClassName> = ({ className }) => {
+  const [isHovered, setIsHovered] = useState(false);
   return (
     <svg
       viewBox="0 0 24 24"
@@ -15,6 +16,10 @@ const ReturnIcon: FC<ClassName> = ({ className }) => {
       y="0px"
       enableBackground="new 0 0 24 24"
       xmlSpace="preserve"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      stroke={isHovered ? "#3fe8a4" : "#008069"}
+      style={{transition: "stroke 0.2s ease-in-out"}}
     >
       <path
         className={className}

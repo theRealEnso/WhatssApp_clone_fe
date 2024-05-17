@@ -7,25 +7,35 @@ import { SidebarHeader } from "./sidebar-header/sidebar-header-component"
 import { Notifications } from "./notifications/notifications-component";
 import { SearchInput } from "./search-input/search-input-component";
 import { ConversationsList } from "./conversations-list/conversations-list-component";
+import { SearchList } from "./search-list/search-list-component";
 
 export const Sidebar = () => {
   const [searchResults, setSearchResults] = useState([]);
+  console.log(searchResults);
 
   const conversations = useSelector(selectAllUserConversations);
   console.log(conversations);
   
   return (
-    <div className="w-[30%] min-h-full flex flex-none border-r-2 border-dark_bg_3">
-        <div className="flex flex-col flex-none w-full">
-            <SidebarHeader></SidebarHeader>
+    <div className="w-[30%] min-h-full select-none border-r-2 border-dark_bg_3">
+        <SidebarHeader></SidebarHeader>
 
-            <Notifications></Notifications>
+        <Notifications></Notifications>
 
-            <SearchInput searchResults={searchResults} setSearchResults={setSearchResults}></SearchInput>
+        <SearchInput searchResults={searchResults} setSearchResults={setSearchResults}></SearchInput>
 
-            <ConversationsList></ConversationsList>
+        {
+          searchResults && searchResults.length > 0 ? 
+          (
+            <SearchList searchResults={searchResults} setSearchResults={setSearchResults}></SearchList>
+          )
 
-        </div>
-    </div>
+          :
+            (
+            <ConversationsList searchResults={searchResults} setSearchResults={setSearchResults}></ConversationsList>
+            )
+        }
+
+      </div>
   );
 };
