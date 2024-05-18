@@ -1,16 +1,22 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 
 import { ClassName } from "../App";
 
 const EmojiIcon: FC<ClassName> = ({ className }) => {
+  const [isHovered, setIsHovered] = useState(false);
   return (
     <svg
-      width="28"
-      height="28"
+      width="36"
+      height="36"
       x="0"
       y="0"
       className="ekdr8vow dhq51u3o"
       viewBox="0 0 24 24"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      stroke={isHovered ? "#3fe8a4" : "#fff"}
+      style={{transition: "stroke 0.2s ease-in-out"}}
+      strokeWidth={1}
     >
       <path
         className={className}

@@ -8,8 +8,8 @@ import { openConversation } from "../../../redux/chat/chatReducer";
 
 import { timestampHandler } from "../../../utilities/date";
 
-export const Conversation = ({conversation}) => {
-    // console.log(conversation);
+export const Conversation = ({convo}) => {
+    // console.log(convo);
     const dispatch = useDispatch();
 
     const currentUser = useSelector(selectCurrentUser);
@@ -18,7 +18,7 @@ export const Conversation = ({conversation}) => {
     const {access_token} = currentUser;
 
     // need to filter through the users array and extract the data of the other user (ie user that the currently signed in user is communicating with)
-    const usersArray = conversation.users;
+    const usersArray = convo.users;
     const recipientUserData = usersArray.filter((user) => user._id !== currentUserId);
     const recipientUser = recipientUserData[0];
     const recipient_id = recipientUser._id;
@@ -30,8 +30,7 @@ export const Conversation = ({conversation}) => {
     }
 
     //already have list of conversations in the state. We need to somehow write code that, when user clicks on a conversation in the list, that conversation gets added to the activeConversation state in order to displayed in the chat window.
-    // Since we already have the entire conversations array in the state, maybe we can try filtering through that array and extract the conversation being focused
-    //Can we filter out using the conversation id? or the recipient id? Our backend api endpoint is expecting to receive a recipient_id in the body... so if this is the case, we already have the recipient user data in this component
+    //Our backend api endpoint is expecting to receive a recipient_id in the body... so if this is the case, we already have the recipient user data in this component...
     const openConvo = async () => {
         await dispatch(openConversation(values))
     }
@@ -46,17 +45,17 @@ export const Conversation = ({conversation}) => {
             <div className="flex justify-between">
                 <h1 className="text-md font-bold text-white tracking-wide">{`${recipientUser.firstName} ${recipientUser.lastName}`}</h1>
                 {
-                    conversation.latestMessage ? <span className="text-dark_text_2">{timestampHandler(conversation.latestMessage.createdAt)}</span> : null
+                    convo.latestMessage ? <span className="text-dark_text_2">{timestampHandler(convo.latestMessage.createdAt)}</span> : null
                 }
             </div>
 
 
             {
-                conversation.latestMessage ? 
+                convo.latestMessage ? 
                 (
                     <div className="flex flex-col">
-                        <span className="overflow-hidden text-dark_text_4">{truncate(conversation.latestMessage.message, 25)}</span>
-                        <span className="text-dark_text_2">{moment(conversation.latestMessage.createdAt).fromNow()}</span>
+                        <span className="overflow-hidden text-dark_text_4">{truncate(convo.latestMessage.message, 25)}</span>
+                        <span className="text-dark_text_2">{moment(convo.latestMessage.createdAt).fromNow()}</span>
                     </div>
                 ) 
                 : null

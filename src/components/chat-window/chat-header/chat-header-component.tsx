@@ -15,8 +15,8 @@ export const ChatHeader = ({recipientUser}) => {
             </div>
         </div>
 
-        <div className="px-6 w-[100px]">
-            <ul className="flex justify-between cursor-pointer w-full">
+        <div className="mr-8">
+            <ul className="flex justify-between space-x-4 cursor-pointer w-full">
                 <li><SearchLargeIcon></SearchLargeIcon></li>
                 <li><DotsIcon></DotsIcon></li>
             </ul>

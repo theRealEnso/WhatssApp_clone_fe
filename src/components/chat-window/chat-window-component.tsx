@@ -8,6 +8,7 @@ import { getAllConversationMessages } from '../../redux/chat/chatReducer';
 
 import { ChatHeader } from "./chat-header/chat-header-component";
 import { ChatMessages } from './chat-messages/chat-messages-component';
+import { MessageActions } from './message-actions/message-actions-component';
 
 export const ChatWindow = () => {
     const dispatch = useDispatch();
@@ -44,6 +45,10 @@ export const ChatWindow = () => {
 
         <div className="flex-1">
             <ChatMessages></ChatMessages>
+        </div>
+
+        <div>
+            <MessageActions></MessageActions>
         </div>
         
     </div>

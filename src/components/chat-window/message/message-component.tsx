@@ -22,13 +22,15 @@ export const Message = ({message}) => {
         {
             message.sender._id === currentUser_id ? 
             (
-                <div className="w-full flex flex-col justify-end ml-auto space-x-3 max-w-xs mr-6">
-                    <span className="ml-auto mt-4">You :</span>
-                    <div className="relative h-full w-fit bg-green_3 rounded-lg px-3 py-1 mt-4">
-                        <TriangleIcon className="absolute rotate-[60deg] right-[-10px] top-[-5px] fill-green_3"></TriangleIcon>
-                        <p className="float-left h-full">{message.message}</p>
-                        <br></br>
-                        <p className="float-right">{timeStampInHoursAndMin}</p>
+                <div className="w-full flex justify-end ml-auto space-x-3 max-w-xs mr-6">
+                    <div className="flex flex-col">
+                        <span className="mt-4 ml-auto">You :</span>
+                        <div className="relative flex flex-col h-full w-fit bg-green_3 rounded-lg px-3 py-1 mt-4">
+                            <TriangleIcon className="absolute rotate-[60deg] right-[-10px] top-[-5px] fill-green_3"></TriangleIcon>
+                            <p className="float-left h-full pr-4">{message.message}</p>
+                            <br></br>
+                            <p className="flex justify-end mb-2">{timeStampInHoursAndMin}</p>
+                        </div>
                     </div>
                 </div>
             )
