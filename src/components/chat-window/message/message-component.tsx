@@ -25,11 +25,10 @@ export const Message = ({message}) => {
                 <div className="w-full flex justify-end ml-auto space-x-3 max-w-xs mr-6">
                     <div className="flex flex-col">
                         <span className="mt-4 ml-auto">You :</span>
-                        <div className="relative flex flex-col h-full w-fit bg-green_3 rounded-lg px-3 py-1 mt-4">
+                        <div className="relative flex flex-col h-full w-fit bg-green_3 rounded-lg px-3 py-1 mt-4 right-[50px]">
                             <TriangleIcon className="absolute rotate-[60deg] right-[-10px] top-[-5px] fill-green_3"></TriangleIcon>
-                            <p className="float-left h-full pr-4">{message.message}</p>
-                            <br></br>
-                            <p className="flex justify-end mb-2">{timeStampInHoursAndMin}</p>
+                            <span className="float-left h-full pr-4 py-2">{message.message}</span>
+                            <span className="flex justify-end mb-2">{timeStampInHoursAndMin}</span>
                         </div>
                     </div>
                 </div>
@@ -38,11 +37,10 @@ export const Message = ({message}) => {
             : (
                 <div className="w-full flex flex-col space-x-3 max-w-xs ml-6">
                     <span className="">{message.sender.firstName} :</span>
-                    <div className="relative h-full w-fit bg-dark_bg_2 rounded-lg px-3 py-1 my-4">
+                    <div className="relative flex flex-col h-full w-fit bg-dark_bg_2 rounded-lg px-3 py-1 my-4 left-[50px] space-y-2">
                         <TriangleIcon className="absolute top-[-5px] left-[-8px] rotate-[60deg] fill-dark_bg_2"></TriangleIcon>
-                        <p className="float-left h-full">{message.message}</p>
-                        <br></br>
-                        <p className="float-right pr-2 mt-2">{timeStampInHoursAndMin}</p>
+                        <span className="flex">{message.message}</span>
+                        <span className="flex justify-end">{timeStampInHoursAndMin}</span>
                     </div>
                 </div>
             )
