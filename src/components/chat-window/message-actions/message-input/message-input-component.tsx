@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectActiveConversation } from "../../../../redux/chat/chatSelector";
 import { selectCurrentUser } from "../../../../redux/user/userSelector";
 import { sendMessage } from "../../../../redux/chat/chatReducer";
 
-export const MessageInput = () => {
-    const [textMessage, setTextMessage] = useState("");
+export const MessageInput = ({textMessage, setTextMessage}) => {
 
     const dispatch = useDispatch();
 

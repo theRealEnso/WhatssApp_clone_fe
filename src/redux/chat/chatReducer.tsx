@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import axios from "axios";
 
+import { timestampHandler } from "../../utilities/date";
+
 const CONVERSATIONS_ENDPOINT = `${import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT}/conversations`;
 const MESSAGES_ENDPOINT = `${import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT}/messages`
 
@@ -144,6 +146,32 @@ export const chatSlice = createSlice({
             state.status = "succeeded";
             state.error = "";
             state.messages = [...state.messages, action.payload];
+
+            //the conversation that received the latest message needs to be displayed at the top on the front end
+            //how to get the conversation that received the latest message? Well, we know that if we send a message, then every message has additional data attached to it, one being the conversation object that is attached to the message as was defined in the schema
+            //we can perhaps try creating a new array by filtering out the active conversation array, leaving an array with all the other conversations.
+            //then, we can create an updated conversation with the necessary updates, and then unshift that to pop it onto the beginning of the array
+
+
+            //get the latest message
+            const newestMessage = action.payload;
+
+            //from the latest or newest message, grap the conversation object
+            const conversationToUpdate = newestMessage.conversation;
+
+            //create a new conversation object, spreading over the previous values of the conversation, and update the latest message field with the newest message. Use this to unshift into the new array
+            const updatedConversation = {
+                ...conversationToUpdate,
+                latestMessage: newestMessage
+            }
+
+            const currentConvos = [...state.conversations];
+            let updatedConvos = currentConvos.filter((conversation) => conversation._id !== updatedConversation._id);
+            updatedConvos.unshift(updatedConversation);
+
+            state.conversations = [...updatedConvos];
+
+
         })
         .addCase(sendMessage.rejected, (state, action) => {
             state.status = "failed";

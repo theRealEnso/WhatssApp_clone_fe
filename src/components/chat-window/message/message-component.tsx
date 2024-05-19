@@ -5,8 +5,6 @@ import { selectCurrentUser } from "../../../redux/user/userSelector";
 
 import TriangleIcon from "../../../svg/TriangleIcon";
 
-import { timestampHandler } from "../../../utilities/date";
-
 export const Message = ({message}) => {
     console.log(message)
 
