@@ -3,7 +3,7 @@ import { selectActiveConversation } from "../../../../redux/chat/chatSelector";
 import { selectCurrentUser } from "../../../../redux/user/userSelector";
 import { sendMessage } from "../../../../redux/chat/chatReducer";
 
-export const MessageInput = ({textMessage, setTextMessage}) => {
+export const MessageInput = ({textMessage, setTextMessage, inputTextRef}) => {
 
     const dispatch = useDispatch();
 
@@ -35,7 +35,7 @@ export const MessageInput = ({textMessage, setTextMessage}) => {
         }
     }
 
-    console.log(textMessage);
+    // console.log(textMessage);
   return (
     <div className="flex flex-1 items-center justify-center align-center">
         <input 
@@ -45,6 +45,7 @@ export const MessageInput = ({textMessage, setTextMessage}) => {
         value={textMessage}
         onChange={handleMessageInputChange}
         onKeyDown={sendTextMessage}
+        ref={inputTextRef}
         ></input>
     </div>
   );
