@@ -6,7 +6,7 @@ import { selectCurrentUser } from "../../../redux/user/userSelector";
 import TriangleIcon from "../../../svg/TriangleIcon";
 
 export const Message = ({message}) => {
-    console.log(message)
+    // console.log(message)
 
     const currentUser = useSelector(selectCurrentUser);
     const currentUser_id = currentUser._id;

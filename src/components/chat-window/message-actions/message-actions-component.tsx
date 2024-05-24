@@ -17,6 +17,7 @@ export const MessageActions = () => {
     const [textMessage, setTextMessage] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
+    const [sendIcon, setSendIcon] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -36,8 +37,11 @@ export const MessageActions = () => {
     };
 
     const sendTextMessage = async () => {
+        console.log("sendTextMessage function was called!");
+        setSendIcon(true);
         await dispatch(sendMessage(values));
         setTextMessage("");
+        setSendIcon(false);
     };
 
     useEffect(() => {
@@ -72,7 +76,7 @@ export const MessageActions = () => {
 
         <div className="flex items-center px-2 mr-2 cursor-pointer">
             {
-                status === "loading" 
+                status === "loading" && sendIcon 
                 ? <span><ClipLoader size={30} color={"#3fe8a4"}></ClipLoader></span>
                 : <span onClick={sendTextMessage}><SendIcon></SendIcon></span>
             }  

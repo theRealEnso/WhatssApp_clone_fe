@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import axios from "axios";
 
-import { timestampHandler } from "../../utilities/date";
-
 const CONVERSATIONS_ENDPOINT = `${import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT}/conversations`;
 const MESSAGES_ENDPOINT = `${import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT}/messages`
 
@@ -22,7 +20,7 @@ const CHAT_INITIAL_STATE: ChatState = {
     name: "",
     conversations: [],
     activeConversation: {},
-    messages: []
+    messages: [],
 };
 
 export const getAllUserConversations = createAsyncThunk("conversations/all", async (access_token, {rejectWithValue}) => {
