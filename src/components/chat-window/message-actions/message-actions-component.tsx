@@ -6,16 +6,17 @@ import { selectActiveConversation } from "../../../redux/chat/chatSelector";
 import { selectCurrentUser } from "../../../redux/user/userSelector";
 import { sendMessage } from "../../../redux/chat/chatReducer";
 
-import {AttachmentIcon} from "../../../svg";
 import {SendIcon} from "../../../svg";
 
 import { MessageInput } from "./message-input/message-input-component";
 import { ClipLoader } from "react-spinners";
 import { Emoji } from "./emoji-picker/emoji-component";
+import { Attachments } from "./attachments/attachments-component";
 
 export const MessageActions = () => {
     const [textMessage, setTextMessage] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -59,13 +60,13 @@ export const MessageActions = () => {
 
     <div className="w-full h-[85px] dark:bg-dark_bg_3 flex">
         <div className="flex items-center mx-6 space-x-6">
-            <Emoji ref={emojiPickerRef} inputTextRef={inputTextRef} textMessage={textMessage} setTextMessage={setTextMessage} showEmojiPicker={showEmojiPicker} setShowEmojiPicker={setShowEmojiPicker}></Emoji>
-            <span className="cursor-pointer"><AttachmentIcon></AttachmentIcon></span>
+            <Emoji ref={emojiPickerRef} inputTextRef={inputTextRef} textMessage={textMessage} setTextMessage={setTextMessage} showEmojiPicker={showEmojiPicker} setShowEmojiPicker={setShowEmojiPicker} setShowAttachmentMenu={setShowAttachmentMenu}></Emoji>
+
+            <Attachments showAttachmentMenu={showAttachmentMenu} setShowAttachmentMenu={setShowAttachmentMenu} setShowEmojiPicker={setShowEmojiPicker}></Attachments>
 
             <div className="flex flex-1">
                 {/* message input */}
-                <MessageInput textMessage={textMessage} setTextMessage={setTextMessage} inputTextRef={inputTextRef}></MessageInput>
-
+                <MessageInput textMessage={textMessage} setTextMessage={setTextMessage} inputTextRef={inputTextRef} ></MessageInput>
             </div>
         </div>
 

@@ -1,14 +1,17 @@
-import { useState, forwardRef} from "react";
+import { useState, useEffect, forwardRef} from "react";
 
 import { EmojiIcon } from "../../../../svg";
 import {CloseIcon} from "../../../../svg";
 import EmojiPicker from "emoji-picker-react";
 
-export const Emoji = forwardRef(({textMessage, setTextMessage, showEmojiPicker, setShowEmojiPicker, inputTextRef}, ref) => {
+export const Emoji = forwardRef(({textMessage, setTextMessage, showEmojiPicker, setShowEmojiPicker, inputTextRef, setShowAttachmentMenu}, ref) => {
+
+  const [cursorPosition, setCursorPosition] = useState(0);
 
   const toggleEmojiPicker = (event) => {
     event.stopPropagation();
     setShowEmojiPicker(!showEmojiPicker);
+    setShowAttachmentMenu(false);
   };
 
   const handleEmojiSelection = (emojiData, event) => {
@@ -18,7 +21,7 @@ export const Emoji = forwardRef(({textMessage, setTextMessage, showEmojiPicker, 
     if(inputRef) {
       inputRef.focus(); // focus the input first so that the cursor is active
 
-      // grab everything starting from the begginning of the string up to where the cursor is currently positioned-- selectionStart grabs the index of where the cursor is positioned if nothing is highlighted
+      // grab everything starting from the beginning of the string up to where the cursor is currently positioned-- selectionStart grabs the index of where the cursor is positioned if nothing is highlighted
       const startOfText = textMessage.substring(0, inputRef.selectionStart);
 
       // grab everything after where the cursor is positioned--selectionEnd also grabs the index of where the cursor is positionedf nothing is highlighted. Substring will just get everything to the end of the string if no index is supplied
@@ -26,15 +29,19 @@ export const Emoji = forwardRef(({textMessage, setTextMessage, showEmojiPicker, 
   
       const newText = startOfText + emoji + endOfText;
       setTextMessage(newText);
-  
-      // Move the cursor to the end of the inserted emoji
-      const cursorPosition = startOfText.length + emoji.length;
-      setTimeout(() => {
-        inputRef.setSelectionRange(cursorPosition, cursorPosition);
-      }, 0);
+
+      const cursorPositionIndex = startOfText.length + emoji.length;
+      setCursorPosition(cursorPositionIndex);
     }
 
   };
+
+  // Move the position of the input cursor right after the inserted emoji
+  useEffect(() => {
+
+    inputTextRef.current.setSelectionRange(cursorPosition, cursorPosition); 
+
+  }, [cursorPosition, inputTextRef]);
 
   return (
     <div className="flex items-center cursor-pointer">
