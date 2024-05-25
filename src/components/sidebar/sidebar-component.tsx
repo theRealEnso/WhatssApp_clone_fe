@@ -17,7 +17,7 @@ export const Sidebar = () => {
   console.log(conversations);
   
   return (
-    <div className="w-[30%] min-h-full select-none border-r-2 border-dark_bg_3">
+    <div className="max-w-[30%] flex0030 h-full select-none border-r-2 border-dark_bg_3">
         <SidebarHeader></SidebarHeader>
 
         <Notifications></Notifications>

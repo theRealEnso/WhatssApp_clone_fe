@@ -3,6 +3,7 @@ import { truncate } from "../../../utilities/truncateString";
 
 import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../../redux/user/userSelector";
+import { selectActiveConversation } from "../../../redux/chat/chatSelector";
 
 import { openConversation } from "../../../redux/chat/chatReducer";
 
@@ -16,6 +17,8 @@ export const Conversation = ({convo}) => {
     // console.log(currentUser);
     const currentUserId = currentUser._id;
     const {access_token} = currentUser;
+
+    const activeConversation = useSelector(selectActiveConversation);
 
     // need to filter through the users array and extract the data of the other user (ie user that the currently signed in user is communicating with)
     const usersArray = convo.users;
@@ -36,7 +39,7 @@ export const Conversation = ({convo}) => {
     }
 
   return (
-    <div className="flex flex-auto mt-8 outline-0 p-2 cursor-pointer rounded-lg hover:bg-dark_bg_5 hover:border-2 hover:border-green_1 shadow-inner shadow-2xl shadow-dark_bg_5 focus:ring-2 focus:ring-green_1 active:ring-2 active:ring-green_1 active:transition-shadow duration-75" onClick={openConvo}>
+    <div className={`flex flex-auto mt-8 outline-0 p-2 cursor-pointer rounded-lg hover:bg-dark_bg_2 hover:border-2 hover:border-green_1 shadow-inner shadow-2xl shadow-dark_bg_5 focus:ring-2 focus:ring-green_1 active:ring-2 active:ring-green_1 active:transition-shadow duration-75 ${convo._id === activeConversation._id ? "dark:bg-dark_hover_1" : ""}`} onClick={openConvo}>
         <div className="flex flex-none items-center w-14 mr-4">
             <img src={recipientUser.picture} className="w-[45px] h-[45px] rounded-full object-cover"></img>
         </div>

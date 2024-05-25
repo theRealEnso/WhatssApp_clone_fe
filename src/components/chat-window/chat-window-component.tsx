@@ -40,10 +40,12 @@ export const ChatWindow = () => {
     },[activeConversation, currentUser_id, access_token, conversation_id, dispatch])
 
   return (
-    <div className="min-h-screen w-full text-white flex flex-col flex-auto" >
-        <ChatHeader recipientUser={recipientUser}></ChatHeader>
-
-        <div className="flex-1">
+    <div className="h-fit text-white flex flex-col">
+        <div>
+            <ChatHeader recipientUser={recipientUser}></ChatHeader>
+        </div>
+        
+        <div>
             <ChatMessages></ChatMessages>
         </div>
 

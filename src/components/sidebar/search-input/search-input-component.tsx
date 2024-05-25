@@ -45,36 +45,40 @@ export const SearchInput = ({searchResults, setSearchResults}) => {
 
   const hideReturnIcon = () => setReturnIcon(false);
   return (
-    <div className="w-full flex flex-auto items-center justify-center mt-2">
-        <div className="h-[50px] flex flex-auto items-center dark:bg-dark_bg_2 rounded-lg">
-          {
-            returnIcon || searchInput.length > 0 
-              ? <div className="flex items-center justify-center px-2 rotateAnimation cursor-pointer" onClick={clearSearchResults}>
-                  <ReturnIcon className="dark:fill-green_1 h-full w-full"></ReturnIcon>
-                </div>
-              : <div className="flex items-center justify-center px-2">
-                  <SearchIcon className="dark:fill-dark_svg_2 dark:bg_dark_bg_2"></SearchIcon>
-                </div>
-          }
+    <div className="w-full flex items-center justify-center mt-2">
+        <div className="h-[50px] w-full flex items-center dark:bg-dark_bg_2 rounded-lg">
+          <div className="flex flex-initial">
+            {
+              returnIcon || searchInput.length > 0 
+                ? <div className="flex items-center justify-center px-2 rotateAnimation cursor-pointer" onClick={clearSearchResults}>
+                    <ReturnIcon className="dark:fill-green_1 h-full w-full"></ReturnIcon>
+                  </div>
+                : <div className="flex items-center justify-center px-2">
+                    <SearchIcon className="dark:fill-dark_svg_2 dark:bg_dark_bg_2"></SearchIcon>
+                  </div>
+            }
+          </div>
 
-            <input 
-                type="text" 
-                placeholder="Search or start a new chat..." 
-                className="h-[40px] rounded-lg px-2 dark:bg-dark_bg_2 outline-none text-white flex-1"
-                onFocus={showReturnIcon}
-                onBlur={searchResults.length === 0 ? hideReturnIcon : showReturnIcon}
-                name="searchInput"
-                value={searchInput}
-                onChange={handleInputChange}
-                onKeyDown={handleUserSearch}
-                >
-            </input>
+            <div className="flex shrink">
+              <input 
+                  type="text" 
+                  placeholder="Search or start a new chat..." 
+                  className="h-[40px] rounded-lg px-2 dark:bg-dark_bg_2 outline-none text-white"
+                  onFocus={showReturnIcon}
+                  onBlur={searchResults.length === 0 ? hideReturnIcon : showReturnIcon}
+                  name="searchInput"
+                  value={searchInput}
+                  onChange={handleInputChange}
+                  onKeyDown={handleUserSearch}
+                  >
+              </input>
+            </div>
+
+            <div className="p-4 flex shrink">
+              <FilterIcon className="dark:fill-dark_svg_2"></FilterIcon>
+            </div>
+            
         </div>
-        
-        <div className="p-4">
-            <FilterIcon className="dark:fill-dark_svg_2"></FilterIcon>
-        </div>
-       
     </div>
   );
 };

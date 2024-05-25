@@ -62,7 +62,7 @@ export const MessageActions = () => {
 
   return (
 
-    <div className="w-full h-[85px] dark:bg-dark_bg_3 flex">
+    <div className="w-full h-[80px] dark:bg-dark_bg_3 flex">
         <div className="flex items-center mx-6 space-x-6">
             <Emoji ref={emojiPickerRef} inputTextRef={inputTextRef} textMessage={textMessage} setTextMessage={setTextMessage} showEmojiPicker={showEmojiPicker} setShowEmojiPicker={setShowEmojiPicker} setShowAttachmentMenu={setShowAttachmentMenu}></Emoji>
 

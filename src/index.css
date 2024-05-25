@@ -22,6 +22,15 @@ body {
 @layer components {
   /* define custom classes here prefaced with @apply */
 
+  .flex0030 {
+    flex: 0 0 30%;
+  }
+
+  .container {
+    width: calc(100% - 38px);
+    max-width: 1600px;
+  }
+
   .convos {
     height: calc(100vh - 220px);
     overflow-y: auto;

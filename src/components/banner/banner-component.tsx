@@ -2,7 +2,7 @@ import { Logo } from "../../svg";
 
 export const Banner = () => {
   return (
-    <div className="min-h-screen w-full text-white dark:bg-dark_bg_2 flex items-center justify-center border-b-8 border-green_2">
+    <div className="w-full h-full text-white dark:bg-dark_bg_2 flex items-center justify-center shrink overflow-hidden border-b-8 border-green_2">
         <div className="flex flex-col items-center justify-center">
             <Logo></Logo>
             <h1 className="text-5xl dark:text-green_1 tracking-wide my-6">WhatsApp</h1>
