@@ -2,7 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { openConversation } from "../../../redux/chat/chatReducer";
 import { selectCurrentUser } from "../../../redux/user/userSelector";
 
-export const Contacts = ({result, setSearchResults}) => {
+import SocketContext from "../../../context/socket-context";
+
+const Contacts = ({result, setSearchResults, socket}) => {
     console.log(result);
 
     const dispatch = useDispatch();
@@ -18,8 +20,9 @@ export const Contacts = ({result, setSearchResults}) => {
     }
 
     const openConvo = async () => {
-        await dispatch(openConversation(values));
+        const newConvo = await dispatch(openConversation(values));
         await setSearchResults([]);
+        socket.emit("join conversation room", newConvo.payload._id);
     }
 
   return (
@@ -37,3 +40,11 @@ export const Contacts = ({result, setSearchResults}) => {
     </div>
   );
 };
+
+const ContactWithSocket = (props) => (
+    <SocketContext.Consumer>
+        {(socket) => <Contacts {...props} socket={socket}></Contacts>}
+    </SocketContext.Consumer>
+);
+
+export default ContactWithSocket;

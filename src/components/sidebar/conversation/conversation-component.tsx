@@ -5,11 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../../redux/user/userSelector";
 import { selectActiveConversation } from "../../../redux/chat/chatSelector";
 
+import SocketContext from "../../../context/socket-context";
+
 import { openConversation } from "../../../redux/chat/chatReducer";
 
 import { timestampHandler } from "../../../utilities/date";
 
-export const Conversation = ({convo}) => {
+const Conversation = ({convo, socket}) => {
     // console.log(convo);
     const dispatch = useDispatch();
 
@@ -35,7 +37,9 @@ export const Conversation = ({convo}) => {
     //already have list of conversations in the state. We need to somehow write code that, when user clicks on a conversation in the list, that conversation gets added to the activeConversation state in order to displayed in the chat window.
     //Our backend api endpoint is expecting to receive a recipient_id in the body... so if this is the case, we already have the recipient user data in this component...
     const openConvo = async () => {
-        await dispatch(openConversation(values))
+        const openedConvo = await dispatch(openConversation(values));
+        // console.log(openedConvo);
+        socket.emit("join conversation room", openedConvo.payload._id);
     }
 
   return (
@@ -68,7 +72,12 @@ export const Conversation = ({convo}) => {
   );
 };
 
-{/* <div className="flex flex-auto mt-8 outline-0 p-2 cursor-pointer rounded-lg hover:bg-dark_bg_5 hover:border-2 hover:border-green_1 shadow-inner shadow-2xl shadow-dark_bg_5 focus:ring-2 focus:ring-green_1 active:ring-2 active:ring-green_1 active:transition-shadow duration-75" onClick={openConvo}>
-    <!-- Your existing content here -->
-</div> */}
+const ConversationWithSocket = (props) => (
+    <SocketContext.Consumer>
+        {(socket) => <Conversation {...props} socket={socket}></Conversation>}
+    </SocketContext.Consumer>
+);
+
+export default ConversationWithSocket;
+
 

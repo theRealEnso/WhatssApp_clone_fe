@@ -1,4 +1,4 @@
-import { Contacts } from "../contacts/contacts-component"
+import Contacts from "../contacts/contacts-component"
 
 export const SearchList = ({searchResults, setSearchResults}) => {
   return (

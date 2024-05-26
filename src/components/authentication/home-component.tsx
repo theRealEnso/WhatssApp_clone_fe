@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import SocketContext from "../../context/socket-context";
 
 import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../redux/user/userSelector";
@@ -9,7 +10,8 @@ import { Sidebar } from "../sidebar/sidebar-component";
 import { Banner } from "../banner/banner-component";
 import { ChatWindow } from "../chat-window/chat-window-component";
 
-const Home = () => {
+const Home = ({socket}) => {
+    // console.log(socket);
     const dispatch = useDispatch();
 
     const currentUser = useSelector(selectCurrentUser);
@@ -18,15 +20,28 @@ const Home = () => {
 
     const activeConversation = useSelector(selectActiveConversation);
 
+    //join the user id to socket io instance on the server
+    useEffect(() => {
+        socket.emit("join", currentUser._id)
+    }, [currentUser, socket]);
+
+    // listen to messages received from socket on backend
+    useEffect(() => {
+        socket.on("message received", (message) => {
+            console.log("message received from backend: ", message)
+        })
+    },[socket])
+
+    //fetch conversation data from api
     useEffect(() => {
         // const values = {
         //     access_token: access_token,
         // };
 
-        if(currentUser) {
+        if(access_token) {
             dispatch(getAllUserConversations(access_token));
         }
-    },[currentUser, access_token, dispatch])
+    },[access_token, dispatch])
 
     return (
         <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center align-center overflow-hidden">
@@ -43,4 +58,12 @@ const Home = () => {
     );
 };
 
-export default Home;
+const HomeWithSocket = (props) => (
+    // when `SocketContext.Consumer is used, the function inside the consumer receives the `value` prop that was provided in the `SocketContext.Provider`, i.e. the socket instance
+    <SocketContext.Consumer>
+        {/* receive the socket instance, then pass this as props to the Home component */}
+        {(socket) => <Home {...props} socket={socket}></Home>}
+    </SocketContext.Consumer>
+)
+
+export default HomeWithSocket;

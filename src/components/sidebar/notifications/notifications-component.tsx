@@ -19,7 +19,7 @@ export const Notifications = () => {
                 </span>
             </div>
 
-            <div className="flex flex-auto">
+            <div className="flex flex-auto justify-end">
                 <CloseIcon className="cursor-pointer dark:fill-dark_svg_2"></CloseIcon>
             </div>
         </div>

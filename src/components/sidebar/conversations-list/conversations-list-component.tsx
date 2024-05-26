@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
 import { selectAllUserConversations } from "../../../redux/chat/chatSelector";
 import { selectActiveConversation } from "../../../redux/chat/chatSelector";
-import { Conversation } from "../conversation/conversation-component";
+
+import Conversation  from "../conversation/conversation-component"; // reminder that `exporting default <component name>` does not work with {} brackets when importing for use
 
 export const ConversationsList = () => {
     const conversations = useSelector(selectAllUserConversations);

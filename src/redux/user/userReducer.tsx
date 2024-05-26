@@ -48,11 +48,13 @@ export const loginUser = createAsyncThunk("auth/login", async (payloadData, {rej
     try {
         // const response = await axios.post(`${AUTH_ENDPOINT}/login`, payloadData);
         // console.log(response);
-        const {data} = await axios.post(`${AUTH_ENDPOINT}/login`, payloadData)
+        const {data} = await axios.post(`${AUTH_ENDPOINT}/login`, payloadData);
+
         return data;
+
     } catch(error) {
         console.log(error)
-        rejectWithValue(error.response.data.error.message);
+        return rejectWithValue(error.response.data.error.message);
     }
 });
 
@@ -69,7 +71,7 @@ export const logoutUser = createAsyncThunk("auth/logout", async (payloadData, {r
         return data;
 
     } catch(error){
-        rejectWithValue(error.response.data.error.message)
+        return rejectWithValue(error.response.data.error.message)
     }
 })
 

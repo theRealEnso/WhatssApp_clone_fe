@@ -73,11 +73,10 @@ export const SearchInput = ({searchResults, setSearchResults}) => {
                   >
               </input>
             </div>
+        </div>
 
-            <div className="p-4 flex shrink">
+        <div className="p-4 flex shrink justify-end cursor-pointer">
               <FilterIcon className="dark:fill-dark_svg_2"></FilterIcon>
-            </div>
-            
         </div>
     </div>
   );

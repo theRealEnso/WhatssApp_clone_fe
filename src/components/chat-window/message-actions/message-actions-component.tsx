@@ -6,6 +6,8 @@ import { selectActiveConversation } from "../../../redux/chat/chatSelector";
 import { selectCurrentUser } from "../../../redux/user/userSelector";
 import { sendMessage } from "../../../redux/chat/chatReducer";
 
+import SocketContext from "../../../context/socket-context";
+
 import {SendIcon} from "../../../svg";
 
 import { MessageInput } from "./message-input/message-input-component";
@@ -13,7 +15,7 @@ import { ClipLoader } from "react-spinners";
 import { Emoji } from "./emoji-picker/emoji-component";
 import { Attachments } from "./attachments/attachments-component";
 
-export const MessageActions = () => {
+const MessageActions = ({socket}) => {
     const [textMessage, setTextMessage] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
@@ -37,11 +39,12 @@ export const MessageActions = () => {
     };
 
     const sendTextMessage = async () => {
-        console.log("sendTextMessage function was called!");
+        // console.log("sendTextMessage function was called!");
         setSendIcon(true);
-        await dispatch(sendMessage(values));
+        const newMessage = await dispatch(sendMessage(values));
         setTextMessage("");
         setSendIcon(false);
+        socket.emit("newly sent message", newMessage.payload);
     };
 
     useEffect(() => {
@@ -85,3 +88,11 @@ export const MessageActions = () => {
     </div>
   );
 };
+
+const MessageActionsWithSocket = (props) => (
+    <SocketContext.Consumer>
+        {(socket) => <MessageActions {...props} socket={socket}></MessageActions>}
+    </SocketContext.Consumer>
+);
+
+export default MessageActionsWithSocket;

@@ -31,7 +31,7 @@ export const SidebarHeader = () => {
     }, [isMenuOpen])
 
   return (
-    <div className="h-[70px] w-full flex items-center justify-between dark:bg-dark_bg_2 px-[16px] overflow-hidden">
+    <div className="h-[70px] w-full flex items-center justify-between dark:bg-dark_bg_2 px-[16px]">
         {/* profile picture */}
         <div className="flex flex-none items-center justify-center">
             <img src={picture} alt={`${currentUser.firstName} ${currentUser.lastName}'s profile picture`} className="h-[50px] w-[50px] rounded-full object-cover"></img>
