@@ -5,7 +5,6 @@ import { selectCurrentUser } from '../../redux/user/userSelector';
 import { selectActiveConversation } from '../../redux/chat/chatSelector';
 import { getAllConversationMessages } from '../../redux/chat/chatReducer';
 
-
 import { ChatHeader } from "./chat-header/chat-header-component";
 import { ChatMessages } from './chat-messages/chat-messages-component';
 import MessageActions from './message-actions/message-actions-component';
@@ -19,7 +18,7 @@ export const ChatWindow = () => {
     const currentUser_id = currentUser._id;
 
     const activeConversation = useSelector(selectActiveConversation);
-    console.log(activeConversation);
+    // console.log(activeConversation);
     const conversation_id = activeConversation._id;
 
 
@@ -37,7 +36,7 @@ export const ChatWindow = () => {
             dispatch(getAllConversationMessages({access_token, conversation_id}))
         }
         
-    },[activeConversation, currentUser_id, access_token, conversation_id, dispatch])
+    },[activeConversation, currentUser_id, access_token, conversation_id, dispatch]);
 
   return (
     <div className="h-fit text-white flex flex-col">

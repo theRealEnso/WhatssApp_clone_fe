@@ -35,8 +35,8 @@ export const Message = ({message}) => {
             : (
                 <div className="w-full flex flex-col space-x-3 max-w-xs ml-6">
                     <span className="">{message.sender.firstName} :</span>
-                    <div className="relative flex flex-col h-full w-fit bg-dark_bg_2 rounded-lg px-3 py-1 my-4 left-[50px] space-y-2">
-                        <TriangleIcon className="absolute top-[-5px] left-[-8px] rotate-[60deg] fill-dark_bg_2"></TriangleIcon>
+                    <div className="relative flex flex-col h-full w-fit bg-dark_bg_5 rounded-lg px-3 py-1 my-4 left-[50px] space-y-2">
+                        <TriangleIcon className="absolute top-[-5px] left-[-8px] rotate-[60deg] fill-dark_bg_5"></TriangleIcon>
                         <span className="flex">{message.message}</span>
                         <span className="flex justify-end">{timeStampInHoursAndMin}</span>
                     </div>

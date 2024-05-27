@@ -11,7 +11,7 @@ import { SearchList } from "./search-list/search-list-component";
 
 export const Sidebar = () => {
   const [searchResults, setSearchResults] = useState([]);
-  console.log(searchResults);
+  // console.log(searchResults);
 
   const conversations = useSelector(selectAllUserConversations);
   console.log(conversations);

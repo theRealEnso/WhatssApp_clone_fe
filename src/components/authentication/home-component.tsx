@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import SocketContext from "../../context/socket-context";
 
 import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../redux/user/userSelector";
 import { selectActiveConversation } from "../../redux/chat/chatSelector";
-import { getAllUserConversations } from "../../redux/chat/chatReducer";
+import { getAllUserConversations, updateMessages} from "../../redux/chat/chatReducer";
 
 import { Sidebar } from "../sidebar/sidebar-component";
 import { Banner } from "../banner/banner-component";
@@ -20,17 +20,12 @@ const Home = ({socket}) => {
 
     const activeConversation = useSelector(selectActiveConversation);
 
+    const socketListenerAdded = useRef(false);
+
     //join the user id to socket io instance on the server
     useEffect(() => {
         socket.emit("join", currentUser._id)
     }, [currentUser, socket]);
-
-    // listen to messages received from socket on backend
-    useEffect(() => {
-        socket.on("message received", (message) => {
-            console.log("message received from backend: ", message)
-        })
-    },[socket])
 
     //fetch conversation data from api
     useEffect(() => {
@@ -41,7 +36,27 @@ const Home = ({socket}) => {
         if(access_token) {
             dispatch(getAllUserConversations(access_token));
         }
-    },[access_token, dispatch])
+    },[access_token, dispatch]);
+
+    //listen on received message
+    useEffect(() => {
+        //define a handleMessage function that receives the message emitted from the server, logs the message, and dispatches the desired action with the message
+        const handleMessage = (message) => {
+            console.log("message received ----->", message);
+            dispatch(updateMessages(message));
+        };
+
+        //register event listener only once when the component mounts, does not get added multiple times during any re-renders (unless dependencies change)
+        //even if component re-renders due to strict mode, this only runs once
+        socket.on("received message", handleMessage);
+
+        // Cleanup / remove the `socket.on` listener that listens for `received message` emitted by the server on component unmount or when socket changes
+        //ensures that when the component re-renders due to strict mode, the previous event listener is removed before the new one is added, preventing accumulating of listeners. So, component mounts => listener is registered => strict mode causes react to re-render this component => on re-render, the component first unmounts + removes the registered event listener, then mounts again and registers the listener again
+        return () => {
+            //socket.off(eventName, listener) => removes the specified listener from the listener array for the event named `eventName`
+            socket.off("received message", handleMessage);
+        };
+    }, [socket, dispatch]);
 
     return (
         <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center align-center overflow-hidden">
@@ -51,7 +66,7 @@ const Home = ({socket}) => {
                 {
                     activeConversation && Object.keys(activeConversation).length > 0 ? <ChatWindow></ChatWindow> : <Banner></Banner>
                 }
-                
+
             </div>
 
         </div>

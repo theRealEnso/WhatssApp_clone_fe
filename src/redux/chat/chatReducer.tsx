@@ -73,7 +73,7 @@ export const getAllConversationMessages = createAsyncThunk("messages/all", async
 });
 
 export const sendMessage = createAsyncThunk("messages/send", async (payloadData, {rejectWithValue}) => {
-    const {access_token, message, conversation_id} = payloadData
+    const {access_token, message, conversation_id} = payloadData;
     try {
         const {data} = await axios.post(MESSAGES_ENDPOINT, {conversation_id, message}, {
             headers: {
@@ -93,6 +93,13 @@ export const chatSlice = createSlice({
         clearActiveConversation: (state) => {
             state.activeConversation = {};
         },
+
+        updateMessages: (state, action) => {
+            const convo = state.activeConversation;
+            if(convo._id === action.payload.conversation._id){
+                state.messages = [...state.messages, action.payload];
+            } 
+        }
     },
 
     extraReducers(builder) {
@@ -130,7 +137,7 @@ export const chatSlice = createSlice({
         .addCase(getAllConversationMessages.fulfilled, (state, action) => {
             state.status = "succeeded";
             state.error = "";
-            state.messages = [...action.payload];
+            state.messages = action.payload;
         })
         .addCase(getAllConversationMessages.rejected, (state, action) => {
             state.status = "failed";
@@ -179,6 +186,6 @@ export const chatSlice = createSlice({
 
 });
 
-export const {clearActiveConversation} = chatSlice.actions;
+export const {clearActiveConversation, updateMessages} = chatSlice.actions;
 
 export const chatReducer = chatSlice.reducer;

@@ -1,39 +1,50 @@
-import { useDispatch, useSelector } from "react-redux";
-import { selectActiveConversation } from "../../../../redux/chat/chatSelector";
-import { selectCurrentUser } from "../../../../redux/user/userSelector";
-import { sendMessage } from "../../../../redux/chat/chatReducer";
+// import { useDispatch, useSelector } from "react-redux";
+// import { selectActiveConversation } from "../../../../redux/chat/chatSelector";
+// import { selectCurrentUser } from "../../../../redux/user/userSelector";
+// import { sendMessage } from "../../../../redux/chat/chatReducer";
 
-export const MessageInput = ({textMessage, setTextMessage, inputTextRef}) => {
+// import SocketContext from "../../../../context/socket-context";
 
-    const dispatch = useDispatch();
+export const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessage}) => {
 
-    const currentUser = useSelector(selectCurrentUser)
-    const {access_token} = currentUser;
+    // const dispatch = useDispatch();
 
-    const activeConversation = useSelector(selectActiveConversation);
-    const conversation_id = activeConversation._id;
+    // const currentUser = useSelector(selectCurrentUser)
+    // const {access_token} = currentUser;
 
-    const values = {
-        access_token,
-        conversation_id,
-        message: textMessage,
-    };
+    // const activeConversation = useSelector(selectActiveConversation);
+    // const conversation_id = activeConversation._id;
+
+    // const values = {
+    //     access_token,
+    //     conversation_id,
+    //     message: textMessage,
+    // };
 
     const handleMessageInputChange = (event) => {
         const typedInput = event.target.value;
         setTextMessage(typedInput);
     }
 
-    const sendTextMessage = async (event) => {
-        try {
-            if(textMessage && event.key === "Enter"){
-                await dispatch(sendMessage(values));
-                setTextMessage("");
-            }
-        } catch(error){
-            console.log(error);
+    const sendTxtMsg = (event) => {
+        if(textMessage && event.key === "Enter"){
+            event.preventDefault();
+            sendTextMessage();
         }
-    }
+    };
+
+    // const sendTextMessage = async (event) => {
+    //     try {
+    //         if(textMessage && event.key === "Enter"){
+    //             const sentMessage = await dispatch(sendMessage(values));
+    //             // console.log(sentMessage);
+    //             setTextMessage("");
+    //             socket.emit("newly sent message", sentMessage.payload);
+    //         }
+    //     } catch(error){
+    //         console.log(error);
+    //     }
+    // }
 
     // console.log(textMessage);
   return (
@@ -44,9 +55,17 @@ export const MessageInput = ({textMessage, setTextMessage, inputTextRef}) => {
         className="dark:bg-dark_bg_5 h-[50px] w-[1100px] flex p-4 rounded-lg"
         value={textMessage}
         onChange={handleMessageInputChange}
-        onKeyDown={sendTextMessage}
+        onKeyDown={sendTxtMsg}
         ref={inputTextRef}
         ></input>
     </div>
   );
 };
+
+// const MessageInputWithSocket = (props) => (
+//     <SocketContext.Consumer>
+//         {(socket) => <MessageInput {...props} socket={socket}></MessageInput>}
+//     </SocketContext.Consumer>
+// );
+
+// export default MessageInputWithSocket;

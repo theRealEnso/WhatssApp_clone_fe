@@ -39,12 +39,11 @@ const MessageActions = ({socket}) => {
     };
 
     const sendTextMessage = async () => {
-        // console.log("sendTextMessage function was called!");
         setSendIcon(true);
         const newMessage = await dispatch(sendMessage(values));
+        socket.emit("newly sent message", newMessage.payload);
         setTextMessage("");
         setSendIcon(false);
-        socket.emit("newly sent message", newMessage.payload);
     };
 
     useEffect(() => {
@@ -73,7 +72,7 @@ const MessageActions = ({socket}) => {
 
             <div className="flex flex-1">
                 {/* message input */}
-                <MessageInput textMessage={textMessage} setTextMessage={setTextMessage} inputTextRef={inputTextRef} ></MessageInput>
+                <MessageInput textMessage={textMessage} setTextMessage={setTextMessage} inputTextRef={inputTextRef} sendTextMessage={sendTextMessage} ></MessageInput>
             </div>
         </div>
 
