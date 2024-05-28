@@ -94,11 +94,31 @@ export const chatSlice = createSlice({
             state.activeConversation = {};
         },
 
-        updateMessages: (state, action) => {
+        updateMessagesAndConversation: (state, action) => {
+
+            //update messages
             const convo = state.activeConversation;
             if(convo._id === action.payload.conversation._id){
                 state.messages = [...state.messages, action.payload];
-            } 
+            }
+            
+            //get the latest message
+            const newestMessage = action.payload;
+
+            //from the latest or newest message, grap the conversation object
+            const conversationToUpdate = newestMessage.conversation;
+
+            //create a new conversation object, spreading over the previous values of the conversation, and update the latest message field with the newest message. Use this to unshift into the new array
+            const updatedConversation = {
+                ...conversationToUpdate,
+                latestMessage: newestMessage
+            }
+
+            const currentConvos = [...state.conversations];
+            let updatedConvos = currentConvos.filter((conversation) => conversation._id !== updatedConversation._id);
+            updatedConvos.unshift(updatedConversation);
+
+            state.conversations = [...updatedConvos];
         }
     },
 
@@ -186,6 +206,6 @@ export const chatSlice = createSlice({
 
 });
 
-export const {clearActiveConversation, updateMessages} = chatSlice.actions;
+export const {clearActiveConversation, updateMessagesAndConversation} = chatSlice.actions;
 
 export const chatReducer = chatSlice.reducer;

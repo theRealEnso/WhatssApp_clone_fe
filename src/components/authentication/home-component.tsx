@@ -1,10 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect} from "react";
 import SocketContext from "../../context/socket-context";
 
 import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../redux/user/userSelector";
 import { selectActiveConversation } from "../../redux/chat/chatSelector";
-import { getAllUserConversations, updateMessages} from "../../redux/chat/chatReducer";
+import { getAllUserConversations, updateMessagesAndConversation} from "../../redux/chat/chatReducer";
 
 import { Sidebar } from "../sidebar/sidebar-component";
 import { Banner } from "../banner/banner-component";
@@ -19,8 +19,6 @@ const Home = ({socket}) => {
     // console.log(access_token);
 
     const activeConversation = useSelector(selectActiveConversation);
-
-    const socketListenerAdded = useRef(false);
 
     //join the user id to socket io instance on the server
     useEffect(() => {
@@ -43,7 +41,7 @@ const Home = ({socket}) => {
         //define a handleMessage function that receives the message emitted from the server, logs the message, and dispatches the desired action with the message
         const handleMessage = (message) => {
             console.log("message received ----->", message);
-            dispatch(updateMessages(message));
+            dispatch(updateMessagesAndConversation(message));
         };
 
         //register event listener only once when the component mounts, does not get added multiple times during any re-renders (unless dependencies change)
