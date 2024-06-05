@@ -6,7 +6,7 @@ import { CommunityIcon, StoryIcon, ChatIcon, DotsIcon } from "../../../svg"
 import { Menu } from "./menu";
 
 
-export const SidebarHeader = () => {
+export const SidebarHeader = ({onlineUsers}) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef();
 

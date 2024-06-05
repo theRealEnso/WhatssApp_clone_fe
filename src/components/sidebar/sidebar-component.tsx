@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useSelector } from "react-redux";
-import { selectAllUserConversations } from "../../redux/chat/chatSelector";
+import { selectAllUserConversations, selectOnlineUsers } from "../../redux/chat/chatSelector";
 
 import { SidebarHeader } from "./sidebar-header/sidebar-header-component"
 import { Notifications } from "./notifications/notifications-component";
@@ -15,10 +15,12 @@ export const Sidebar = () => {
 
   const conversations = useSelector(selectAllUserConversations);
   console.log(conversations);
+
+  const onlineUsers = useSelector(selectOnlineUsers);
   
   return (
     <div className="max-w-[30%] flex0030 h-full select-none border-r-2 border-dark_bg_3">
-        <SidebarHeader></SidebarHeader>
+        <SidebarHeader onlineUsers={onlineUsers}></SidebarHeader>
 
         <Notifications></Notifications>
 
@@ -32,7 +34,7 @@ export const Sidebar = () => {
 
           :
             (
-            <ConversationsList searchResults={searchResults} setSearchResults={setSearchResults}></ConversationsList>
+            <ConversationsList searchResults={searchResults} setSearchResults={setSearchResults} onlineUsers={onlineUsers}></ConversationsList>
             )
         }
 

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { openConversation } from "../../../redux/chat/chatReducer";
 import { selectCurrentUser } from "../../../redux/user/userSelector";
 
-import SocketContext from "../../../context/socket-context";
+import {SocketContext} from "../../../context/socket-context";
 
 const Contacts = ({result, setSearchResults, socket}) => {
     console.log(result);

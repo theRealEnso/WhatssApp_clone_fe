@@ -12,6 +12,7 @@ type ChatState = {
     conversations: [];
     activeConversation: object;
     messages: [];
+    onlineUsers: [],
 }
 
 const CHAT_INITIAL_STATE: ChatState = {
@@ -21,6 +22,7 @@ const CHAT_INITIAL_STATE: ChatState = {
     conversations: [],
     activeConversation: {},
     messages: [],
+    onlineUsers: [],
 };
 
 export const getAllUserConversations = createAsyncThunk("conversations/all", async (access_token, {rejectWithValue}) => {
@@ -111,7 +113,7 @@ export const chatSlice = createSlice({
             //create a new conversation object, spreading over the previous values of the conversation, and update the latest message field with the newest message. Use this to unshift into the new array
             const updatedConversation = {
                 ...conversationToUpdate,
-                latestMessage: newestMessage
+                latestMessage: newestMessage,
             }
 
             const currentConvos = [...state.conversations];
@@ -119,6 +121,10 @@ export const chatSlice = createSlice({
             updatedConvos.unshift(updatedConversation);
 
             state.conversations = [...updatedConvos];
+        },
+
+        setOnlineUsers: (state, action) => {
+            state.onlineUsers = [...action.payload];
         }
     },
 
@@ -206,6 +212,6 @@ export const chatSlice = createSlice({
 
 });
 
-export const {clearActiveConversation, updateMessagesAndConversation} = chatSlice.actions;
+export const {clearActiveConversation, updateMessagesAndConversation, setOnlineUsers} = chatSlice.actions;
 
 export const chatReducer = chatSlice.reducer;

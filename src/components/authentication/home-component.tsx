@@ -1,10 +1,10 @@
 import { useEffect} from "react";
-import SocketContext from "../../context/socket-context";
+import { SocketContext } from "../../context/socket-context";
 
 import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../redux/user/userSelector";
-import { selectActiveConversation } from "../../redux/chat/chatSelector";
-import { getAllUserConversations, updateMessagesAndConversation} from "../../redux/chat/chatReducer";
+import { selectActiveConversation, selectOnlineUsers } from "../../redux/chat/chatSelector";
+import { getAllUserConversations, updateMessagesAndConversation, setOnlineUsers} from "../../redux/chat/chatReducer";
 
 import { Sidebar } from "../sidebar/sidebar-component";
 import { Banner } from "../banner/banner-component";
@@ -19,11 +19,17 @@ const Home = ({socket}) => {
     // console.log(access_token);
 
     const activeConversation = useSelector(selectActiveConversation);
+    const onlineUsers = useSelector(selectOnlineUsers);
 
     //join the user id to socket io instance on the server
     useEffect(() => {
-        socket.emit("join", currentUser._id)
-    }, [currentUser, socket]);
+        socket.emit("join", currentUser._id);
+
+        //get online users
+        socket.on("get-online-users", (users) => {
+            dispatch(setOnlineUsers(users));
+        })
+    }, [currentUser, socket, dispatch]);
 
     //fetch conversation data from api
     useEffect(() => {
@@ -49,12 +55,14 @@ const Home = ({socket}) => {
         socket.on("received message", handleMessage);
 
         // Cleanup / remove the `socket.on` listener that listens for `received message` emitted by the server on component unmount or when socket changes
-        //ensures that when the component re-renders due to strict mode, the previous event listener is removed before the new one is added, preventing accumulating of listeners. So, component mounts => listener is registered => strict mode causes react to re-render this component => on re-render, the component first unmounts + removes the registered event listener, then mounts again and registers the listener again
+        //ensures that when the component re-renders due to strict mode, the previous event listener is removed before the new one is added, preventing accumulating of listeners. So, component mounts => socket.on listener is registered => strict mode causes react to re-render this component => on re-render, the component first unmounts + removes the registered  socket.on event listener, then mounts again and registers the listener again
         return () => {
             //socket.off(eventName, listener) => removes the specified listener from the listener array for the event named `eventName`
             socket.off("received message", handleMessage);
         };
     }, [socket, dispatch]);
+
+    console.log(onlineUsers);
 
     return (
         <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center align-center overflow-hidden">

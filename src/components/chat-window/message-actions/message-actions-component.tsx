@@ -6,7 +6,7 @@ import { selectActiveConversation } from "../../../redux/chat/chatSelector";
 import { selectCurrentUser } from "../../../redux/user/userSelector";
 import { sendMessage } from "../../../redux/chat/chatReducer";
 
-import SocketContext from "../../../context/socket-context";
+import {SocketContext} from "../../../context/socket-context";
 
 import {SendIcon} from "../../../svg";
 
@@ -41,6 +41,7 @@ const MessageActions = ({socket}) => {
     const sendTextMessage = async () => {
         setSendIcon(true);
         const newMessage = await dispatch(sendMessage(values));
+        // console.log(newMessage);
         socket.emit("newly sent message", newMessage.payload);
         setTextMessage("");
         setSendIcon(false);
