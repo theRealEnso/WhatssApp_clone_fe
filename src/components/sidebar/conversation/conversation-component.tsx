@@ -37,7 +37,7 @@ const Conversation = ({convo, socket, online}) => {
     const openConvo = async () => {
         const openedConvo = await dispatch(openConversation(values));
         // console.log(openedConvo);
-        socket.emit("join conversation room", openedConvo.payload._id); // send conversation ID back to server socket
+        socket.emit("join conversation room", openedConvo.payload._id); // send conversation ID back to server
     }
 
   return (

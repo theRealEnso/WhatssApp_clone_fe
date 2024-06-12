@@ -3,7 +3,7 @@ import { SocketContext } from "../../context/socket-context";
 
 import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../redux/user/userSelector";
-import { selectActiveConversation, selectOnlineUsers } from "../../redux/chat/chatSelector";
+import { selectActiveConversation, } from "../../redux/chat/chatSelector";
 import { getAllUserConversations, updateMessagesAndConversation, setOnlineUsers} from "../../redux/chat/chatReducer";
 
 import { Sidebar } from "../sidebar/sidebar-component";
@@ -19,13 +19,12 @@ const Home = ({socket}) => {
     // console.log(access_token);
 
     const activeConversation = useSelector(selectActiveConversation);
-    const onlineUsers = useSelector(selectOnlineUsers);
 
-    //join the user id to socket io instance on the server
+    //emit the user id back to the server socket under the name "join"
     useEffect(() => {
         socket.emit("join", currentUser._id);
 
-        //get online users
+        //get online users that is emmited from the server, then add this data to the redux store
         socket.on("get-online-users", (users) => {
             dispatch(setOnlineUsers(users));
         })
@@ -61,8 +60,6 @@ const Home = ({socket}) => {
             socket.off("received message", handleMessage);
         };
     }, [socket, dispatch]);
-
-    console.log(onlineUsers);
 
     return (
         <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center align-center overflow-hidden">
