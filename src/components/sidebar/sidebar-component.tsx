@@ -6,7 +6,7 @@ import { selectAllUserConversations, selectOnlineUsers } from "../../redux/chat/
 import { SidebarHeader } from "./sidebar-header/sidebar-header-component"
 import { Notifications } from "./notifications/notifications-component";
 import { SearchInput } from "./search-input/search-input-component";
-import { ConversationsList } from "./conversations-list/conversations-list-component";
+import ConversationsList from "./conversations-list/conversations-list-component";
 import { SearchList } from "./search-list/search-list-component";
 
 export const Sidebar = () => {

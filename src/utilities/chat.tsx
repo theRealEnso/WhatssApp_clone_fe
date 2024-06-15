@@ -11,3 +11,12 @@ export const getRecipientUserId = (loggedInUserId, usersArray) => {
 
     return recipient_id;
 };
+
+export const checkOnlineStatus = (onlineUsersArray, loggedInUserId, usersArray) => {
+    const recipientUserId = getRecipientUserId(loggedInUserId, usersArray);
+
+    //check if recipient user ID is in the online users array
+    const onlineUser = onlineUsersArray.find((user) => user.userId === recipientUserId);
+
+    return onlineUser ? true : false;
+};

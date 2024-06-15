@@ -114,7 +114,7 @@ export const userSlice = createSlice({
         .addCase(loginUser.fulfilled, (state, action) => {
             state.status = "succeeded";
             state.error = "";
-            state.user = action.payload.user; // server sends back a response object that contains a nested user object
+            state.user = action.payload.user; // server sends back a response object that contains a nested user object inside the payload
         })
         .addCase(loginUser.rejected, (state, action) => {
             state.status = "failed";

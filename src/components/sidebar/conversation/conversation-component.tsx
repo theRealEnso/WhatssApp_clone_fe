@@ -3,17 +3,17 @@ import { truncate } from "../../../utilities/truncateString";
 
 import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentUser } from "../../../redux/user/userSelector";
-import { selectActiveConversation } from "../../../redux/chat/chatSelector";
+import { selectActiveConversation} from "../../../redux/chat/chatSelector";
 
 import {SocketContext} from "../../../context/socket-context";
 
-import { openConversation } from "../../../redux/chat/chatReducer";
+import { openConversation} from "../../../redux/chat/chatReducer";
 
 import { timestampHandler } from "../../../utilities/date";
 import { getRecipientUser } from "../../../utilities/chat";
 
-const Conversation = ({convo, socket, online}) => {
-    // console.log(convo);
+const Conversation = ({convo, socket, online, isTyping, currentConvoId, currentTypingStatus}) => {
+    console.log(convo);
     const dispatch = useDispatch();
 
     const currentUser = useSelector(selectCurrentUser);
@@ -35,10 +35,14 @@ const Conversation = ({convo, socket, online}) => {
     //already have list of conversations in the state. We need to somehow write code that, when user clicks on a conversation in the list, that conversation gets added to the activeConversation state in order to displayed in the chat window.
     //Our backend api endpoint is expecting to receive a recipient_id in the body... so if this is the case, we already have the recipient user data in this component...
     const openConvo = async () => {
-        const openedConvo = await dispatch(openConversation(values));
-        // console.log(openedConvo);
-        socket.emit("join conversation room", openedConvo.payload._id); // send conversation ID back to server
-    }
+        try {
+            const openedConvo = await dispatch(openConversation(values));
+            // console.log(openedConvo);
+            socket.emit("join conversation room", openedConvo.payload._id); // send conversation ID back to server
+        } catch(error) {
+            console.error(error);
+        }
+    };
 
   return (
     <div className={`flex flex-auto mt-8 outline-0 p-2 cursor-pointer rounded-lg hover:bg-dark_bg_2 hover:border-2 hover:border-green_1 shadow-inner shadow-2xl shadow-dark_bg_5 focus:ring-2 focus:ring-green_1 active:ring-2 active:ring-green_1 active:transition-shadow duration-75 ${convo._id === activeConversation._id ? "dark:bg-dark_hover_1" : ""}`} onClick={openConvo}>
@@ -60,6 +64,13 @@ const Conversation = ({convo, socket, online}) => {
 
 
             {
+                online && isTyping && currentConvoId === convo._id ? 
+                (
+                    <div className="flex flex-col">
+                        <span className="text-white">{currentTypingStatus}</span>
+                        <span className="text-dark_text_2">{moment(convo.latestMessage.createdAt).fromNow()}</span>
+                    </div>
+                ) :
                 convo.latestMessage ? 
                 (
                     <div className="flex flex-col">

@@ -13,6 +13,7 @@ type ChatState = {
     activeConversation: object;
     messages: [];
     onlineUsers: [],
+    typingStatus: string,
 }
 
 const CHAT_INITIAL_STATE: ChatState = {
@@ -23,6 +24,7 @@ const CHAT_INITIAL_STATE: ChatState = {
     activeConversation: {},
     messages: [],
     onlineUsers: [],
+    typingStatus: "",
 };
 
 export const getAllUserConversations = createAsyncThunk("conversations/all", async (access_token, {rejectWithValue}) => {
@@ -125,7 +127,11 @@ export const chatSlice = createSlice({
 
         setOnlineUsers: (state, action) => {
             state.onlineUsers = [...action.payload];
-        }
+        },
+
+        setTypingStatus: (state, action) => {
+            state.typingStatus = action.payload;
+        },
     },
 
     extraReducers(builder) {
@@ -212,6 +218,6 @@ export const chatSlice = createSlice({
 
 });
 
-export const {clearActiveConversation, updateMessagesAndConversation, setOnlineUsers} = chatSlice.actions;
+export const {clearActiveConversation, updateMessagesAndConversation, setOnlineUsers, setTypingStatus} = chatSlice.actions;
 
 export const chatReducer = chatSlice.reducer;

@@ -24,7 +24,7 @@ export const Emoji = forwardRef(({textMessage, setTextMessage, showEmojiPicker, 
       // grab everything starting from the beginning of the string up to where the cursor is currently positioned-- selectionStart grabs the index of where the cursor is positioned if nothing is highlighted
       const startOfText = textMessage.substring(0, inputRef.selectionStart);
 
-      // grab everything after where the cursor is positioned--selectionEnd also grabs the index of where the cursor is positioned nothing is highlighted. Substring will just get everything to the end of the string if no index is supplied
+      // grab everything after where the cursor is positioned--selectionEnd also grabs the index of where the cursor is positioned if nothing is highlighted. Substring will just get everything to the end of the string if no index is supplied
       const endOfText = textMessage.substring(inputRef.selectionEnd);
   
       const newText = startOfText + emoji + endOfText;
@@ -38,9 +38,10 @@ export const Emoji = forwardRef(({textMessage, setTextMessage, showEmojiPicker, 
 
   // Move the position of the input cursor right after the inserted emoji
   useEffect(() => {
-
-    inputTextRef.current.setSelectionRange(cursorPosition, cursorPosition); 
-
+    if(inputTextRef && inputTextRef.current){
+      inputTextRef.current.setSelectionRange(cursorPosition, cursorPosition); 
+    }
+    
   }, [cursorPosition, inputTextRef]);
 
   return (

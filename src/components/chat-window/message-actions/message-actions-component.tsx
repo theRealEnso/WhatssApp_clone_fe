@@ -10,7 +10,7 @@ import {SocketContext} from "../../../context/socket-context";
 
 import {SendIcon} from "../../../svg";
 
-import { MessageInput } from "./message-input/message-input-component";
+import MessageInputWithSocket from "./message-input/message-input-component";
 import { ClipLoader } from "react-spinners";
 import { Emoji } from "./emoji-picker/emoji-component";
 import { Attachments } from "./attachments/attachments-component";
@@ -39,12 +39,16 @@ const MessageActions = ({socket}) => {
     };
 
     const sendTextMessage = async () => {
-        setSendIcon(true);
-        const newMessage = await dispatch(sendMessage(values));
-        // console.log(newMessage);
-        socket.emit("newly sent message", newMessage.payload);
-        setTextMessage("");
-        setSendIcon(false);
+        try {
+            setSendIcon(true);
+            const newMessage = await dispatch(sendMessage(values));
+            // console.log(newMessage);
+            socket.emit("newly sent message", newMessage.payload);
+            setTextMessage("");
+            setSendIcon(false);
+        } catch(error) {
+            console.error(error);
+        }
     };
 
     useEffect(() => {
@@ -73,7 +77,7 @@ const MessageActions = ({socket}) => {
 
             <div className="flex flex-1">
                 {/* message input */}
-                <MessageInput textMessage={textMessage} setTextMessage={setTextMessage} inputTextRef={inputTextRef} sendTextMessage={sendTextMessage} ></MessageInput>
+                <MessageInputWithSocket textMessage={textMessage} setTextMessage={setTextMessage} inputTextRef={inputTextRef} sendTextMessage={sendTextMessage} ></MessageInputWithSocket>
             </div>
         </div>
 
@@ -89,10 +93,12 @@ const MessageActions = ({socket}) => {
   );
 };
 
-const MessageActionsWithSocket = (props) => (
-    <SocketContext.Consumer>
-        {(socket) => <MessageActions {...props} socket={socket}></MessageActions>}
-    </SocketContext.Consumer>
-);
+const MessageActionsWithSocket = (props) => {
+    return (
+        <SocketContext.Consumer>
+            {(socket) => <MessageActions {...props} socket={socket}></MessageActions>}
+        </SocketContext.Consumer>
+    )
+};
 
 export default MessageActionsWithSocket;

@@ -1,30 +1,40 @@
-// import { useDispatch, useSelector } from "react-redux";
-// import { selectActiveConversation } from "../../../../redux/chat/chatSelector";
-// import { selectCurrentUser } from "../../../../redux/user/userSelector";
-// import { sendMessage } from "../../../../redux/chat/chatReducer";
+import { useState, useEffect } from "react";
+import { SocketContext } from "../../../../context/socket-context";
 
-// import SocketContext from "../../../../context/socket-context";
+import { useSelector, useDispatch } from "react-redux";
+import { selectActiveConversation } from "../../../../redux/chat/chatSelector";
+import { setTypingStatus } from "../../../../redux/chat/chatReducer";
 
-export const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessage}) => {
 
-    // const dispatch = useDispatch();
+const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessage, socket}) => {
+    const dispatch = useDispatch();
 
-    // const currentUser = useSelector(selectCurrentUser)
-    // const {access_token} = currentUser;
+    const [typing, setTyping] = useState(false);
 
-    // const activeConversation = useSelector(selectActiveConversation);
-    // const conversation_id = activeConversation._id;
-
-    // const values = {
-    //     access_token,
-    //     conversation_id,
-    //     message: textMessage,
-    // };
+    const activeConversation = useSelector(selectActiveConversation);
+    const conversation_id = activeConversation._id;
 
     const handleMessageInputChange = (event) => {
         const typedInput = event.target.value;
         setTextMessage(typedInput);
-    }
+
+        if(!typing){
+            setTyping(true);
+            socket.emit("typing", conversation_id);
+        }
+         
+        const lastTypingTime = new Date().getTime();
+        const timer = 2000;
+
+        setTimeout(() => {
+            const timeNow = new Date().getTime();
+            const timeDifference = timeNow - lastTypingTime;
+            if(timeDifference >= timer && typing) {
+                socket.emit("stopped typing", conversation_id); 
+                setTyping(false);
+            }
+        }, timer);
+    };
 
     const sendTxtMsg = (event) => {
         if(textMessage && event.key === "Enter"){
@@ -33,20 +43,21 @@ export const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTex
         }
     };
 
-    // const sendTextMessage = async (event) => {
-    //     try {
-    //         if(textMessage && event.key === "Enter"){
-    //             const sentMessage = await dispatch(sendMessage(values));
-    //             // console.log(sentMessage);
-    //             setTextMessage("");
-    //             socket.emit("newly sent message", sentMessage.payload);
-    //         }
-    //     } catch(error){
-    //         console.log(error);
-    //     }
-    // }
+    useEffect(() => {
+        socket.on("typing", (typingStatusObject) => {
+            const {typingStatus} = typingStatusObject;
+            dispatch(setTypingStatus(typingStatus))
+        });
 
-    // console.log(textMessage);
+    }, [typing, socket, dispatch]);
+
+    useEffect(() => {
+        socket.on("stopped typing", (typingStatusObject) => {
+            const {typingStatus} = typingStatusObject;
+            dispatch(setTypingStatus(typingStatus));
+        })
+    }, [typing, socket, dispatch]);
+
   return (
     <div className="flex flex-1 items-center justify-center align-center">
         <input 
@@ -62,10 +73,12 @@ export const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTex
   );
 };
 
-// const MessageInputWithSocket = (props) => (
-//     <SocketContext.Consumer>
-//         {(socket) => <MessageInput {...props} socket={socket}></MessageInput>}
-//     </SocketContext.Consumer>
-// );
+const MessageInputWithSocket = (props) => {
+    return (
+        <SocketContext.Consumer>
+            {(socket) => <MessageInput {...props} socket={socket}></MessageInput>}
+        </SocketContext.Consumer>
+    )
+};
 
-// export default MessageInputWithSocket;
+export default MessageInputWithSocket;

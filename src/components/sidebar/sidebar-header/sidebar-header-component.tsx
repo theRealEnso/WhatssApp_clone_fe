@@ -3,7 +3,8 @@ import { useSelector } from "react-redux"
 import { selectCurrentUser } from "../../../redux/user/userSelector"
 
 import { CommunityIcon, StoryIcon, ChatIcon, DotsIcon } from "../../../svg"
-import { Menu } from "./menu";
+// import Menu from "./menu";
+import MenuWithSocket from "./menu";
 
 
 export const SidebarHeader = ({onlineUsers}) => {
@@ -15,6 +16,7 @@ export const SidebarHeader = ({onlineUsers}) => {
 
     const toggleMenu = (event) => {
         event.stopPropagation();
+        // console.log("Menu clicked!");
         setIsMenuOpen(!isMenuOpen);
     }
 
@@ -22,6 +24,7 @@ export const SidebarHeader = ({onlineUsers}) => {
         const handleOutsideMenuClick = (event) => {
             // console.log(event.target);
             if(menuRef.current && !menuRef.current.contains(event.target)){
+                // console.log("clicked outside menu")
                 setIsMenuOpen(false);
             }
         };
@@ -54,7 +57,7 @@ export const SidebarHeader = ({onlineUsers}) => {
 
                 <li className="px-2 cursor-pointer" onClick={toggleMenu}>
                     <DotsIcon className="dark:fill-dark_svg_1"></DotsIcon>
-                    <Menu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} ref={menuRef}></Menu>
+                    <MenuWithSocket isMenuOpen={isMenuOpen} ref={menuRef}></MenuWithSocket>
                 </li>
             </ul>
         </div>

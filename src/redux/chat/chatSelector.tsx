@@ -7,3 +7,5 @@ export const selectActiveConversation = (state) => state.chat.activeConversation
 export const selectConversationMessages = (state) => state.chat.messages;
 
 export const selectOnlineUsers = (state) => state.chat.onlineUsers;
+
+export const selectTypingStatus = (state) => state.chat.typingStatus;
