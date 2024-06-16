@@ -9,7 +9,7 @@ import { setTypingStatus } from "../../../../redux/chat/chatReducer";
 const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessage, socket}) => {
     const dispatch = useDispatch();
 
-    const [typing, setTyping] = useState(false);
+    const [typing, setTyping] = useState<boolean>(false);
 
     const activeConversation = useSelector(selectActiveConversation);
     const conversation_id = activeConversation._id;
@@ -18,14 +18,27 @@ const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessag
         const typedInput = event.target.value;
         setTextMessage(typedInput);
 
-        if(!typing){
+        //'typing state variable initializes as "false"
+        //if statement checks if `typing` state variable is false/ falsy (which it is indeed false on initialization). If it is false, then set it to true, and emit the "typing" event
+        //So, on the first keystroke, `typing` state variable flips from false to true
+        //on every subsequent keystroke, since the `typing` state variable is now true/truthy and no longer false/falsy, the code in the `if` block never runs again, because the if statement only runs if the `typing state variable is "false", which it no longer is with the state update. This ensures that the "typing" event is only emitted once
+        if(!typing && typedInput && typedInput.length > 0){
             setTyping(true);
             socket.emit("typing", conversation_id);
+        } 
+        
+        //if the user deletes everything in the input, and the `typing` state variable is still "true", then flip it back to "false" (because typing should be false in this case), and emit the "stopped typing" event
+        if (typedInput.length === 0 && typing){
+            setTyping(false);
+            socket.emit("stopped typing", conversation_id)
         }
-         
+        
+        //lastTypingTime gets updated on every keystroke
         const lastTypingTime = new Date().getTime();
         const timer = 2000;
 
+        //setTimeOut to check if user stops typing after two seconds. If two seconds elapse without a new keystroke, then the code snippet runs, emits a "stopped typing" event + sets the `typing` state variable back to false.
+        //Since `typing` state variable is false again, then on the next keystroke, the if block above runs again, and the process repeats
         setTimeout(() => {
             const timeNow = new Date().getTime();
             const timeDifference = timeNow - lastTypingTime;

@@ -13,7 +13,7 @@ import { checkOnlineStatus } from "../../../utilities/chat";
 
 const ConversationsList = ({onlineUsers, socket}) => {
     const [currentTypingStatus, setCurrentTypingStatus] = useState<string>("");
-    const [currentConvoId, setCurrentConvoId] = useState<string>("");
+    const [convoId, setCurrentConvoId] = useState<string>("");
 
     const conversations = useSelector(selectAllUserConversations);
     console.log(conversations);
@@ -54,7 +54,7 @@ const ConversationsList = ({onlineUsers, socket}) => {
                     key={convo._id} 
                     convo={convo} online={isUserOnline ? true : false} 
                     isTyping={currentTypingStatus === "typing..." ? true : false} 
-                    currentConvoId={currentConvoId}
+                    convoId={convoId}
                     currentTypingStatus={currentTypingStatus}
                     >
                   </Conversation>)

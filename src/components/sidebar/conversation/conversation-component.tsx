@@ -12,7 +12,7 @@ import { openConversation} from "../../../redux/chat/chatReducer";
 import { timestampHandler } from "../../../utilities/date";
 import { getRecipientUser } from "../../../utilities/chat";
 
-const Conversation = ({convo, socket, online, isTyping, currentConvoId, currentTypingStatus}) => {
+const Conversation = ({convo, socket, online, isTyping, convoId, currentTypingStatus}) => {
     console.log(convo);
     const dispatch = useDispatch();
 
@@ -64,7 +64,7 @@ const Conversation = ({convo, socket, online, isTyping, currentConvoId, currentT
 
 
             {
-                online && isTyping && currentConvoId === convo._id ? 
+                online && isTyping && convoId === convo._id ? 
                 (
                     <div className="flex flex-col">
                         <span className="text-green_1 text-md">{currentTypingStatus}</span>

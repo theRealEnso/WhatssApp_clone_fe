@@ -48,15 +48,15 @@ const ChatMessages = ({socket}) => {
             {
                 messages.map((message) => (<Message key={message._id} message={message}></Message>))
             }
-            
+
+            {/* automatic scroll to end or bottom */}
+            <div ref={endRef}></div>
+
             {
               currentTypingStatus === "typing..." 
                 ? <TypingStatusBubble typing={currentTypingStatus === "typing..." ? true : false}></TypingStatusBubble> 
                 : null
             }
-
-            {/* automatic scroll to end or bottom */}
-            <div ref={endRef}></div>
         </div>  
     </div>
   );
