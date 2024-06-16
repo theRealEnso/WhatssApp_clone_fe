@@ -67,7 +67,7 @@ const Conversation = ({convo, socket, online, isTyping, currentConvoId, currentT
                 online && isTyping && currentConvoId === convo._id ? 
                 (
                     <div className="flex flex-col">
-                        <span className="text-white">{currentTypingStatus}</span>
+                        <span className="text-green_1 text-md">{currentTypingStatus}</span>
                         <span className="text-dark_text_2">{moment(convo.latestMessage.createdAt).fromNow()}</span>
                     </div>
                 ) :

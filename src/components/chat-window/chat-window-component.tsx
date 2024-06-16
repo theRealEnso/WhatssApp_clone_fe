@@ -6,7 +6,7 @@ import { selectActiveConversation } from '../../redux/chat/chatSelector';
 import { getAllConversationMessages } from '../../redux/chat/chatReducer';
 
 import { ChatHeader } from "./chat-header/chat-header-component";
-import { ChatMessages } from './chat-messages/chat-messages-component';
+import ChatMessages from './chat-messages/chat-messages-component';
 import MessageActions from './message-actions/message-actions-component';
 
 export const ChatWindow = () => {
