@@ -27,10 +27,16 @@ const Home = ({socket}) => {
         //get online users that is emmited from the server, then add this data to the redux store
         socket.on("get-online-users", (users) => {
             dispatch(setOnlineUsers(users));
-        })
+        });
     }, [currentUser, socket, dispatch]);
 
     //fetch conversation data from api
+
+    useEffect(() => {
+        socket.on("get-updated-online-users", (users) => {
+            dispatch(setOnlineUsers(users));
+        })
+    },[dispatch, socket])
     useEffect(() => {
         // const values = {
         //     access_token: access_token,
@@ -54,7 +60,7 @@ const Home = ({socket}) => {
         socket.on("received message", handleMessage);
 
         // Cleanup / remove the `socket.on` listener that listens for `received message` emitted by the server on component unmount or when socket changes
-        //ensures that when the component re-renders due to strict mode, the previous event listener is removed before the new one is added, preventing accumulating of listeners. So, component mounts => socket.on listener is registered => strict mode causes react to re-render this component => on re-render, the component first unmounts + removes the registered  socket.on event listener, then mounts again and registers the listener again
+        //ensures that when the component re-renders due to strict mode, the previous event listener is removed before the new one is added, preventing accumulation of listeners. So, component mounts => socket.on listener is registered => strict mode causes react to re-render this component => on re-render, the component first unmounts + removes the registered  socket.on event listener, then mounts again and registers the listener again
         return () => {
             //socket.off(eventName, listener) => removes the specified listener from the listener array for the event named `eventName`
             socket.off("received message", handleMessage);

@@ -22,16 +22,16 @@ const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessag
         //if statement checks if `typing` state variable is false/ falsy (which it is indeed false on initialization). If it is false, then set it to true, and emit the "typing" event
         //So, on the first keystroke, `typing` state variable flips from false to true
         //on every subsequent keystroke, since the `typing` state variable is now true/truthy and no longer false/falsy, the code in the `if` block never runs again, because the if statement only runs if the `typing state variable is "false", which it no longer is with the state update. This ensures that the "typing" event is only emitted once
-        if(!typing && typedInput && typedInput.length > 0){
+        if(!typing){
             setTyping(true);
             socket.emit("typing", conversation_id);
         } 
         
-        //if the user deletes everything in the input, and the `typing` state variable is still "true", then flip it back to "false" (because typing should be false in this case), and emit the "stopped typing" event
-        if (typedInput.length === 0 && typing){
-            setTyping(false);
-            socket.emit("stopped typing", conversation_id)
-        }
+        // //if the user deletes everything in the input, and the `typing` state variable is still "true", then flip it back to "false" (because typing should be false in this case), and emit the "stopped typing" event
+        // if (typedInput.length === 0 && typing){
+        //     setTyping(false);
+        //     socket.emit("stopped typing", conversation_id)
+        // }
         
         //lastTypingTime gets updated on every keystroke
         const lastTypingTime = new Date().getTime();

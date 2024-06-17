@@ -1,4 +1,4 @@
-import { useState, useEffect, forwardRef} from "react";
+import { useState, useEffect, forwardRef, MouseEvent} from "react";
 
 import { EmojiIcon } from "../../../../svg";
 import {CloseIcon} from "../../../../svg";
@@ -14,7 +14,8 @@ export const Emoji = forwardRef(({textMessage, setTextMessage, showEmojiPicker, 
     setShowAttachmentMenu(false);
   };
 
-  const handleEmojiSelection = (emojiData, event) => {
+  const handleEmojiSelection = (emojiData, event: MouseEvent) => {
+    // console.log(emojiData);
     const {emoji} = emojiData;
     const inputRef = inputTextRef.current;
 

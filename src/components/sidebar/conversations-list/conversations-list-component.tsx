@@ -52,7 +52,8 @@ const ConversationsList = ({onlineUsers, socket}) => {
                 return (
                   <Conversation 
                     key={convo._id} 
-                    convo={convo} online={isUserOnline ? true : false} 
+                    convo={convo} 
+                    online={isUserOnline ? true : false} 
                     isTyping={currentTypingStatus === "typing..." ? true : false} 
                     convoId={convoId}
                     currentTypingStatus={currentTypingStatus}
