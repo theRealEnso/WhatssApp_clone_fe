@@ -1,6 +1,9 @@
-import { PollIcon, ContactIcon, DocumentIcon, CameraIcon, StickerIcon, PhotoIcon } from "../../../../../svg";
+import { PollIcon, ContactIcon, DocumentIcon, CameraIcon, StickerIcon} from "../../../../../svg";
 
-export const AttachmentMenu = ({attachmentsRef}) => {
+import { PhotoAttachment } from "./photo-attachment";
+import { DocumentAttachments } from "./documents-attachment-component";
+
+export const AttachmentMenu = ({attachmentsRef, setShowAttachmentMenu}) => {
   return (
     <div className="flex flex-col gap-y-2" ref={attachmentsRef}>
 
@@ -16,11 +19,6 @@ export const AttachmentMenu = ({attachmentsRef}) => {
             </button>
        </div>
 
-       <div className="cursor-pointer hover:scale-125 transition-transform">
-            <button className="rounded-full bg-[#5F66CD]">
-                <DocumentIcon></DocumentIcon>
-            </button>
-       </div>
 
        <div className="cursor-pointer hover:scale-125 transition-transform">
             <button className="rounded-full bg-[#D3396D]">
@@ -34,11 +32,9 @@ export const AttachmentMenu = ({attachmentsRef}) => {
             </button>
        </div>
 
-       <div className="cursor-pointer hover:scale-125 transition-transform">
-            <button className="rounded-full bg-[#BF59CF]">
-                <PhotoIcon></PhotoIcon>
-            </button>
-       </div>
+        <DocumentAttachments setShowAttachmentMenu={setShowAttachmentMenu}></DocumentAttachments>
+
+        <PhotoAttachment setShowAttachmentMenu={setShowAttachmentMenu}></PhotoAttachment>
 
     </div>
   );

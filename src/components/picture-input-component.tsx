@@ -5,19 +5,18 @@ const PictureInput = ({readablePicture, setReadablePicture, setPicture}) => {
     const inputRef = useRef();
 
     const handleImageSelection = (event) => {
-        // const selectedPictureData = event.target.files;
-        // console.log(pictureData);
+        console.log(event.target.files); // returns a `FileList` Object, which is an object containing files that the user has selected. First index at 0 contains the relevant data that we want of the file that was selected
         const selectedPictureData = event.target.files[0];
 
         if(selectedPictureData.type !== "image/jpeg" && selectedPictureData.type !== "image/png" && selectedPictureData.type !== "image/webp"){
             setError(`${selectedPictureData.name} format is not supported! Please use jpeg or png files only`);
             return;
-        } else if (selectedPictureData.size > 1024 * 1024 * 5) {
-            setError(`${selectedPictureData.size} exceeds 5 MB file size limit`);
+        } else if (selectedPictureData.size > 1024 * 1024 * 5) { // size is reported in bytes => 1,000,000 bytes = 1 MB
+            setError(`${(selectedPictureData.size / 1000000).toFixed(2)} exceeds 5 MB file size limit`); // convert bytes to MB rounded to two decimal places
             return;
         } else {
-            setPicture(selectedPictureData)
-            setError("")
+            setPicture(selectedPictureData);
+            setError("");
         }
 
         //reading the picture
@@ -35,7 +34,6 @@ const PictureInput = ({readablePicture, setReadablePicture, setPicture}) => {
     const toggleImageUpload = () => inputRef.current.click();
 
     const handleImageChange = () => {
-        setImage("");
         setReadablePicture("");
         toggleImageUpload();
     }
@@ -57,7 +55,7 @@ const PictureInput = ({readablePicture, setReadablePicture, setPicture}) => {
         }
 
 
-        <input type="file" accept="image/png, image/jpeg/ image/webp" name="picture" id="picture" hidden onChange={handleImageSelection} ref={inputRef}></input>
+        <input type="file" accept="image/png, image/jpeg, image/webp" name="picture" id="picture" hidden onChange={handleImageSelection} ref={inputRef}></input>
 
         {/* error */}
         <div>

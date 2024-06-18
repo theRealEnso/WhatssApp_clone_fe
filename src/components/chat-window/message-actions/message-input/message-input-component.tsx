@@ -3,8 +3,6 @@ import { SocketContext } from "../../../../context/socket-context";
 
 import { useSelector, useDispatch } from "react-redux";
 import { selectActiveConversation } from "../../../../redux/chat/chatSelector";
-import { setTypingStatus } from "../../../../redux/chat/chatReducer";
-
 
 const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessage, socket}) => {
     const dispatch = useDispatch();

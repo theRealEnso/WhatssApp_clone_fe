@@ -11,9 +11,10 @@ type ChatState = {
     name: string;
     conversations: [];
     activeConversation: object;
-    messages: [];
+    messages: [],
+    notifications: [],
     onlineUsers: [],
-    typingStatus: string,
+    files: [],
 }
 
 const CHAT_INITIAL_STATE: ChatState = {
@@ -23,8 +24,9 @@ const CHAT_INITIAL_STATE: ChatState = {
     conversations: [],
     activeConversation: {},
     messages: [],
+    notifications: [],
     onlineUsers: [],
-    typingStatus: "",
+    files: [],
 };
 
 export const getAllUserConversations = createAsyncThunk("conversations/all", async (access_token, {rejectWithValue}) => {
@@ -129,8 +131,8 @@ export const chatSlice = createSlice({
             state.onlineUsers = [...action.payload];
         },
 
-        setTypingStatus: (state, action) => {
-            state.typingStatus = action.payload;
+        addFiles: (state, action) => {
+            state.files = [...state.files, action.payload];
         },
     },
 
@@ -218,6 +220,6 @@ export const chatSlice = createSlice({
 
 });
 
-export const {clearActiveConversation, updateMessagesAndConversation, setOnlineUsers, setTypingStatus} = chatSlice.actions;
+export const {clearActiveConversation, updateMessagesAndConversation, setOnlineUsers, addFiles} = chatSlice.actions;
 
 export const chatReducer = chatSlice.reducer;

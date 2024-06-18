@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 // import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from './redux/user/userSelector';
+import { selectFiles } from './redux/chat/chatSelector';
 
 import { SocketProvider } from './context/socket-context';
 import { io } from 'socket.io-client';
@@ -17,6 +18,9 @@ const socket = io(import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT.split("ap
 const  App = () => {
   const currentUser = useSelector(selectCurrentUser);
   const {access_token} = currentUser;
+
+  const files = useSelector(selectFiles);
+  console.log(files);
 
   return (
     <>

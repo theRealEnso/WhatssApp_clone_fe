@@ -35,7 +35,7 @@ export const Attachments = ({showAttachmentMenu, setShowAttachmentMenu, setShowE
 
         <div className={showAttachmentMenu ? "absolute cursor-pointer -translate-y-[240px] translate-x-[-5px] pointer-events-auto opacity-100 transition-opacity transition-transform" : "absolute opacity-0 translate-x-[-5px] -translate-y-[180px] pointer-events-none"}>
             {
-                showAttachmentMenu && <AttachmentMenu attachmentsRef={attachmentsRef}></AttachmentMenu>
+                showAttachmentMenu && <AttachmentMenu attachmentsRef={attachmentsRef} setShowAttachmentMenu={setShowAttachmentMenu}></AttachmentMenu>
             }
         </div>
 
