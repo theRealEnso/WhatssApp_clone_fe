@@ -1,4 +1,4 @@
-export const getFileType = (fileData) => {
+export const getFileType = (fileData: string) => {
     switch (fileData){
         case "application/pdf":
             return "PDF";
@@ -6,23 +6,12 @@ export const getFileType = (fileData) => {
 
         case "application/msword":
         case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-            return "Microsoft DOCX";
-            break;
-        
-        case "application/vnd.oasis.opendocument.text":
-            return "OpenDocument text doc";
-            break;
-
-        case "application/vnd.oasis.opendocument.spreadsheet":
-            return "OpenDocument spreadsheet"
-            break;
-
-        case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-            return "OpenDocument presentation";
+            return "DOCX";
             break;
 
         case "application/vnd.ms-powerpoint":
-            return "Microsoft PowerPoint";
+        case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+            return "PPTX";
             break;
         
         case "text/html":
@@ -30,7 +19,7 @@ export const getFileType = (fileData) => {
             break;
 
         case "text/plain":
-            return "PLAIN TXT";
+            return "TXT";
             break;
         
         case "application/vnd.rar":
@@ -43,10 +32,8 @@ export const getFileType = (fileData) => {
             break;
         
         case "audio/mpeg":
-            return "MP3";
-            break;
         case "audio/wav":
-            return "WAV";
+            return "AUDIO";
             break;
         
         case "image/png":
@@ -59,10 +46,10 @@ export const getFileType = (fileData) => {
         case "video/mp4":
         case "video/webm":
         case "video/mpeg":
-            return "video";
+            return "VIDEO";
             break;
 
         default:
-            return fileData;
+            return "IMAGE";
     }
 };

@@ -11,11 +11,11 @@ export const PhotoAttachment = ({setShowAttachmentMenu}) => {
     const dispatch = useDispatch();
     const photoInputRef = useRef();
 
-    const openPhotoSelection = () => {
+    const openFileSelection = () => {
         photoInputRef.current && photoInputRef.current.click();
     };
 
-    const handleVideoAndFileSelection = (event) => {
+    const handleFileSelection = (event) => {
         // console.log(event.target.files); // returns a `FileList` object, which is an object containing files that the user has selected
 
         //create a new array from the `FileList` object. Each item in this array will contain a file object for each file
@@ -59,7 +59,7 @@ export const PhotoAttachment = ({setShowAttachmentMenu}) => {
 
   return (
     <div className="cursor-pointer hover:scale-125 transition-transform">
-        <button className="rounded-full bg-[#BF59CF]" onClick={openPhotoSelection}>
+        <button className="rounded-full bg-[#BF59CF]" onClick={openFileSelection}>
             <PhotoIcon></PhotoIcon>
         </button>
 
@@ -69,7 +69,7 @@ export const PhotoAttachment = ({setShowAttachmentMenu}) => {
             multiple 
             ref={photoInputRef} 
             accept="image/png, image/jpeg, image/gif, image/webp, video/mp4, video/mpeg"
-            onChange={handleVideoAndFileSelection}>
+            onChange={handleFileSelection}>
 
         </input>
     </div>

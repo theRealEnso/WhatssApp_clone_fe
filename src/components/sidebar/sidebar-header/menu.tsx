@@ -11,7 +11,7 @@ const Menu = forwardRef(({isMenuOpen, socket}, ref) => {
     const dispatch = useDispatch();
 
     const currentUser = useSelector(selectCurrentUser);
-    console.log(currentUser);
+    // console.log(currentUser);
     const {access_token} = currentUser;
 
     const signOut = async () => {

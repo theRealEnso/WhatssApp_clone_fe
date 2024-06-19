@@ -14,7 +14,7 @@ export const Sidebar = () => {
   // console.log(searchResults);
 
   const conversations = useSelector(selectAllUserConversations);
-  console.log(conversations);
+  // console.log(conversations);
 
   const onlineUsers = useSelector(selectOnlineUsers);
   console.log(onlineUsers);

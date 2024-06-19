@@ -13,7 +13,7 @@ import { timestampHandler } from "../../../utilities/date";
 import { getRecipientUser } from "../../../utilities/chat";
 
 const Conversation = ({convo, socket, online, isTyping, convoId, currentTypingStatus}) => {
-    console.log(convo);
+    // console.log(convo);
     const dispatch = useDispatch();
 
     const currentUser = useSelector(selectCurrentUser);

@@ -16,7 +16,7 @@ const ConversationsList = ({onlineUsers, socket}) => {
     const [convoId, setCurrentConvoId] = useState<string>("");
 
     const conversations = useSelector(selectAllUserConversations);
-    console.log(conversations);
+    // console.log(conversations);
 
     const activeConversation = useSelector(selectActiveConversation);
     

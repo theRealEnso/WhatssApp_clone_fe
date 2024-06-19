@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser } from '../../redux/user/userSelector';
-import { selectActiveConversation } from '../../redux/chat/chatSelector';
+import { selectActiveConversation, selectFiles } from '../../redux/chat/chatSelector';
 import { getAllConversationMessages } from '../../redux/chat/chatReducer';
 
 import { ChatHeader } from "./chat-header/chat-header-component";
 import ChatMessages from './chat-messages/chat-messages-component';
 import MessageActions from './message-actions/message-actions-component';
+import { FilesPreview } from './preview/files/files-preview-component';
 
 export const ChatWindow = () => {
     const dispatch = useDispatch();
@@ -20,6 +21,8 @@ export const ChatWindow = () => {
     const activeConversation = useSelector(selectActiveConversation);
     // console.log(activeConversation);
     const conversation_id = activeConversation._id;
+
+    const files = useSelector(selectFiles);
 
 
     useEffect(() => {
@@ -39,19 +42,24 @@ export const ChatWindow = () => {
     },[activeConversation, currentUser_id, access_token, conversation_id, dispatch]);
 
   return (
-    <div className="h-fit text-white flex flex-col">
+    <div className="h-fit text-white flex flex-col w-full">
         <div>
             <ChatHeader recipientUser={recipientUser}></ChatHeader>
         </div>
         
-        <div>
-            <ChatMessages></ChatMessages>
-        </div>
+        {
+            files.length > 0 
+                ? <FilesPreview></FilesPreview> 
+                :   <>
+                        <div>
+                            <ChatMessages></ChatMessages>
+                        </div>
 
-        <div>
-            <MessageActions></MessageActions>
-        </div>
-        
+                        <div>
+                            <MessageActions></MessageActions>
+                        </div>
+                    </>
+        }
     </div>
   );
 };

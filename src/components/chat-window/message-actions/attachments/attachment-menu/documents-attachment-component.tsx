@@ -27,8 +27,6 @@ export const DocumentAttachments = ({setShowAttachmentMenu}) => {
                 && document.type !== "application/msword"
                 && document.type !== "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 && document.type !== "application/vnd.ms-powerpoint"
-                && document.type !== "application/vnd.oasis.opendocument.text"
-                && document.type !== "application/vnd.oasis.opendocument.spreadsheet"
                 && document.type !== "application/vnd.openxmlformats-officedocument.presentationml.presentation"
                 && document.type !== "text/html"
                 && document.type !== "text/plain"
@@ -40,7 +38,7 @@ export const DocumentAttachments = ({setShowAttachmentMenu}) => {
             ){
                 docFiles = docFiles.filter((doc) => doc.name !== document.name);
                 return;
-            } else if(document.size > 1024 * 1024 * 5){
+            } else if(document.size > 1024 * 1024 * 50){
                 docFiles = docFiles.filter((doc) => doc.name !== document.name);
                 return;
             } else {
@@ -50,7 +48,7 @@ export const DocumentAttachments = ({setShowAttachmentMenu}) => {
                     const dataURL = event.target.result;
                     dispatch(addFiles(
                         {
-                            documentFile: document, 
+                            file: document, 
                             base64EncodedURL: dataURL, 
                             type: getFileType(document.type),
                         }

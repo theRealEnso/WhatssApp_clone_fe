@@ -10,7 +10,7 @@ export const Attachments = ({showAttachmentMenu, setShowAttachmentMenu, setShowE
         event.stopPropagation();
         setShowAttachmentMenu(!showAttachmentMenu);
         setShowEmojiPicker(false);
-    }
+    };
 
     useEffect(() => {
         const handleOutsideAttachmentsClick = (event) => {
