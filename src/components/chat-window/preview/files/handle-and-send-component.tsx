@@ -15,25 +15,28 @@ export const HandleAndSend = ({activeIndex, setActiveIndex}) => {
       <span></span>
 
       {/* list and display files as thumbnails */}
-      <div className="flex gap-x-2">
+      <div className="flex gap-x-3">
         {
           files.map((file, index) => {
             console.log(file);
             const handlePreviewChange = () => setActiveIndex(index);
             return (
-              <div key={index} className={`w-14 h-14 mt-2 border dark:border-white rounded-md overflow-hidden cursor-pointer ${activeIndex === index ? "border-[4px] border-green_1" : ""}`} onClick={handlePreviewChange}>
+              <div key={index} className={`w-16 h-16 mt-2 border dark:border-white rounded-md overflow-hidden cursor-pointer ${activeIndex === index ? "border-[4px] dark:border-green_1" : ""}`} onClick={handlePreviewChange}>
                 {
                   file.type === "IMAGE"
                     ? (
                       <img 
                         src={file.base64EncodedURL} 
-                        alt={file.type} className="w-full h-full object-cover">
+                        alt={file.type} 
+                        className="w-full h-full object-cover">
                       </img>
                       )
                     : (
                       <img 
                         src={`../../../../images/files/${file.type}.png`} 
-                        alt={file.type} className="w-8 h-10 mt-1.5 ml-2.5">
+                        alt={file.type} 
+                        className="w-full h-full object-cover"
+                        >
                       </img>
                     )
                 }
