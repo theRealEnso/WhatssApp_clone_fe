@@ -138,6 +138,13 @@ export const chatSlice = createSlice({
         removeFiles: (state) => {
             state.files = [];
         },
+
+        removeFileFromFiles: (state, action) => {
+            const index = action.payload;
+            const files = [...state.files];
+            const fileToRemove = [files[index]]; // create array containing the single file to be removed
+            state.files = files.filter((file) => !fileToRemove.includes(file)); // iterate through files array and include everything that is NOT in the `fileToRemove` array
+        },
     },
 
     extraReducers(builder) {
@@ -225,6 +232,6 @@ export const chatSlice = createSlice({
 
 });
 
-export const {clearActiveConversation, updateMessagesAndConversation, setOnlineUsers, addFiles, removeFiles} = chatSlice.actions;
+export const {clearActiveConversation, updateMessagesAndConversation, setOnlineUsers, addFiles, removeFiles, removeFileFromFiles} = chatSlice.actions;
 
 export const chatReducer = chatSlice.reducer;

@@ -17,7 +17,7 @@ export const Sidebar = () => {
   // console.log(conversations);
 
   const onlineUsers = useSelector(selectOnlineUsers);
-  console.log(onlineUsers);
+  // console.log(onlineUsers);
   
   return (
     <div className="max-w-[30%] flex0030 h-full select-none border-r-2 border-dark_bg_3">
