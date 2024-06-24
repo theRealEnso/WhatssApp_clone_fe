@@ -1,19 +1,71 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { selectFiles } from "../../../../redux/chat/chatSelector";
-import { removeFileFromFiles } from "../../../../redux/chat/chatReducer";
+// import selectors
+import { selectFiles, selectActiveConversation } from "../../../../redux/chat/chatSelector";
+import { selectCurrentUser } from "../../../../redux/user/userSelector";
 
+// import redux actions
+import { removeFileFromFiles, sendMessage, removeFiles } from "../../../../redux/chat/chatReducer";
+
+// import custom utility function
+import { uploadFiles } from "../../../../utilities/upload-files";
+
+// import react components
 import {Add} from "./add"
 import { SendIcon } from "../../../../svg";
+import { MoonLoader } from "react-spinners";
 
-export const HandleAndSend = ({activeIndex, setActiveIndex}) => {
+// import socket context to convert component to one that has access to the socket
+import { SocketContext } from "../../../../context/socket-context";
+
+const HandleAndSend = ({activeIndex, setActiveIndex, message, socket}) => {
   const dispatch = useDispatch();
-  const files = useSelector(selectFiles);
+
   const [hoveredIndex, setHoveredIndex] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const files = useSelector(selectFiles);
+  const {access_token} = useSelector(selectCurrentUser);
+  const activeConversation = useSelector(selectActiveConversation);
+  const conversation_id = activeConversation._id;
 
   const removeSelectedFile = (index: number) => {
     dispatch(removeFileFromFiles(index));
+  };
+
+  // solution may work, but is not a best practice. It is recommended to keep logic that handles state management + updates directly in the reducer
+  // const removeSelectedFile = (index: number) => {
+  //   const updatedFiles = files.filter((_, idx) => idx !== index)
+  //   dispatch(removeFileFromFiles(updatedFiles));
+  // };
+
+  const sendMessageWithFiles = async (event) => {
+    // console.log(files, message);
+    event.preventDefault();
+    setLoading(true);
+
+    //upload files first to cloudinary
+    const uploaded_files = await uploadFiles(files);
+    // console.log(uploaded_files);
+
+    const values = {
+      access_token,
+      message,
+      conversation_id,
+      files: uploaded_files.length > 0 ? uploaded_files : [],
+    }
+
+    //send message + files, then emit message so recipient user receives them
+    const sentMessageWithFiles = await dispatch(sendMessage(values));
+    // console.log(sentMessageWithFiles);
+
+    socket.emit("newly sent message", sentMessageWithFiles.payload);
+
+    await dispatch(removeFiles());
+
+    setLoading(false);
+
   };
 
   console.log(`The active index is currently at: ${activeIndex}`);
@@ -74,9 +126,22 @@ export const HandleAndSend = ({activeIndex, setActiveIndex}) => {
       </div>
 
       {/* send button */}
-      <div className="bg-green_1 w-16 h-16 mt-2 rounded-full flex items-center justify-center cursor-pointer">
-          <SendIcon className="fill-white"></SendIcon>
+      <div className="bg-green_1 w-16 h-16 mt-2 rounded-full flex items-center justify-center cursor-pointer" onClick={sendMessageWithFiles}>
+        {
+          loading ? <MoonLoader color="#fff" size={30}></MoonLoader> : <SendIcon className="fill-white"></SendIcon>
+        }
+          
       </div>
     </div>
   );
 };
+
+const HandleAndSendWithSocket = (props) => {
+  return (
+    <SocketContext.Consumer>
+      {(socket) => <HandleAndSend {...props} socket={socket}></HandleAndSend>}
+    </SocketContext.Consumer>
+  )
+}
+
+export default HandleAndSendWithSocket;

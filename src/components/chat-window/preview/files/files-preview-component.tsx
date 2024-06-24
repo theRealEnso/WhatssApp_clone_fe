@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FilesHeader } from "./files-header-component";
 import { FileViewer } from "./file-viewer-component";
 import { Input } from "./input";
-import { HandleAndSend } from "./handle-and-send-component";
+import HandleAndSend from "./handle-and-send-component";
 
 export const FilesPreview = () => {
   const [message, setMessage] = useState<string>("");
@@ -25,7 +25,7 @@ export const FilesPreview = () => {
                 <Input message={message} setMessage={setMessage}></Input>
 
                 {/* Send and manipulate files */}
-                <HandleAndSend activeIndex={activeIndex} setActiveIndex={setActiveIndex}></HandleAndSend>
+                <HandleAndSend activeIndex={activeIndex} setActiveIndex={setActiveIndex} message={message}></HandleAndSend>
             </div>
         </div>
     </div>

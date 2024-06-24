@@ -40,7 +40,7 @@ export const getAllUserConversations = createAsyncThunk("conversations/all", asy
         });
 
         // console.log(data);
-        return data;
+        return data; // response set back from server for this endpoint
 
     } catch(error) {
         return rejectWithValue(error.response.data.error.message);
@@ -56,7 +56,7 @@ export const openConversation = createAsyncThunk("conversations/active", async (
             }
         });
 
-        return data
+        return data; // response sent back from the server for this endpoint
     } catch(error){
         return rejectWithValue(error.response.data.error.message);
     }
@@ -72,21 +72,21 @@ export const getAllConversationMessages = createAsyncThunk("messages/all", async
             }
         });
 
-        return data;
+        return data; // response set back from the server for this endpoint
     } catch (error){
         return rejectWithValue(error.response.data.error.message)
     }
 });
 
 export const sendMessage = createAsyncThunk("messages/send", async (payloadData, {rejectWithValue}) => {
-    const {access_token, message, conversation_id} = payloadData;
+    const {access_token, message, conversation_id, files} = payloadData;
     try {
-        const {data} = await axios.post(MESSAGES_ENDPOINT, {conversation_id, message}, {
+        const {data} = await axios.post(MESSAGES_ENDPOINT, {conversation_id, message, files}, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
         })
-        return data;
+        return data; // response sent back from the server for this endpoint
     } catch(error){
         return rejectWithValue(error.response.data.error.message)
     }
@@ -144,6 +144,9 @@ export const chatSlice = createSlice({
             const files = [...state.files];
             const fileToRemove = [files[index]]; // create array containing the single file to be removed
             state.files = files.filter((file) => !fileToRemove.includes(file)); // iterate through files array and include everything that is NOT in the `fileToRemove` array
+        },
+        removeFileFromFiles: (state, action) => {
+            state.files = action.payload;
         },
     },
 

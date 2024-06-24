@@ -3,16 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
+// import react-hook-form, yup resolver + yup form validation
 import {useForm} from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registerFormSchema } from '../../utilities/yup-form-validation';
+
+// import react components
 import FormInput from './form-input-component';
 import PictureInput from '../picture-input-component';
+import { PulseLoader } from 'react-spinners';
+
+// import redux action to register the user
 import { registerUser } from '../../redux/user/userReducer';
 
+// import selector to pick off user status from the redux store
 import { selectCurrentUserStatus } from '../../redux/user/userSelector';
-
-import { PulseLoader } from 'react-spinners';
 
 //environment variables
 const cloudinary_name = import.meta.env.VITE_REACT_APP_CLOUDINARY_API_NAME;
@@ -22,7 +27,7 @@ const RegisterForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const currentUserStatus = useSelector(selectCurrentUserStatus)
+    const currentUserStatus = useSelector(selectCurrentUserStatus);
 
     const [readablePicture, setReadablePicture] = useState("");
     const [picture, setPicture] = useState("");
@@ -56,11 +61,11 @@ const RegisterForm = () => {
 
     const uploadImageToCloudinary = async () => {
         const formData = new FormData();
-        formData.append("upload_preset", cloudinary_key);
-        formData.append("file", picture);
+        formData.append("upload_preset", cloudinary_key); // "upload_preset" is a required and reserved keyword
+        formData.append("file", picture); // "file" is a required and reserved keyword
         const {data} = await axios.post(`https://api.cloudinary.com/v1_1/${cloudinary_name}/image/upload`, formData);
         return data;
-    }
+    };
 
     const navigateToLoginPage = () => navigate("/login");
 
@@ -84,7 +89,12 @@ const RegisterForm = () => {
 
                 <PictureInput readablePicture={readablePicture} setReadablePicture={setReadablePicture} setPicture={setPicture} ></PictureInput>
 
-                <button type="submit" className="w-full flex justify-center bg-green_1 text-gray-100 p-4 rounded-full tracking-wide font-semibold focus:outline-none hover:bg-green_2 shadow-lg cursor-pointer transition ease-in duration-300">{currentUserStatus === "loading" ? <PulseLoader color="#fff" size={16}></PulseLoader> : "Register"}</button>
+                <button 
+                    type="submit" 
+                    className="w-full flex justify-center bg-green_1 text-gray-100 p-4 rounded-full tracking-wide font-semibold focus:outline-none hover:bg-green_2 shadow-lg cursor-pointer transition ease-in duration-300"
+                >
+                    {currentUserStatus === "loading" ? <PulseLoader color="#fff" size={16}></PulseLoader> : "Register"}
+                </button>
             </form>
 
             <div className="flex items-center justify-center flex-col dark:text-dark_text_1">

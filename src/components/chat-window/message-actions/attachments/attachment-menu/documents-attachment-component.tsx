@@ -18,6 +18,7 @@ export const DocumentAttachments = ({setShowAttachmentMenu}) => {
 
     const handleDocumentSelection = (event) => {
         const filesObject = event.target.files;
+        console.log(filesObject);
         let docFiles = Array.from(filesObject);
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
