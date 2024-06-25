@@ -1,10 +1,15 @@
 import { useRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+
+// import selectors
 import { selectConversationMessages } from "../../../redux/chat/chatSelector";
+import { selectCurrentUser } from "../../../redux/user/userSelector";
 
-import { Message } from "../message/message-component";
+import { Message } from "../message/message-component"; 
 
+// import components
 import { TypingStatusBubble } from "../typing-status-bubble/typing-status-bubble-component";
+import { FileMessage } from "../files/file-message/file-message-component";
 
 import { SocketContext } from "../../../context/socket-context";
 
@@ -14,6 +19,7 @@ const ChatMessages = ({socket}) => {
   const [convoId, setConvoId] = useState<string>("");
 
   const messages = useSelector(selectConversationMessages);
+  const currentUser = useSelector(selectCurrentUser);
 
   const endRef = useRef();
 
@@ -46,17 +52,31 @@ const ChatMessages = ({socket}) => {
         {/* messages container */}
         <div className="scrollbar message-window overflow-auto py-2 px-[2%]">
             {
-                messages.map((message) => (<Message key={message._id} message={message}></Message>))
-            }
+                messages && messages.map((message) => (
+                
+                  <>
+                    {/* message files */}
+                    {
+                      message.files.length > 0 ?
+                        message.files.map((file) => (<FileMessage key={message._id} message={message} fileMessage={file}></FileMessage>)) : null
+                    }
 
-            {/* automatic scroll to end or bottom */}
-            <div ref={endRef}></div>
+                    {/* message text */}
+                    {
+                      message.message.length > 0 ? (<Message key={message._id} message={message} me={currentUser._id === message.sender._id}></Message>) : null
+                    }
+                  </>
+                ))
+            }
 
             {
               currentTypingStatus === "typing..." 
                 ? <TypingStatusBubble typing={currentTypingStatus === "typing..." ? true : false}></TypingStatusBubble> 
                 : null
             }
+
+          {/* automatic scroll to end or bottom */}
+          <div ref={endRef}></div>
         </div>  
     </div>
   );
