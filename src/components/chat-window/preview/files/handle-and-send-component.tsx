@@ -15,6 +15,7 @@ import { uploadFiles } from "../../../../utilities/upload-files";
 import {Add} from "./add"
 import { SendIcon } from "../../../../svg";
 import { MoonLoader } from "react-spinners";
+import VideoThumbnail from "react-video-thumbnail";
 
 // import socket context to convert component to one that has access to the socket
 import { SocketContext } from "../../../../context/socket-context";
@@ -54,7 +55,7 @@ const HandleAndSend = ({activeIndex, setActiveIndex, message, socket}) => {
       message,
       conversation_id,
       files: uploaded_files.length > 0 ? uploaded_files : [],
-    }
+    };
 
     //send message + files, then emit message so recipient user receives them
     const sentMessageWithFiles = await dispatch(sendMessage(values));
@@ -98,7 +99,12 @@ const HandleAndSend = ({activeIndex, setActiveIndex, message, socket}) => {
                         className="w-full h-full object-cover">
                       </img>
                       )
-                    : (
+                    : file.type === "VIDEO"
+                      ? (
+                        <VideoThumbnail videoUrl={file.base64EncodedURL}></VideoThumbnail>
+                      )
+                    :
+                     (
                       <img 
                         src={`../../../../images/files/${file.type}.png`} 
                         alt={file.type} 
@@ -128,7 +134,7 @@ const HandleAndSend = ({activeIndex, setActiveIndex, message, socket}) => {
       {/* send button */}
       <div className="bg-green_1 w-16 h-16 mt-2 rounded-full flex items-center justify-center cursor-pointer" onClick={sendMessageWithFiles}>
         {
-          loading ? <MoonLoader color="#fff" size={30}></MoonLoader> : <SendIcon className="fill-white"></SendIcon>
+          loading ? <MoonLoader color="#fff" size={30}></MoonLoader> : <SendIcon className="fill-white"></SendIcon> 
         }
           
       </div>

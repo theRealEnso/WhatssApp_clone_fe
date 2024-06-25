@@ -145,9 +145,7 @@ export const chatSlice = createSlice({
             const fileToRemove = [files[index]]; // create array containing the single file to be removed
             state.files = files.filter((file) => !fileToRemove.includes(file)); // iterate through files array and include everything that is NOT in the `fileToRemove` array
         },
-        removeFileFromFiles: (state, action) => {
-            state.files = action.payload;
-        },
+        
     },
 
     extraReducers(builder) {

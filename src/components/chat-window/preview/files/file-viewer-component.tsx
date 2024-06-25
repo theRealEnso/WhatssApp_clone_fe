@@ -11,9 +11,31 @@ export const FileViewer = ({activeIndex}) => {
         {/* container */}
         <div className="flex justify-center items-center">
             {
+                // check if files array is not empty + if there is an activeIndex is truthy + if there is a `type` property. If so, then...
                 files.length > 0 && files[activeIndex] && files[activeIndex].type ?
+                    // further check if the type is an "IMAGE" string. If so, then render an image
                     (files[activeIndex].type === "IMAGE" 
-                        ? (<img src={files[activeIndex].base64EncodedURL} alt="" className="max-w-[80%] object-contain hview"></img>)
+                        ? (
+                            <img 
+                                src={files[activeIndex].base64EncodedURL} 
+                                alt={files[activeIndex].type} 
+                                className="max-w-[80%] object-contain hview"
+                                >
+
+                            </img>
+                            )
+                        //check if file type is "VIDEO", if so, then render a video
+                        : files[activeIndex].type === "VIDEO" ? 
+                            (
+                                <video 
+                                    src={files[activeIndex].base64EncodedURL} 
+                                    controls
+                                    className="hview max-w-[80%] object-contain"
+                                    >
+
+                                </video>
+                            )
+                        //Otherwise, display the following
                         : (
                             <div className="min-w-full hview flex flex-col items-center justify-center">
                                 {/* file icon image */}
@@ -29,9 +51,10 @@ export const FileViewer = ({activeIndex}) => {
                                 </div>
                                 
                             </div>
-                        )) : null
+                        )
+                    ) 
+                : null
             }
-    
         </div>
     </div>
   );
