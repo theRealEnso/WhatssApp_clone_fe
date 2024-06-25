@@ -5,12 +5,12 @@ import { useSelector } from "react-redux";
 import { selectConversationMessages } from "../../../redux/chat/chatSelector";
 import { selectCurrentUser } from "../../../redux/user/userSelector";
 
-import { Message } from "../message/message-component"; 
-
 // import components
+import { Message } from "../message/message-component"; 
 import { TypingStatusBubble } from "../typing-status-bubble/typing-status-bubble-component";
 import { FileMessage } from "../files/file-message/file-message-component";
 
+//import socket context
 import { SocketContext } from "../../../context/socket-context";
 
 const ChatMessages = ({socket}) => {
@@ -19,6 +19,8 @@ const ChatMessages = ({socket}) => {
   const [convoId, setConvoId] = useState<string>("");
 
   const messages = useSelector(selectConversationMessages);
+  // console.log(messages);
+
   const currentUser = useSelector(selectCurrentUser);
 
   const endRef = useRef();
@@ -55,14 +57,15 @@ const ChatMessages = ({socket}) => {
                 messages && messages.map((message) => (
                 
                   <>
-                    {/* message files */}
+                    {/* display message file attachments */}
                     {
                       message.files.length > 0 ?
-                        message.files.map((file) => (<FileMessage key={message._id} message={message} fileMessage={file}></FileMessage>)) : null
+                        message.files.map((file) => (<FileMessage key={message._id} message={message} fileMessage={file} me={currentUser._id === message.sender._id}></FileMessage>)) : null
                     }
 
-                    {/* message text */}
+                    {/* display message text */}
                     {
+                      // additional check to see if a message is empty. If it is, then don't display it
                       message.message.length > 0 ? (<Message key={message._id} message={message} me={currentUser._id === message.sender._id}></Message>) : null
                     }
                   </>

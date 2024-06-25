@@ -9,42 +9,43 @@ export const Message = ({message, me}) => {
     const timeStampInHoursAndMin = moment(message.createdAt).format("hh:mm")
 
   return (
-
-    <div className={`w-full flex mt-2 mb-6 space-x-3 max-w-xs ${me ? "ml-auto justify-end" : ""}`}>
-
-        <span className="relative bottom-3">
+    <div className="flex flex-col">
+        <span className={`${me ? "ml-auto justify-end" : ""}`}>
             {
                 me ? "You: " : `${message.sender.firstName}: `
             }
         </span>
+        <div className={`w-full flex mt-2 mb-6 space-x-3 max-w-xs ${me ? "ml-auto justify-end relative right-8" : ""}`}>
 
-        {/* message container */}
-        <div className="">
-            <div className={`relative left-2 h-full dark:text-dark_text_1 p-2 rounded-lg ${me ? "bg-green_3" : "dark:bg-dark_bg_2"}`}>
 
-                {/* Display message */}
-                <p className="float-left h-full text-md pb-6 pr-2">{message.message}</p>
+            {/* message container */}
+            <div className="">
+                <div className={`relative left-2 h-full dark:text-dark_text_1 p-2 rounded-lg ${me ? "bg-green_3" : "dark:bg-dark_bg_2"}`}>
 
-                {/* display message timestamp */}
-                <span className="absolute right-1.5 bottom-1 text-sm text-dark_text_5 leading-none">{timeStampInHoursAndMin}</span>
+                    {/* Display message */}
+                    <p className="float-left h-full text-md pb-6 pr-2">{message.message}</p>
 
-                {/* Triangle */}
-                {
-                    !me ? (
-                        <span>
-                            <TriangleIcon className="dark:fill-dark_bg_2 rotate-[60deg] absolute top-[-5px] -left-1.5"></TriangleIcon>
-                        </span>
-                    ) : (
-                        <span>
-                            <TriangleIcon className="dark:fill-green_3 rotate-[60deg] absolute -left-[8px] -top-[5px]"></TriangleIcon>
-                        </span>
-                    )
-                }
+                    {/* display message timestamp */}
+                    <span className="absolute right-1.5 bottom-1 text-sm text-dark_text_5 leading-none">{timeStampInHoursAndMin}</span>
+
+                    {/* Triangle */}
+                    {
+                        !me ? (
+                            <span>
+                                <TriangleIcon className="dark:fill-dark_bg_2 rotate-[60deg] absolute top-[-5px] -left-1.5"></TriangleIcon>
+                            </span>
+                        ) : (
+                            <span>
+                                <TriangleIcon className="dark:fill-green_3 rotate-[60deg] absolute right-[-11px] -top-[5px]"></TriangleIcon>
+                            </span>
+                        )
+                    }
+
+                </div>
 
             </div>
-
         </div>
-    </div>
+    </div>  
   );
 };
 
