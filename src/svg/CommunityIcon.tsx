@@ -1,6 +1,6 @@
 import {FC, useState} from 'react';
 
-import { ClassName } from "../App";
+import { ClassName } from '../App';
 
 import "./customIconColor.css";
 

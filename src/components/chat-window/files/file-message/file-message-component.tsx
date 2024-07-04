@@ -6,6 +6,7 @@ import { selectCurrentUser } from "../../../../redux/user/userSelector";
 // import components
 import TriangleIcon from "../../../../svg/TriangleIcon";
 import { FileImageVideo } from "../file-image-video/file-image-video-component";
+import { OtherFiles } from "../other-files/other-files-component";
 
 export const FileMessage = ({fileMessage, message, me}) => {
     const {file, type} = fileMessage;
@@ -22,18 +23,18 @@ export const FileMessage = ({fileMessage, message, me}) => {
                 }
             </span>
 
-            <div className={`w-full flex mt-2 mb-6 space-x-3 max-w-xs ${me ? "ml-auto justify-end relative right-8" : ""}`}>
+            <div className={`w-full flex mt-2 mb-6 space-x-3 max-w-xs ${me ? "ml-auto justify-end relative right-12" : ""}`}>
     
     
                 {/* message container */}
                 <div className="">
-                    <div className={`relative left-2 h-full dark:text-dark_text_1 rounded-lg ${me ? "bg-white border-[3px] border-green_3" : "dark:bg-dark_bg_2"}`}>
+                    <div className={`relative left-2 h-full dark:text-dark_text_1 rounded-lg ${me ? "border-[3px] border-green_3" : "dark:bg-dark_bg_1 border-[3px] border-dark_bg_2"} ${me && file.public_id.split(".")[1] === "png" ? "bg-white" : "bg-green_3"}`}>
     
                         {/* Display message */}
-                        <div className="h-full text-md">
+                        <div className={`h-full text-md ${type !== "IMAGE" && type !== "VIDEO" ? "pb-5" : ""}`}>
                             {
                                 type === "IMAGE" || type === "VIDEO"
-                                    ? <FileImageVideo url={file.secure_url} type={type}></FileImageVideo> : ""
+                                    ? <FileImageVideo url={file.secure_url} type={type}></FileImageVideo> : <OtherFiles file={file} type={type} me={me}></OtherFiles>
                             }
                         </div>
     
@@ -44,11 +45,11 @@ export const FileMessage = ({fileMessage, message, me}) => {
                         {
                             !me ? (
                                 <span>
-                                    <TriangleIcon className="dark:fill-dark_bg_2 rotate-[60deg] absolute top-[-5px] -left-1.5"></TriangleIcon>
+                                    <TriangleIcon className="dark:fill-dark_bg_2 rotate-[60deg] absolute top-[-8px] -left-2"></TriangleIcon>
                                 </span>
                             ) : (
                                 <span>
-                                    <TriangleIcon className="dark:fill-green_3 rotate-[60deg] absolute right-[-15px] -top-[7px]"></TriangleIcon>
+                                    <TriangleIcon className="dark:fill-green_4 rotate-[60deg] absolute right-[-14px] -top-[7.5px]"></TriangleIcon>
                                 </span>
                             )
                         }

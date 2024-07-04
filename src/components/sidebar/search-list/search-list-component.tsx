@@ -7,7 +7,7 @@ export const SearchList = ({searchResults, setSearchResults}) => {
 
         <div className="flex flex-col">
             {
-                searchResults.map((result) => (<Contacts result={result} setSearchResults={setSearchResults}></Contacts>))
+                searchResults.map((result) => (<Contacts key={result._id} result={result} setSearchResults={setSearchResults}></Contacts>))
             }
         </div>
     </div>

@@ -46,7 +46,7 @@ export const DocumentAttachments = ({setShowAttachmentMenu}) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(document);
                 reader.onload = (event) => {
-                    const dataURL = event.target.result;
+                    const dataURL = event.target ? event.target.result : null;
                     dispatch(addFiles(
                         {
                             file: document, 

@@ -15,12 +15,12 @@ export const Message = ({message, me}) => {
                 me ? "You: " : `${message.sender.firstName}: `
             }
         </span>
-        <div className={`w-full flex mt-2 mb-6 space-x-3 max-w-xs ${me ? "ml-auto justify-end relative right-8" : ""}`}>
+        <div className={`w-full flex mt-2 mb-6 space-x-3 max-w-xs ${me ? "ml-auto justify-end relative right-24" : ""}`}>
 
 
             {/* message container */}
             <div className="">
-                <div className={`relative left-2 h-full dark:text-dark_text_1 p-2 rounded-lg ${me ? "bg-green_3" : "dark:bg-dark_bg_2"}`}>
+                <div className={`relative left-16 h-full dark:text-dark_text_1 p-2 rounded-lg ${me ? "bg-green_3" : "dark:bg-dark_bg_2"}`}>
 
                     {/* Display message */}
                     <p className="float-left h-full text-md pb-6 pr-2">{message.message}</p>

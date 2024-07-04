@@ -31,6 +31,8 @@ const HandleAndSend = ({activeIndex, setActiveIndex, message, socket}) => {
   const activeConversation = useSelector(selectActiveConversation);
   const conversation_id = activeConversation._id;
 
+  console.log(files);
+
   const removeSelectedFile = (index: number) => {
     dispatch(removeFileFromFiles(index));
   };

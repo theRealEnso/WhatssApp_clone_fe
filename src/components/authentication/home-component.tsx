@@ -22,7 +22,7 @@ const Home = ({socket}) => {
 
     //emit the user id back to the server socket under the name "join"
     useEffect(() => {
-        socket.emit("join", currentUser._id);
+        socket.emit("user logged in", currentUser._id);
 
         //get online users that is emmited from the server, then add this data to the redux store
         socket.on("get-online-users", (users) => {
@@ -30,13 +30,14 @@ const Home = ({socket}) => {
         });
     }, [currentUser, socket, dispatch]);
 
-    //fetch conversation data from api
-
     useEffect(() => {
         socket.on("get-updated-online-users", (users) => {
             dispatch(setOnlineUsers(users));
         })
-    },[dispatch, socket])
+    },[dispatch, socket]);
+
+
+    //fetch conversation data from api
     useEffect(() => {
         // const values = {
         //     access_token: access_token,
@@ -83,7 +84,7 @@ const Home = ({socket}) => {
 };
 
 const HomeWithSocket = (props) => (
-    // when `SocketContext.Consumer is used, the function inside the consumer receives the `value` prop that was provided in the `SocketContext.Provider`, i.e. the socket instance
+    // when `SocketContext.Consumer is used, the function inside the consumer receives the `value` prop that was provided in the `SocketContext.Provider`, which is the socket instance / connection that we assigned to it
     <SocketContext.Consumer>
         {/* receive the socket instance, then pass this as props to the Home component */}
         {(socket) => <Home {...props} socket={socket}></Home>}

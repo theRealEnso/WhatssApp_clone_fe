@@ -11,7 +11,7 @@ export const FileViewer = ({activeIndex}) => {
         {/* container */}
         <div className="flex justify-center items-center">
             {
-                // check if files array is not empty + if there is an activeIndex is truthy + if there is a `type` property. If so, then...
+                // check if files array is not empty + if activeIndex is truthy + if there is a `type` property. If so, then...
                 files.length > 0 && files[activeIndex] && files[activeIndex].type ?
                     // further check if the type is an "IMAGE" string. If so, then render an image
                     (files[activeIndex].type === "IMAGE" 

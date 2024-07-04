@@ -1,4 +1,4 @@
-import { PollIcon, ContactIcon, DocumentIcon, CameraIcon, StickerIcon} from "../../../../../svg";
+import { PollIcon, ContactIcon, DocumentIcon, PhotoIcon, CameraIcon, StickerIcon} from "../../../../../svg";
 
 import { PhotoAttachment } from "./photo-attachment";
 import { DocumentAttachments } from "./documents-attachment-component";
@@ -9,13 +9,13 @@ export const AttachmentMenu = ({attachmentsRef, setShowAttachmentMenu}) => {
 
        <div className="cursor-pointer hover:scale-125 transition-transform">
             <button className="rounded-full">
-                <PollIcon></PollIcon>
+                <PollIcon className=""></PollIcon>
             </button>
        </div>
 
        <div className="cursor-pointer hover:scale-125 transition-transform">
             <button className="rounded-full bg-[#0EABF4]">
-                <ContactIcon></ContactIcon>
+                <ContactIcon className=""></ContactIcon>
             </button>
        </div>
 
@@ -28,7 +28,7 @@ export const AttachmentMenu = ({attachmentsRef, setShowAttachmentMenu}) => {
 
        <div className="cursor-pointer hover:scale-125 transition-transform">
             <button className="rounded-full">
-                <StickerIcon></StickerIcon>
+                <StickerIcon className=""></StickerIcon>
             </button>
        </div>
 

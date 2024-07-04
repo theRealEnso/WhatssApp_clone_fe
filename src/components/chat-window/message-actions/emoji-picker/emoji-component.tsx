@@ -22,10 +22,10 @@ export const Emoji = forwardRef(({textMessage, setTextMessage, showEmojiPicker, 
     if(inputRef) {
       inputRef.focus(); // focus the input first so that the cursor is active
 
-      // grab everything starting from the beginning of the string up to where the cursor is currently positioned-- selectionStart grabs the index of where the cursor is positioned if nothing is highlighted
+      // grab everything starting from the beginning of the string up to where the cursor is currently positioned-- selectionStart grabs the index of where the cursor is positioned if nothing is highlighted. The `substring` method returns the part of the string from the index up to and excluding the index, or to the end of the string if no index is supplied
       const startOfText = textMessage.substring(0, inputRef.selectionStart);
 
-      // grab everything after where the cursor is positioned--selectionEnd also grabs the index of where the cursor is positioned if nothing is highlighted. Substring will just get everything to the end of the string if no index is supplied
+      // grab everything after where the cursor is positioned--selectionEnd also grabs the index of where the cursor is positioned if nothing is highlighted. Substring will just get everything to the end of the string if no index is supplied. So here, we grab everything after the index of where the cursor is currently positioned
       const endOfText = textMessage.substring(inputRef.selectionEnd);
   
       const newText = startOfText + emoji + endOfText;
@@ -49,7 +49,7 @@ export const Emoji = forwardRef(({textMessage, setTextMessage, showEmojiPicker, 
     <div className="flex items-center cursor-pointer">
       <button className="relative" onClick={toggleEmojiPicker}>
         {
-          showEmojiPicker ? <CloseIcon></CloseIcon> : <EmojiIcon></EmojiIcon>
+          showEmojiPicker ? <CloseIcon className=""></CloseIcon> : <EmojiIcon className=""></EmojiIcon>
         }
       </button>
 
