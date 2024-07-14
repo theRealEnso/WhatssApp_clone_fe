@@ -143,7 +143,7 @@ export const chatSlice = createSlice({
             const index = action.payload;
             const files = [...state.files];
             const fileToRemove = [files[index]]; // create array containing the single file to be removed
-            state.files = files.filter((file) => !fileToRemove.includes(file)); // iterate through files array and include everything that is NOT in the `fileToRemove` array
+            state.files = files.filter((file) => !fileToRemove.includes(file)); // iterate through files array. Upon each iterated item, check to see if that item is NOT included in the `fileToRemoveArray`. If it is NOT INCLUDED in the `fileToRemove` array, then filter those items out into a new array. If the iterated item IS included in the `fileToRemoveArray`, then it is effectively ignored
         },
         
     },

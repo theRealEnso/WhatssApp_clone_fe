@@ -10,7 +10,7 @@ import { getFileType } from "../../../../../utilities/fileChecker";
 export const DocumentAttachments = ({setShowAttachmentMenu}) => {
     const dispatch = useDispatch();
 
-    const documentsInputRef = useRef();
+    const documentsInputRef = useRef<HTMLInputElement>(null);
 
     const openDocFileSelection = () => {
         documentsInputRef.current && documentsInputRef.current.click();

@@ -6,7 +6,7 @@ import { addFiles } from "../../../../redux/chat/chatReducer";
 
 import { getFileType } from "../../../../utilities/fileChecker";
 
-export const Add = ({setActiveIndex}) => {
+export const Add = () => {
     const addRef = useRef();
     const dispatch = useDispatch();
 
@@ -64,7 +64,7 @@ export const Add = ({setActiveIndex}) => {
     }
 
   return (
-    <div className=" mt-2 w-16 h-16 border dark:border-white rounded-md flex items-center justify-center cursor-pointer" onClick={openAddFiles}>
+    <div className="mt-6 w-20 h-20 border dark:border-white rounded-md flex items-center justify-center cursor-pointer" onClick={openAddFiles}>
         <span className="rotate-45">
             <CloseIcon className="dark:fill-dark_svg_1"></CloseIcon>
         </span>
