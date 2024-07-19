@@ -13,6 +13,8 @@ import { FilesPreview } from './preview/files/files-preview-component';
 export const ChatWindow = () => {
     const dispatch = useDispatch();
 
+    const [textMessage, setTextMessage] = useState<string>("");
+
     const [recipientUser, setRecipientUser] = useState({});
     const currentUser = useSelector(selectCurrentUser);
     const {access_token} = currentUser;
@@ -49,14 +51,14 @@ export const ChatWindow = () => {
         
         {
             files.length > 0 
-                ? <FilesPreview></FilesPreview> 
+                ? <FilesPreview textMessage={textMessage} setTextMessage={setTextMessage}></FilesPreview> 
                 :   <>
                         <div>
                             <ChatMessages></ChatMessages>
                         </div>
 
                         <div>
-                            <MessageActions></MessageActions>
+                            <MessageActions textMessage={textMessage} setTextMessage={setTextMessage}></MessageActions>
                         </div>
                     </>
         }

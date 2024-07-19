@@ -21,7 +21,7 @@ import { uploadFiles } from "../../../../utilities/upload-files";
 //import socket context
 import { SocketContext } from "../../../../context/socket-context";
 
-const Input = ({message, setMessage, socket}) => {
+const Input = ({textMessage, setTextMessage, socket}) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const dispatch = useDispatch();
@@ -34,10 +34,13 @@ const Input = ({message, setMessage, socket}) => {
   const files = useSelector(selectFiles);
   // console.log(files);
 
-  const handleInputChange = (event) => setMessage(event.target.value);
+  const handleInputChange = (event) => {
+    const typedInput = event.target.value;
+    setTextMessage(typedInput);
+  };
 
   const sendMessageWithFiles = async (event) => {
-    // console.log(files, message);
+    // console.log(files, textMessage);
     event.preventDefault();
     setLoading(true);
 
@@ -47,7 +50,7 @@ const Input = ({message, setMessage, socket}) => {
 
     const values = {
       access_token,
-      message,
+      message: textMessage,
       conversation_id,
       files: uploaded_files.length > 0 ? uploaded_files : [],
     };
@@ -66,10 +69,11 @@ const Input = ({message, setMessage, socket}) => {
 
   const sendTxtMsg = async (event) => {
     if(event.key === "Enter"){
-      await sendMessageWithFiles();
+      await sendMessageWithFiles(textMessage);
     }
   }
 
+  // console.log(textMessage);
 
   return (
     <div className="flex items-center justify-center w-full space-x-4 border-b dark:border-dark_border_2 p-4">
@@ -77,7 +81,7 @@ const Input = ({message, setMessage, socket}) => {
       <input 
         type="text" 
         placeholder="Type a message..." 
-        value={message} 
+        value={textMessage} 
         onChange={handleInputChange}
         onKeyDown={sendTxtMsg}
         className="w-full h-[50px] max-w-[60%] bg-transparent border-none dark:text-dark_text_1 dark:bg-dark_hover_1 rounded-lg p-4"
@@ -97,7 +101,8 @@ const Input = ({message, setMessage, socket}) => {
   );
 };
 
-const InputWithSocket = ({props}) => {
+const InputWithSocket = (props) => {
+  // console.log(props); // props is an object containing all of the props or properties that it received from the parent component
   return (
     <SocketContext.Consumer>
       {(socket) => <Input {...props} socket={socket}></Input>}

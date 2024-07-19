@@ -69,6 +69,8 @@ const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessag
         })
     }, [typing, socket, dispatch]);
 
+    // console.log(textMessage);
+
   return (
     <div className="flex flex-1 items-center justify-center align-center">
         <input 

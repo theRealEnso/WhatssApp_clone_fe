@@ -12,7 +12,7 @@ import { MiniPreview } from "./mini-preview-component";
 
 // import socket context to convert component to one that has access to the socket
 
-export const MiniPreviewSelector = ({activeIndex, setActiveIndex, message}) => {
+export const MiniPreviewSelector = ({activeIndex, setActiveIndex}) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isHoveredPrevious, setIsHoveredPrevious] = useState<boolean>(false);
   const [isHoveredNext, setIsHoveredNext] = useState<boolean>(false);

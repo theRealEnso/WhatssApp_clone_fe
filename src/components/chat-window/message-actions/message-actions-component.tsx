@@ -15,8 +15,7 @@ import { ClipLoader } from "react-spinners";
 import { Emoji } from "./emoji-picker/emoji-component";
 import { Attachments } from "./attachments/attachments-component";
 
-const MessageActions = ({socket}) => {
-    const [textMessage, setTextMessage] = useState<string>("");
+const MessageActions = ({textMessage, setTextMessage, socket}) => {
     const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
     const [showAttachmentMenu, setShowAttachmentMenu] = useState<boolean>(false);
     const [sendIcon, setSendIcon] = useState<boolean>(false);

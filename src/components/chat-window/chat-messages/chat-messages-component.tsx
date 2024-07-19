@@ -57,17 +57,21 @@ const ChatMessages = ({socket}) => {
                 messages && messages.map((message) => (
                 
                   <>
-                    {/* display message file attachments */}
-                    {
-                      message.files.length > 0 ?
-                        message.files.map((file) => (<FileMessage key={message._id} message={message} fileMessage={file} me={currentUser._id === message.sender._id}></FileMessage>)) : null
-                    }
-
                     {/* display message text */}
                     {
                       // additional check to see if a message is empty. If it is, then don't display it
                       message.message.length > 0 ? (<Message key={message._id} message={message} me={currentUser._id === message.sender._id}></Message>) : null
                     }
+                    
+                    {/* display message file attachments */}
+                    {
+                      message.files.length > 0 ?
+                        message.files.map((file) => {
+                          console.log(file);
+                          return (<FileMessage key={file.file.original_filename} message={message} fileMessage={file} me={currentUser._id === message.sender._id}></FileMessage>)
+                        }) : null
+                    }
+
                   </>
                 ))
             }
