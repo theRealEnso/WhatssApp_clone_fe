@@ -15,13 +15,16 @@ export const MiniPreview = ({file, index, activeIndex, setActiveIndex}) => {
     const handlePreviewChange = () => setActiveIndex(index);
 
     const removeSelectedFile = (index: number) => {
-        dispatch(removeFileFromFiles(index));
+      if(index > 0){
+        setActiveIndex(index - 1);
+      }
+      dispatch(removeFileFromFiles(index));
       };
     
     return (
         <div 
           key={index} 
-          className={`flex relative w-20 h-20 mt-6 border dark:border-white rounded-md overflow-hidden cursor-pointer ${activeIndex === index || hoveredIndex === index ? "opacity 100 transition-opacity" : "opacity-50"} ${activeIndex === index ? "border-[4px] dark:border-green_2" : ""}`} 
+          className={`flex relative w-20 h-20 mt-6 border dark:border-white rounded-md overflow-hidden cursor-pointer ${activeIndex === index || hoveredIndex === index ? "opacity 100 transition-opacity" : "opacity-50"} ${activeIndex === index ? "border-[4px] dark:border-green_1" : "border-white"}`} 
           onClick={handlePreviewChange}
           onMouseEnter={() => setHoveredIndex(index)}
           onMouseLeave={() => setHoveredIndex(null)}

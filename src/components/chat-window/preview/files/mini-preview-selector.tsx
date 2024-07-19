@@ -14,6 +14,8 @@ import { MiniPreview } from "./mini-preview-component";
 
 export const MiniPreviewSelector = ({activeIndex, setActiveIndex, message}) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [isHoveredPrevious, setIsHoveredPrevious] = useState<boolean>(false);
+  const [isHoveredNext, setIsHoveredNext] = useState<boolean>(false);
 
   const files = useSelector(selectFiles);
 
@@ -48,9 +50,20 @@ export const MiniPreviewSelector = ({activeIndex, setActiveIndex, message}) => {
 
   return (
     <div className="flex">
-      <div className="flex items-center justify-center space-x-10">
+      <div className="flex items-center justify-center space-x-4">
         <div>
-          <button onClick={previousPage}>
+          <button 
+            onClick={previousPage} 
+            disabled={currentPage === 0} 
+            className={`text-lg font-bold tracking-wide ${currentPage === 0 ? "opacity-50 cursor-not-allowed" : "opacity-100"} ${isHoveredPrevious ? "dark:text-green_1 transition-colors" : "text-white"}`}
+            onMouseEnter={() => {
+              
+              setIsHoveredPrevious(true);
+            }}
+            onMouseLeave={() => {
+              setIsHoveredPrevious(false);
+            }}
+            >
             <div className="flex flex-col">
               <span>previous</span>
               <span>{`<---`}</span>
@@ -61,16 +74,27 @@ export const MiniPreviewSelector = ({activeIndex, setActiveIndex, message}) => {
         {/* list and display files as thumbnails */}
         
         {
-          files && files.map((file, index) => {
+          filesToDisplay.map((file, index) => {
             // console.log(file);
             return (
-              <MiniPreview file={file} index={index} activeIndex={activeIndex} setActiveIndex={setActiveIndex}></MiniPreview>
+              <MiniPreview file={file} index={startingIndex + index} activeIndex={activeIndex} setActiveIndex={setActiveIndex}></MiniPreview>
             )
           })
         }
 
         <div>
-          <button onClick={nextPage}>
+          <button 
+            onClick={nextPage} 
+            disabled={currentPage === totalPages - 1} 
+            className={`text-lg font-bold tracking-wide${currentPage === totalPages - 1 ? "opacity-50 cursor-not-allowed" : "opacity-100"} ${isHoveredNext ? "dark:text-green_1 transition-colors" : "text-white"}
+            `}
+            onMouseEnter={() => {
+              setIsHoveredNext(true);
+            }}
+            onMouseLeave={() => {
+              setIsHoveredNext(false);
+            }}
+            >
             <div className="flex flex-col">
               <span>next</span>
               <span>{`--->`}</span>
