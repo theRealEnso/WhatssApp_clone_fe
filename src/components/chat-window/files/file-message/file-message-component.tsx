@@ -34,7 +34,11 @@ export const FileMessage = ({fileMessage, message, me}) => {
                         <div className={`h-full text-md ${type !== "IMAGE" && type !== "VIDEO" ? "pb-5" : ""}`}>
                             {
                                 type === "IMAGE" || type === "VIDEO"
-                                    ? <FileImageVideo url={file.secure_url} type={type}></FileImageVideo> : <OtherFiles file={file} type={type} me={me}></OtherFiles>
+                                    ? 
+                                        <a href={file.secure_url} target="_blank" download>
+                                            <FileImageVideo url={file.secure_url} type={type}></FileImageVideo>
+                                        </a> 
+                                    : <OtherFiles file={file} type={type} me={me}></OtherFiles>
                             }
                         </div>
     

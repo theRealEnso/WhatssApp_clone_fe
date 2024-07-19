@@ -14,7 +14,7 @@ import { CondensedPhotoViewer } from "../condensed-photo-viewer/condensed-photo-
 //import socket context
 import { SocketContext } from "../../../context/socket-context";
 
-const ChatMessages = ({socket}) => {
+const ChatMessages = ({setShowViewer, socket}) => {
 
   const [currentTypingStatus, setCurrentTypingStatus] = useState<string>("");
   const [convoId, setConvoId] = useState<string>("");
@@ -83,7 +83,7 @@ const ChatMessages = ({socket}) => {
                               message.files.filter((_, idx) => idx === 0).map((file) => (<FileMessage key={file.file.original_filename} message={message} fileMessage={file} me={currentUser._id === message.sender._id}></FileMessage>))
                             }
 
-                            <CondensedPhotoViewer message={message} me={currentUser._id === message.sender._id}></CondensedPhotoViewer>
+                            <CondensedPhotoViewer message={message} me={currentUser._id === message.sender._id} setShowViewer={setShowViewer}></CondensedPhotoViewer>
                           </div>
                         ): null
                               

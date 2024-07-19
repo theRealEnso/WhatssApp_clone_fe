@@ -15,6 +15,7 @@ type ChatState = {
     notifications: [],
     onlineUsers: [],
     files: [],
+    filesInViewer: []
 }
 
 const CHAT_INITIAL_STATE: ChatState = {
@@ -27,6 +28,7 @@ const CHAT_INITIAL_STATE: ChatState = {
     notifications: [],
     onlineUsers: [],
     files: [],
+    filesInViewer: [],
 };
 
 export const getAllUserConversations = createAsyncThunk("conversations/all", async (access_token, {rejectWithValue}) => {
@@ -145,6 +147,10 @@ export const chatSlice = createSlice({
             const fileToRemove = [files[index]]; // create array containing the single file to be removed
             state.files = files.filter((file) => !fileToRemove.includes(file)); // iterate through files array. Upon each iterated item, check to see if that item is NOT included in the `fileToRemoveArray`. If it is NOT INCLUDED in the `fileToRemove` array, then filter those items out into a new array. If the iterated item IS included in the `fileToRemoveArray`, then it is effectively ignored
         },
+
+        addFilesToViewer: (state, action) => {
+            state.filesInViewer = action.payload;
+        },
         
     },
 
@@ -233,6 +239,6 @@ export const chatSlice = createSlice({
 
 });
 
-export const {clearActiveConversation, updateMessagesAndConversation, setOnlineUsers, addFiles, removeFiles, removeFileFromFiles} = chatSlice.actions;
+export const {clearActiveConversation, updateMessagesAndConversation, setOnlineUsers, addFiles, removeFiles, removeFileFromFiles, addFilesToViewer} = chatSlice.actions;
 
 export const chatReducer = chatSlice.reducer;

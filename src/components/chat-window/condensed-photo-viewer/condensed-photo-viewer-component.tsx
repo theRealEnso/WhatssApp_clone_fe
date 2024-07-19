@@ -1,13 +1,24 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { addFilesToViewer } from "../../../redux/chat/chatReducer";
 
 import moment from "moment";
 
 import TriangleIcon from "../../../svg/TriangleIcon";
 
-export const CondensedPhotoViewer = ({message, me}) => {
+export const CondensedPhotoViewer = ({message, me, setShowViewer}) => {
     console.log(message);
+    const {files} = message;
+
+    const dispatch = useDispatch();
 
     const [isHovered, setIsHovered] = useState<boolean>(false);
+
+    const displayViewer = () => {
+        setShowViewer(true);
+        dispatch(addFilesToViewer(files));
+    };
 
     // const timestamp = moment(message.createdAt).fromNow();
     const timeStampInHoursAndMin = moment(message.createdAt).format("hh:mm")
@@ -27,11 +38,11 @@ export const CondensedPhotoViewer = ({message, me}) => {
                 <div className={`relative left-16 h-full dark:text-dark_text_1 p-2 rounded-lg ${me ? "bg-green_3" : "dark:bg-dark_bg_2"}`}>
 
                     {/* Display condensed photos */}
-                    <div className={`grid grid-cols-2 grid-rows-2 gap-2 w-[300px] h-[300px] cursor-pointer ${me ? "bg-green_3" : "dark:bg-dark_bg_2"}`}>
+                    <div className={`grid grid-cols-2 grid-rows-2 gap-2 w-[300px] h-[300px] cursor-pointer ${me ? "bg-green_3" : "dark:bg-dark_bg_2"}`} onClick={displayViewer}>
                         {
                             message.files.slice(1).filter((_, idx) => idx < 3)
                             .map((f) => {
-                                console.log(f);
+                                // console.log(f);
                                 return (
                                     <div key={f.file.public_id} className="border-4 border-dark_bg_3 bg-dark_bg_1">
                                         <img src={f.file.secure_url} className="object-cover h-full w-full"></img>
