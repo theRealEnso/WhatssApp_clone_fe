@@ -9,6 +9,7 @@ import { selectCurrentUser } from "../../../redux/user/userSelector";
 import { Message } from "../message/message-component"; 
 import { TypingStatusBubble } from "../typing-status-bubble/typing-status-bubble-component";
 import { FileMessage } from "../files/file-message/file-message-component";
+import { CondensedPhotoViewer } from "../condensed-photo-viewer/condensed-photo-viewer-component";
 
 //import socket context
 import { SocketContext } from "../../../context/socket-context";
@@ -62,14 +63,30 @@ const ChatMessages = ({socket}) => {
                       // additional check to see if a message is empty. If it is, then don't display it
                       message.message.length > 0 ? (<Message key={message._id} message={message} me={currentUser._id === message.sender._id}></Message>) : null
                     }
-                    
+
                     {/* display message file attachments */}
                     {
-                      message.files.length > 0 ?
-                        message.files.map((file) => {
-                          console.log(file);
-                          return (<FileMessage key={file.file.original_filename} message={message} fileMessage={file} me={currentUser._id === message.sender._id}></FileMessage>)
-                        }) : null
+                      message.files.length < 3 ? 
+                        (
+                          <div>
+                            {
+                              message.files.map((file) => {
+                                // console.log(file);
+                                return (<FileMessage key={file.file.original_filename} message={message} fileMessage={file} me={currentUser._id === message.sender._id}></FileMessage>)
+                              })
+                            }
+                          </div>
+                        ) : message.files.length > 3 ? 
+                        (
+                          <div>
+                            {
+                              message.files.filter((_, idx) => idx === 0).map((file) => (<FileMessage key={file.file.original_filename} message={message} fileMessage={file} me={currentUser._id === message.sender._id}></FileMessage>))
+                            }
+
+                            <CondensedPhotoViewer message={message} me={currentUser._id === message.sender._id}></CondensedPhotoViewer>
+                          </div>
+                        ): null
+                              
                     }
 
                   </>
