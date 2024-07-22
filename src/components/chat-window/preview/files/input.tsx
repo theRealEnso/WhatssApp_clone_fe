@@ -13,7 +13,7 @@ import { sendMessage, removeFiles } from "../../../../redux/chat/chatReducer";
 import { SendIcon } from "../../../../svg";
 
 //import components
-import { MoonLoader } from "react-spinners";
+import { ScaleLoader } from "react-spinners";
 
 // import custom utility function
 import { uploadFiles } from "../../../../utilities/upload-files";
@@ -65,6 +65,8 @@ const Input = ({textMessage, setTextMessage, socket}) => {
 
     setLoading(false);
 
+    setTextMessage("");
+
   };
 
   const sendTxtMsg = async (event) => {
@@ -93,7 +95,7 @@ const Input = ({textMessage, setTextMessage, socket}) => {
       <div className="bg-green_1 w-16 h-16 mt-2 rounded-full flex items-center justify-center cursor-pointer">
         <button onClick={sendMessageWithFiles}>
           {
-            loading ? <MoonLoader color="#fff" size={30}></MoonLoader> : <SendIcon className="fill-white"></SendIcon> 
+            loading ? <ScaleLoader color="#fff" size={30}></ScaleLoader> : <SendIcon className="fill-white"></SendIcon> 
           }
         </button>
       </div>

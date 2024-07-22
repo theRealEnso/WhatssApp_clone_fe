@@ -70,7 +70,7 @@ const Home = ({socket}) => {
 
     return (
         <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center align-center overflow-hidden">
-            <div className="container h-full flex py-[20px]">
+            <div className="container h-screen flex py-[20px]">
                 <Sidebar></Sidebar>
 
                 {

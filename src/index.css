@@ -46,6 +46,10 @@ body {
   .hview {
     height: calc(100vh - 340px);
   }
+
+  .fileViewerHeight {
+    height: calc(100vh - 280px);
+  }
 }
 
 /* Animations */

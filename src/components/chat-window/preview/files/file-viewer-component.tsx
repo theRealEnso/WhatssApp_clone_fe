@@ -5,6 +5,14 @@ import { selectFiles } from '../../../../redux/chat/chatSelector'
 export const FileViewer = ({activeIndex}) => {
     const files = useSelector(selectFiles);
 
+    if(!activeIndex || activeIndex === null || !files.length){
+        return (
+            <div className="h-full w-full flex items-center justify-center text-4xl text-white">
+                <h1>No File Selected</h1>
+            </div>
+        )
+    }
+
   return (
     <div className="w-full max-w-[60%]">
         
