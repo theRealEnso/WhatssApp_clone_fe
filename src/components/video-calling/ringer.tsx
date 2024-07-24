@@ -25,7 +25,7 @@ export const Ringer = ({phoneCall, setPhoneCall}) => {
 
     }, []);
 
-    // console.log(timer);
+    console.log(timer);
 
     useEffect(() => {
         if(timer <= 5){
