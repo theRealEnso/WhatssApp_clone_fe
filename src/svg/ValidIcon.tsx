@@ -1,4 +1,7 @@
-export const ValidIcon = ({ className }) => {
+import { FC } from "react";
+import { ClassName } from "../App";
+
+export const ValidIcon:FC<ClassName> = ({ className }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

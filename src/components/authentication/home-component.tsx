@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState, useRef} from "react";
 import { SocketContext } from "../../context/socket-context";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -14,17 +14,22 @@ import { getAllUserConversations, updateMessagesAndConversation, setOnlineUsers}
 import { Sidebar } from "../sidebar/sidebar-component";
 import { Banner } from "../banner/banner-component";
 import { ChatWindow } from "../chat-window/chat-window-component";
-import { Call } from "../video-calling/call";
+import { Call } from "../video-calling/call-component";
 
 const callData = {
-    receivingCall: true,
+    receivingCall: false,
     callEnded: false,
 };
 
 const Home = ({socket}) => {
     // console.log(socket);
+    const myVideoFeed = useRef();
+    const recipientVideoFeed = useRef();
+
+    //call
     const [phoneCall, setPhoneCall] = useState(callData);
     const [phoneCallAccepted, setPhoneCallAccepted] = useState<boolean>(false);
+    const [stream, setStream] = useState();
 
     const {receivingCall, callEnded} = phoneCall;
     const dispatch = useDispatch();
@@ -95,7 +100,7 @@ const Home = ({socket}) => {
             </div>
 
             {/* call */}
-            <Call phoneCall={phoneCall} setPhoneCall={setPhoneCall} phoneCallAccepted={phoneCallAccepted}></Call>
+            <Call phoneCall={phoneCall} setPhoneCall={setPhoneCall} phoneCallAccepted={phoneCallAccepted} myVideoFeed={myVideoFeed} recipientVideoFeed={recipientVideoFeed} stream={stream}></Call>
 
         </div>
     );
