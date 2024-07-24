@@ -19,7 +19,7 @@ const ConversationsList = ({onlineUsers, socket}) => {
     // console.log(conversations);
 
     const activeConversation = useSelector(selectActiveConversation);
-    console.log(activeConversation);
+    // console.log(activeConversation);
     
     const currentUser = useSelector(selectCurrentUser);
     // console.log(currentUser);

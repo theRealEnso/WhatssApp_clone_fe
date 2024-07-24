@@ -1,17 +1,32 @@
-import { useEffect} from "react";
+import { useEffect, useState} from "react";
 import { SocketContext } from "../../context/socket-context";
 
 import { useSelector, useDispatch } from "react-redux";
+
+// import redux selectors
 import { selectCurrentUser } from "../../redux/user/userSelector";
 import { selectActiveConversation, } from "../../redux/chat/chatSelector";
+
+//import redux actions
 import { getAllUserConversations, updateMessagesAndConversation, setOnlineUsers} from "../../redux/chat/chatReducer";
 
+// import components
 import { Sidebar } from "../sidebar/sidebar-component";
 import { Banner } from "../banner/banner-component";
 import { ChatWindow } from "../chat-window/chat-window-component";
+import { Call } from "../video-calling/call";
+
+const callData = {
+    receivingCall: true,
+    callEnded: false,
+};
 
 const Home = ({socket}) => {
     // console.log(socket);
+    const [phoneCall, setPhoneCall] = useState(callData);
+    const [phoneCallAccepted, setPhoneCallAccepted] = useState<boolean>(false);
+
+    const {receivingCall, callEnded} = phoneCall;
     const dispatch = useDispatch();
 
     const currentUser = useSelector(selectCurrentUser);
@@ -78,6 +93,9 @@ const Home = ({socket}) => {
                 }
 
             </div>
+
+            {/* call */}
+            <Call phoneCall={phoneCall} setPhoneCall={setPhoneCall} phoneCallAccepted={phoneCallAccepted}></Call>
 
         </div>
     );
