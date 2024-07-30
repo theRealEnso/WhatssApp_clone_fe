@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser } from '../../redux/user/userSelector';
@@ -11,16 +11,16 @@ import MessageActions from './message-actions/message-actions-component';
 import { FilesPreview } from './preview/files/files-preview-component';
 import { Viewer } from './viewer/viewer-component';
 
-export const ChatWindow = () => {
+import { getRecipientUser } from '../../utilities/chat';
+
+export const ChatWindow = ({callUser, recipientUser, setRecipientUser}) => {
     const dispatch = useDispatch();
 
     const [textMessage, setTextMessage] = useState<string>("");
     const [showViewer, setShowViewer] = useState(false);
 
-    const [recipientUser, setRecipientUser] = useState({});
     const currentUser = useSelector(selectCurrentUser);
     const {access_token} = currentUser;
-    const currentUser_id = currentUser._id;
 
     const activeConversation = useSelector(selectActiveConversation);
     // console.log(activeConversation);
@@ -32,23 +32,20 @@ export const ChatWindow = () => {
     useEffect(() => {
 
         if(activeConversation && activeConversation.users){
-            const recipientUserData = activeConversation.users.filter((user) => user._id !== currentUser_id);
+            const recipientUserData = getRecipientUser(currentUser._id, activeConversation.users);
             // console.log(recipientUserData);
-            if(recipientUserData.length > 0) {
-                const recipient = recipientUserData[0];
-                // console.log(recipient);
-                setRecipientUser(recipient);
-            }
+            setRecipientUser(recipientUserData);
             
             dispatch(getAllConversationMessages({access_token, conversation_id}))
         }
         
-    },[activeConversation, currentUser_id, access_token, conversation_id, dispatch]);
+    },[activeConversation, access_token, currentUser._id, conversation_id, setRecipientUser, dispatch]);
 
-  return (
+
+    return (
     <div className="h-fit text-white flex flex-col w-full">
         <div>
-            <ChatHeader recipientUser={recipientUser}></ChatHeader>
+            <ChatHeader recipientUser={recipientUser} callUser={callUser}></ChatHeader>
         </div>
         
         {
@@ -66,5 +63,5 @@ export const ChatWindow = () => {
                     </>
         }
     </div>
-  );
+    );
 };

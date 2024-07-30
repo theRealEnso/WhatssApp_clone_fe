@@ -6,8 +6,8 @@ import { CallHeader } from './call-header-component';
 import { CallArea } from './call-area-component';
 import { CallActions } from './call-actions-component';
 
-export const Call = ({phoneCall, setPhoneCall, phoneCallAccepted, myVideoFeed, recipientVideoFeed, stream}) => {
-    const {receivingCall, callEnded} = phoneCall;
+export const Call = ({videoCall, setVideoCall, videoCallAccepted, myVideoFeed, recipientVideoFeed, stream}) => {
+    const {receivingCall, callEnded} = videoCall;
 
     const [showActions, setShowActions] = useState<boolean>(false);
 
@@ -24,7 +24,7 @@ export const Call = ({phoneCall, setPhoneCall, phoneCallAccepted, myVideoFeed, r
                 <CallHeader></CallHeader>
 
                 {/* call area */}
-                <CallArea name={`Anonymous caller`}></CallArea>
+                <CallArea name={`${videoCall.name}`}></CallArea>
 
                 {/* call actions */}
                 {
@@ -50,9 +50,9 @@ export const Call = ({phoneCall, setPhoneCall, phoneCallAccepted, myVideoFeed, r
 
         {
             // if we are receiving a call, and we have not answered it yet, then display the `Ringer` component
-            receivingCall && !phoneCallAccepted && 
+            receivingCall && !videoCallAccepted && 
                 (
-                    <Ringer phoneCall={phoneCall} setPhoneCall={setPhoneCall}></Ringer>
+                    <Ringer videoCall={videoCall} setVideoCall={setVideoCall}></Ringer>
                 )
         }
     </div>

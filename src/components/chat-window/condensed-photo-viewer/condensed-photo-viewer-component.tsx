@@ -8,7 +8,7 @@ import moment from "moment";
 import TriangleIcon from "../../../svg/TriangleIcon";
 
 export const CondensedPhotoViewer = ({message, me, setShowViewer}) => {
-    console.log(message);
+    // console.log(message);
     const {files} = message;
 
     const dispatch = useDispatch();

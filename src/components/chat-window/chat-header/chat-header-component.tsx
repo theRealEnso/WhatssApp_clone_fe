@@ -1,10 +1,9 @@
 import { useSelector } from 'react-redux';
 import { selectOnlineUsers } from '../../../redux/chat/chatSelector';
 
-import { SearchLargeIcon } from '../../../svg';
-import {DotsIcon} from '../../../svg';
+import { SearchLargeIcon, DotsIcon, CallIcon, VideoCallIcon } from '../../../svg';
 
-export const ChatHeader = ({recipientUser}) => {
+export const ChatHeader = ({recipientUser, callUser}) => {
     const onlineUsers = useSelector(selectOnlineUsers);
 
     const isRecipientUserOnline = () => {
@@ -32,9 +31,27 @@ export const ChatHeader = ({recipientUser}) => {
         </div>
 
         <div className="mr-8">
-            <ul className="flex justify-between space-x-4 cursor-pointer w-full">
-                <li><SearchLargeIcon></SearchLargeIcon></li>
-                <li><DotsIcon></DotsIcon></li>
+            <ul className="flex items-center justify-center space-x-4 cursor-pointer w-full">
+                <li onClick={() => callUser()}>
+                    <button className="btn">
+                        <VideoCallIcon className="" ></VideoCallIcon>
+                    </button>
+                </li>
+                <li>
+                    <button className="btn">
+                        <CallIcon className="" ></CallIcon>
+                    </button>
+                </li>
+                <li>
+                    <button className="btn">
+                        <SearchLargeIcon className="" ></SearchLargeIcon>
+                    </button>
+                </li>
+                <li>
+                    <button className="btn">
+                        <DotsIcon className="" ></DotsIcon>
+                    </button>
+                </li>
             </ul>
         </div>
 

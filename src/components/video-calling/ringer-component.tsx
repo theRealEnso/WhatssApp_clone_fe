@@ -4,8 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { CloseIcon,  } from "../../svg";
 import { ValidIcon } from "../../svg/ValidIcon";
 
-export const Ringer = ({phoneCall, setPhoneCall}) => {
-    const {receivingCall, callEnded} = phoneCall;
+export const Ringer = ({videoCall, setVideoCall}) => {
+    const {receivingCall, callEnded} = videoCall;
 
     const [timer, setTimer] = useState<number>(0);
 
@@ -32,10 +32,10 @@ export const Ringer = ({phoneCall, setPhoneCall}) => {
             const cleanup = handleTimer(); // cleanup variable contains the clean up function `() => clearInterval(interval);
             return cleanup;
         } else {
-            setPhoneCall({...phoneCall, receivingCall: false})
+            setVideoCall({...videoCall, receivingCall: false})
         } 
 
-    }, [timer, handleTimer, phoneCall, setPhoneCall]);
+    }, [timer, handleTimer, videoCall, setVideoCall]);
 
   return (
     <div className="dark:bg-dark_bg_1 rounded-lg fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg z-30">
@@ -45,7 +45,7 @@ export const Ringer = ({phoneCall, setPhoneCall}) => {
             {/* call information */}
             <div className="flex items-center gap-x-2 space-x-4">
                 <img 
-                    src={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq5c6eldGb8Bzlx0wIuvOUkZnsIo3pqVbVNw&s`} 
+                    src={`${videoCall.picture}`} 
                     alt={`caller profile picture`}
                     className={`w-28 h-28 rounded-full`}
                     >
@@ -54,7 +54,7 @@ export const Ringer = ({phoneCall, setPhoneCall}) => {
 
                 <div>
                     <h1 className="dark:text-white">
-                        <b>Anonymous</b>
+                        <b>{`${videoCall.name}`}</b>
                     </h1>
                     <span className="dark:text-dark_text_2">WhatsApp Video</span>
                 </div>

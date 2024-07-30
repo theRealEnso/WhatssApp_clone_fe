@@ -22,9 +22,11 @@ import ContactIcon from "./ContactIcon.tsx";
 import PollIcon from "./PollIcon.tsx";
 import SmallArrowIcon from "./SmallArrowIcon.tsx";
 import LockIcon from "./LockIcon.tsx";
-import CallIcon from "./CallIcon.tsx";
+import { CallIcon } from "./CallIcon.tsx";
 import MuteIcon from "./MuteIcon.tsx";
 import NoVideoIcon from "./NoVideoIcon.tsx";
+import { SpeakerIcon } from "./SpeakerIcon.tsx";
+import { VideoCallIcon } from "./VideoCallIcon.tsx";
 
 export {
   CommunityIcon,
@@ -54,4 +56,6 @@ export {
   CallIcon,
   MuteIcon,
   NoVideoIcon,
+  SpeakerIcon,
+  VideoCallIcon,
 };

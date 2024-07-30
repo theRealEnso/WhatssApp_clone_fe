@@ -5,6 +5,10 @@ export const getRecipientUser = (loggedInUserId, usersArray) => {
 };
 
 export const getRecipientUserId = (loggedInUserId, usersArray) => {
+    if(!usersArray){
+        console.log("no users array detected!")
+        return null;
+    }
     const recipientUserData = usersArray.filter((user) => user._id !== loggedInUserId);
     const recipientUser = recipientUserData[0];
     const recipient_id = recipientUser._id;
