@@ -6,7 +6,7 @@ import { SpeakerIcon } from "../../svg/SpeakerIcon";
 import { VideoDialIcon } from "../../svg/VideoDialIcon";
 import { DialIcon } from "../../svg/DialIcon";
 
-export const CallActions = () => {
+export const CallActions = ({endCall}) => {
 
   return (
     <div className={`h-22 w-full absolute bottom-0 z-40 px-1`}>
@@ -20,7 +20,7 @@ export const CallActions = () => {
 
             {/* action buttons */}
             <ul className="flex items-center justify-between">
-                <li>
+                <li> 
                     <button className="btn_secondary">
                         <SpeakerIcon className={`fill-white w-6`}></SpeakerIcon>
                     </button>
@@ -35,7 +35,7 @@ export const CallActions = () => {
                         <MuteIcon className="fill-white w-5"></MuteIcon>
                     </button>
                 </li>
-                <li>
+                <li onClick={endCall}>
                     <button className="btn_secondary bg-red-600 rotate-[135deg]">
                         <DialIcon className="fill-white w-6"></DialIcon>
                     </button>

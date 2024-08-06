@@ -47,7 +47,7 @@ const ChatMessages = ({setShowViewer, socket}) => {
       const {typingStatus, conversationId} = typingStatusObject;
       setCurrentTypingStatus(typingStatus);
       setConvoId(conversationId);
-    })
+    });
   },[socket])
 
   return (

@@ -15,8 +15,12 @@ import { Sidebar } from "../sidebar/sidebar-component";
 import { Banner } from "../banner/banner-component";
 import { ChatWindow } from "../chat-window/chat-window-component";
 import { Call } from "../video-calling/call-component";
+import { Ringer } from "../video-calling/ringer-component";
 
 import Peer from "simple-peer";
+import { SignalData } from "simple-peer";
+
+//define typescript types ----------------------------------------
 
 type RecipientUser = {
     _id: string;
@@ -27,28 +31,50 @@ type RecipientUser = {
     status: string;
 };
 
-const callData = {
+type CallData = {
+    socketId: string;
+    receivingCall: boolean;
+    callEnded: boolean;
+    name: string;
+    picture: string;
+    signal: string | SignalData; // Record<string, never> means an empty object, according to code editor suggestion
+};
+
+type SuccessfulConnection = {
+    successfulConnection : object;
+};
+
+//----------------------------------------------------------------------------------------
+
+const callData: CallData = {
     socketId: "",
     receivingCall: false,
     callEnded: false,
     name: "",
     picture: "",
-    signal: {},
+    signal: "",
 };
 
 const Home = ({socket}) => {
     // console.log(socket);
+    console.log("Home component rendered");
     const myVideoFeed = useRef<HTMLVideoElement>();
     const recipientVideoFeed = useRef<HTMLVideoElement>();
+    const connectionRef = useRef();
 
     const [recipientUser, setRecipientUser] = useState<Partial<RecipientUser>>({});
 
     //call
+    const [showCallComponent, setShowCallComponent] = useState<boolean>(false);
     const [videoCall, setVideoCall] = useState(callData);
     const [videoCallAccepted, setVideoCallAccepted] = useState<boolean>(false);
+    const [videoCallEnded, setVideoCallEnded] = useState<boolean>(false);
     const [stream, setStream] = useState<MediaStream | null>(null);
+    // const [initiatorSocketId, setInitiatorSocketId] = useState<string>("");
 
+    //destructure params
     const {receivingCall, callEnded, socketId} = videoCall;
+
     const dispatch = useDispatch();
 
     const currentUser = useSelector(selectCurrentUser);
@@ -59,7 +85,7 @@ const Home = ({socket}) => {
     const activeConversation = useSelector(selectActiveConversation);
     // console.log(activeConversation);
 
-    //----------------------------------
+    //---------------------------------------------------------
     //function to request access to user's video camera and mic
     const setupMedia = () => {
         navigator.mediaDevices.getUserMedia({
@@ -67,7 +93,6 @@ const Home = ({socket}) => {
             audio: true,
         }).then((mediaStream) => { //receive a media stream after user grants permission
             setStream(mediaStream);
-            // recipientVideoFeed.current.srcObject = stream;
         }).catch((error) => {
             console.log(error);
         });
@@ -79,6 +104,8 @@ const Home = ({socket}) => {
         if(myVideoFeed.current && stream){
             myVideoFeed.current.srcObject = stream;
         }
+
+        setShowCallComponent(true);
     };
 
     //---------------------------------
@@ -96,33 +123,126 @@ const Home = ({socket}) => {
             picture: recipientUser.picture || "",
         });
 
-        //peer 1 a.k.a the sender instance a.k.a me. When peer 1 has signaling data, give it to peer 2, a.k.a the receiver
-        // do this by emitting to the backend an object that contains information about the sender / person initiating the video call
+        //peer 1 a.k.a the sender instance a.k.a me. When peer 1 initializes, it automatically creates signaling data to send to peer 2.
+        //creates "SDP offer"
         const peer = new Peer({
             initiator: true,
             trickle: false,
             stream: stream,
         });
 
+        //Once signaling data is created, we emit to the backend an object that contains the ID of the user we are calling, the initiator's signaling data, the socket ID of the initiator, the initiator's name + picture
         peer.on("signal", (data) => {
             // console.log(data);
+            const signalData = JSON.stringify(data);
             socket.emit("call user", {
                 userToCall: recipientUser._id,
-                signal: data,
+                signal: signalData,
                 from: socketId,
                 name: `${currentUser.firstName} ${currentUser.lastName}`,
                 picture: currentUser.picture,
             });
         });
 
+        //when call is accepted by the recipient, the server emits signaling data back to the initiator
+        //`peer.signal()` is finally used to establish the connection. The signal that is passed in is the responder's signaling data that is emitted back from the server
+        //don't move this into a useEffect and do it here because we need access to the initiators peer instance in order to establish the connection to the responder
+        socket.on("call accepted", (responderSignal) => {
+            setVideoCallAccepted(true);
+            peer.signal(responderSignal);
+        });
+
+        // console.log(typeof successfulConnection);
+
+        //After the connection is established, the stream event is fired when the responder's stream is received. Receive the responder's stream
+        peer.on("stream", (stream) => {
+            if(recipientVideoFeed.current){
+                recipientVideoFeed.current.srcObject = stream;
+            }
+        });
+        
+
         peer.on("error", (error) => {
             console.error("Peer error:", error);
         });
+
+        //store the peer instance in `connectionRef` for future reference. This will be used for ending the call or for cleanup
+        connectionRef.current = peer; 
     };
 
     //-------------------------------------------------
+    //answer call function
 
-    //emit the user id back to the server socket under the name "join"
+    const answerCall = () => {
+        if(!stream){
+            console.log("stream is undefined");
+            return;
+        }
+
+        enableMedia();
+        setVideoCallAccepted(true);
+
+        //this peer instance is the user receiving the call, aka the responder. Automatically creates signaling data when it initializes. Generates an SDP Answer in response to peer 1
+        const peer = new Peer({
+            initiator: false,
+            trickle: false,
+            stream: stream,
+        });
+
+        //once signaling data is created, emit to the backend an object containing the the responder's signaling data, as well as the socket ID of the other peer instance (i.e. the person who initiated the call)
+        peer.on("signal", (data) => {
+            const signalData = JSON.stringify(data);
+            socket.emit("answer call", {
+                signal: signalData, // responder's signal
+                to: videoCall.socketId,
+            });
+        });
+
+        //peer.signal(data) is finally used to establish a connection. Pass in the initiator's signaling data
+        peer.signal(videoCall.signal);
+
+        // console.log(typeof successfulConnection);
+
+        //After the connection is established, the stream event is fired when the initiator's stream is received. Receive the initiator's stream and put it on the recipient video feed
+        peer.on("stream", (stream) => {
+            if(recipientVideoFeed.current){
+                recipientVideoFeed.current.srcObject = stream;
+            }
+        });
+        
+        peer.on("error", (error) => {
+            console.error("Peer error:", error);
+        });
+
+        // store peer instance in `connectionRef` for future reference, such as ending the call or cleaning up
+        connectionRef.current = peer;
+    };
+
+    //----------------------------------------------------------------
+    // end call function
+    const endCall = () => {
+        setShowCallComponent(false);
+        setVideoCall({
+            ...videoCall,
+            callEnded: true,
+            receivingCall: false,
+        });
+
+        setVideoCallEnded(true);
+
+        socket.emit("end call", videoCall.socketId);
+
+        myVideoFeed.current.srcObject = null;
+
+        if(connectionRef.current){
+            connectionRef?.current?.destroy();
+        }
+
+    };
+
+    //---------------- define all of the useEffects ----------------------
+
+    //emit the user id back to the server socket under the name "user logged in" to join user to socket io
     useEffect(() => {
         socket.emit("user logged in", currentUser._id);
 
@@ -130,12 +250,27 @@ const Home = ({socket}) => {
         socket.on("get-online-users", (users) => {
             dispatch(setOnlineUsers(users));
         });
+
+        return () => {
+            socket.off("get-online-users");
+        };
+
     }, [currentUser, socket, dispatch]);
 
+    //video calls
+    //need socket ID's of all users  in order to start a joint stream call. SocketId connects to another SocketId.
+    //"setup socket" event emitted from the server sends over the socket ID's of users that logged into the app
+
     useEffect(() => {
-        socket.on("get-updated-online-users", (users) => {
+        const storeOnlineUsers = (users) => {
             dispatch(setOnlineUsers(users));
-        })
+        }
+        socket.on("get-updated-online-users", storeOnlineUsers);
+
+        return () => {
+            socket.off("get-updated-online-users", storeOnlineUsers);
+        };
+
     },[dispatch, socket]);
 
 
@@ -170,53 +305,89 @@ const Home = ({socket}) => {
         };
     }, [socket, dispatch]);
 
-    //video calls
-    //need socket ID in order to start a stream call with someone. SocketId connects to another SocketId
     useEffect(() => {
         setupMedia();
+
         socket.on("setup socket", (socket_id) => {
             // console.log(socket_id);
-            setVideoCall({...videoCall, socketId: socket_id})
+            setVideoCall({...videoCall, socketId: socket_id});
+            // setInitiatorSocketId(socket_id);
         });
 
         socket.on("received call", (callerData) => {
             setVideoCall({
                 ...videoCall, 
-                socketId: callerData.from, 
-                name: callerData.name, 
-                picture: callerData.picture, 
-                signal: callerData.signal, 
-                receivingCall: true})
+                socketId: callerData.from, // initiator's socket ID
+                name: callerData.name, //initiator's name
+                picture: callerData.picture, //initiator's picture
+                signal: callerData.signal, //initiator's signaling data
+                receivingCall: true,
+            })
+        });
+
+        socket.on("call ended", () => {
+            setShowCallComponent(false);
+            setVideoCall({
+                ...videoCall,
+                callEnded: true,
+                receivingCall: false,
+            });
+
+            if(myVideoFeed.current){
+                myVideoFeed.current.srcObject = null;
+            }
+            
+            if(videoCallAccepted && connectionRef.current){
+                connectionRef?.current?.destroy();
+            }
         });
 
         return () => {
             socket.off("setup socket");
-            socket.off("call user");
+            socket.off("received call");
+            socket.off("call ended");
         };
 
-    },[socket, videoCall]);
+    },[socket, videoCall, videoCallAccepted]);
 
-    console.log("socket id =====>", socketId);
+    console.log("socket ID ---------->", socketId);
 
     // console.log(recipientUser);
     // console.log(typeof recipientUser);
     // console.log(stream);
 
     return (
-        <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center align-center overflow-hidden">
-            <div className="container h-screen flex py-[20px]">
-                <Sidebar></Sidebar>
+        <>
+            <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center align-center overflow-hidden">
+                <div className="container h-screen flex py-[20px]">
+                    <Sidebar></Sidebar>
 
-                {
-                    activeConversation && Object.keys(activeConversation).length > 0 ? <ChatWindow callUser={callUser} recipientUser={recipientUser} setRecipientUser={setRecipientUser}></ChatWindow> : <Banner></Banner>
-                }
+                    {
+                        activeConversation && Object.keys(activeConversation).length > 0 ? <ChatWindow callUser={callUser} recipientUser={recipientUser} setRecipientUser={setRecipientUser}></ChatWindow> : <Banner></Banner>
+                    }
 
+                </div>
+
+                {/* call component to display if user is initiating a call, and if the call is accepted on the receiving end*/}
+                <div className={`${(showCallComponent || videoCall.signal) && !videoCallEnded ? "" : "hidden"}`}>
+                         
+                    <Call 
+                        videoCall={videoCall} 
+                        setVideoCall={setVideoCall} 
+                        videoCallAccepted={videoCallAccepted}
+                        videoCallEnded={videoCallEnded} 
+                        myVideoFeed={myVideoFeed} 
+                        recipientVideoFeed={recipientVideoFeed} 
+                        stream={stream}
+                        answerCall={answerCall}
+                        showCallComponent={showCallComponent}
+                        endCall={endCall}
+                        >
+                    </Call>
+                       
+                </div>
             </div>
-
-            {/* call */}
-            <Call videoCall={videoCall} setVideoCall={setVideoCall} videoCallAccepted={videoCallAccepted} myVideoFeed={myVideoFeed} recipientVideoFeed={recipientVideoFeed} stream={stream}></Call>
-
-        </div>
+        </>  
     );
 };
 

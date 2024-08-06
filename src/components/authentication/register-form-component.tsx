@@ -54,7 +54,7 @@ const RegisterForm = () => {
         }
         
         if(result.payload.user){
-            navigate("/")
+            navigate("/");
         }
         reset();
     };
