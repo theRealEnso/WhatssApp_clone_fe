@@ -28,7 +28,7 @@ export const Attachments = ({showAttachmentMenu, setShowAttachmentMenu, setShowE
     <div className="flex items-center cursor-pointer relative">
         <button onClick={toggleAttachmentMenu}>
             {
-                showAttachmentMenu ? <CloseIcon></CloseIcon> : <AttachmentIcon></AttachmentIcon>
+                showAttachmentMenu ? <CloseIcon className=""></CloseIcon> : <AttachmentIcon className=""></AttachmentIcon>
             }
             
         </button>

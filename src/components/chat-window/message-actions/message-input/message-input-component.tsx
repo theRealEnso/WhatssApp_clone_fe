@@ -36,7 +36,7 @@ const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessag
         const timer = 2000;
 
         //setTimeOut to check if user stops typing after two seconds. If two seconds elapse without a new keystroke, then the code snippet runs, emits a "stopped typing" event + sets the `typing` state variable back to false.
-        //Since `typing` state variable is false again, then on the next keystroke, the if block above runs again, and the process repeats
+        //Since `typing` state variable is false again, then when user starts typing again after two seconds, the if block above runs again, and the process repeats
         setTimeout(() => {
             const timeNow = new Date().getTime();
             const timeDifference = timeNow - lastTypingTime;

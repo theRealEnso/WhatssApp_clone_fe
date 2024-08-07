@@ -242,6 +242,17 @@ const Home = ({socket}) => {
 
     //---------------- define all of the useEffects ----------------------
 
+    //fetch conversation data from api to display in the sidebar ui
+    useEffect(() => {
+        // const values = {
+        //     access_token: access_token,
+        // };
+
+        if(access_token) {
+            dispatch(getAllUserConversations(access_token));
+        }
+    },[access_token, dispatch]);
+
     //emit the user id back to the server socket under the name "user logged in" to join user to socket io
     useEffect(() => {
         socket.emit("user logged in", currentUser._id);
@@ -273,18 +284,6 @@ const Home = ({socket}) => {
 
     },[dispatch, socket]);
 
-
-    //fetch conversation data from api
-    useEffect(() => {
-        // const values = {
-        //     access_token: access_token,
-        // };
-
-        if(access_token) {
-            dispatch(getAllUserConversations(access_token));
-        }
-    },[access_token, dispatch]);
-
     //listen on received message
     useEffect(() => {
         //define a handleMessage function that receives the message emitted from the server, logs the message, and dispatches the desired action with the message
@@ -297,8 +296,9 @@ const Home = ({socket}) => {
         //even if component re-renders due to strict mode, this only runs once
         socket.on("received message", handleMessage);
 
+        //cleanup to address issue of strict mode double rendering, causing the message to emit twice
         // Cleanup / remove the `socket.on` listener that listens for `received message` emitted by the server on component unmount or when socket changes
-        //ensures that when the component re-renders due to strict mode, the previous event listener is removed before the new one is added, preventing accumulation of listeners. So, component mounts => socket.on listener is registered => strict mode causes react to re-render this component => on re-render, the component first unmounts + removes the registered  socket.on event listener, then mounts again and registers the listener again
+        //ensures that when the component re-renders due to strict mode, the previous event listener is removed before the new one is added, preventing accumulation of listeners. So, component mounts => socket.on listener is registered => strict mode causes react to re-render this component => on re-render, the component first unmounts + removes the registered  socket.on event listener, then mounts again and registers a new listener again
         return () => {
             //socket.off(eventName, listener) => removes the specified listener from the listener array for the event named `eventName`
             socket.off("received message", handleMessage);

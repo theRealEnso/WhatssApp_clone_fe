@@ -17,7 +17,7 @@ export const ChatWindow = ({callUser, recipientUser, setRecipientUser}) => {
     const dispatch = useDispatch();
 
     const [textMessage, setTextMessage] = useState<string>("");
-    const [showViewer, setShowViewer] = useState(false);
+    const [showViewer, setShowViewer] = useState<boolean>(false);
 
     const currentUser = useSelector(selectCurrentUser);
     const {access_token} = currentUser;
@@ -49,8 +49,9 @@ export const ChatWindow = ({callUser, recipientUser, setRecipientUser}) => {
         </div>
         
         {
-            showViewer ? <Viewer setShowViewer={setShowViewer}></Viewer> :
-            files.length > 0 
+            showViewer 
+            ? <Viewer setShowViewer={setShowViewer}></Viewer> 
+            : files.length > 0 
                 ? <FilesPreview textMessage={textMessage} setTextMessage={setTextMessage}></FilesPreview> 
                 :   <>
                         <div>

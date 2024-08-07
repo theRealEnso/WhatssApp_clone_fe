@@ -84,7 +84,7 @@ const MessageActions = ({textMessage, setTextMessage, socket}) => {
             {
                 status === "loading" && sendIcon 
                 ? <span><ClipLoader size={30} color={"#3fe8a4"}></ClipLoader></span>
-                : <span onClick={sendTextMessage}><SendIcon></SendIcon></span>
+                : <span onClick={sendTextMessage}><SendIcon className=""></SendIcon></span>
             }  
         </div>
         

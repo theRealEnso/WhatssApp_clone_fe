@@ -36,6 +36,8 @@ const RegisterForm = () => {
         resolver: yupResolver(registerFormSchema),
     });
 
+    //handleSubmit from the useForm hook runs a callback function that automatically receives 'data' as an object, which captures what the user types in the input and registers those values to keys of the corresponding "name" property of the input
+    //ex: {firstName: "Enso", lastName: "the Great"}
     const onSubmitHandler = async (data) => {
         console.log(data);
         // const uploadedImage = await uploadImageToCloudinary();

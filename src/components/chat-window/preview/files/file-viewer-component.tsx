@@ -5,7 +5,7 @@ import { selectFiles } from '../../../../redux/chat/chatSelector'
 export const FileViewer = ({activeIndex}) => {
     const files = useSelector(selectFiles);
 
-    if(!activeIndex || activeIndex === null || !files.length){
+    if(activeIndex === null || !files.length){
         return (
             <div className="h-full w-full flex items-center justify-center text-4xl text-white">
                 <h1>No File Selected</h1>
@@ -19,7 +19,7 @@ export const FileViewer = ({activeIndex}) => {
         {/* container */}
         <div className="flex justify-center items-center">
             {
-                // check if files array is not empty + if activeIndex is truthy + if there is a `type` property. If so, then...
+                // check if files array is not empty + if files at the activeIndex is truthy + if there is a `type` property. If so, then...
                 files.length > 0 && files[activeIndex] && files[activeIndex].type ?
                     // further check if the type is an "IMAGE" string. If so, then render an image
                     (files[activeIndex].type === "IMAGE" 
