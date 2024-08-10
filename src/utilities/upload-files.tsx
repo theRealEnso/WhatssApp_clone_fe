@@ -11,6 +11,8 @@ export const uploadFiles = async (files) => {
 
     let uploadedFiles = [];
 
+    //for each file in the array, append it to the form data and then upload it to cloudinary.
+    //get the result data from cloudinary, then use this result to store inside an object to store in the uploadedFiles array
     for(const f of files){
         const {file, type} = f;
         formData.append("file", file); // "file" is required and reserved keyword for cloudinary

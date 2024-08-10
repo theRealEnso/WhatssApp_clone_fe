@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef} from "react";
+import { useEffect, useState, useRef, useCallback} from "react";
 import { SocketContext } from "../../context/socket-context";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -70,6 +70,7 @@ const Home = ({socket}) => {
     const [videoCallAccepted, setVideoCallAccepted] = useState<boolean>(false);
     const [videoCallEnded, setVideoCallEnded] = useState<boolean>(false);
     const [stream, setStream] = useState<MediaStream | null>(null);
+
     // const [initiatorSocketId, setInitiatorSocketId] = useState<string>("");
 
     //destructure params
@@ -85,7 +86,7 @@ const Home = ({socket}) => {
     const activeConversation = useSelector(selectActiveConversation);
     // console.log(activeConversation);
 
-    //---------------------------------------------------------
+    // define all functions ---------------------------------------------------------
     //function to request access to user's video camera and mic
     const setupMedia = () => {
         navigator.mediaDevices.getUserMedia({
@@ -229,6 +230,7 @@ const Home = ({socket}) => {
         });
 
         setVideoCallEnded(true);
+        setVideoCallAccepted(false);
 
         socket.emit("end call", videoCall.socketId);
 

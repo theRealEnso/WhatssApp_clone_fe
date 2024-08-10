@@ -4,54 +4,38 @@ import { useState, useEffect, useCallback } from "react";
 import { CloseIcon,  } from "../../svg";
 import { ValidIcon } from "../../svg/ValidIcon";
 
-export const Ringer = ({videoCall, answerCall, endCall}) => {
+export const Ringer = ({videoCall, setVideoCall, answerCall, endCall}) => {
     const {receivingCall, callEnded, name, picture} = videoCall;
 
     const [timer, setTimer] = useState<number>(0);
 
-    let interval;
-    const handleTimer = () => {
-      interval = setInterval(() => {
-        setTimer((prev) => prev + 1);
-      }, 1000);
-    };
+    // every second, the `timer` state updates because it increments by 1
+    // this entire component re-renders everytime `timer is updated
+    // on each re-render, the useEffect runs again. But, before it runs, the cleanup function from the previous render is called to clear the old interval. This ensures that there is only one interval at a time.
+
+    // useCallback => handleTimer function gets re-created every time the component renders, creating a new function object
+    // since handleTimer is defined in the useEffect's dependency array (and gets re-created on every render), React thinks the dependencies have changed, too
+    // As a result, the useEffect hook will re-run on every render, leading to performance issues. Use the useCallback hook to memoize the handleTimer function
+    const handleTimer = useCallback(() => {
+        const interval = setInterval(() => {
+            setTimer((prev) => prev + 1)
+        }, 1000);
+
+        return () => clearInterval(interval);
+
+    }, []);
+
     console.log(timer);
+
     useEffect(() => {
-      if (timer <= 30) {
-        handleTimer();
-      } else {
-        setCall({ ...call, receiveingCall: false });
-      }
-      return () => clearInterval(interval);
-    }, [timer]);
+        if(timer <= 30){
+            const cleanup = handleTimer(); // cleanup variable contains the clean up function `() => clearInterval(interval);
+            return cleanup;
+        } else {
+            setVideoCall({...videoCall, receivingCall: false})
+        } 
 
-    //every second, the `timer` state updates because it increments by 1
-    //this entire component re-renders everytime `timer is updated
-    //on each re-render, the useEffect runs again. But, before it runs, the cleanup function from the previous render is called to clear the old interval. This ensures that there is only one interval at a time.
-
-    //useCallback => handleTimer function gets re-created every time the component renders, creating a new function object
-    //since handleTimer is defined in the useEffect's dependency array (and gets re-created on every render), React thinks the dependencies have changed, too
-    //As a result, the useEffect hook will re-run on every render, leading to performance issues. Use the useCallback hook to memoize the function
-    // const handleTimer = useCallback(() => {
-    //     const interval = setInterval(() => {
-    //         setTimer((prev) => prev + 1)
-    //     }, 1000);
-
-    //     return () => clearInterval(interval);
-
-    // }, []);
-
-    // console.log(timer);
-
-    // useEffect(() => {
-    //     if(timer <= 30){
-    //         const cleanup = handleTimer(); // cleanup variable contains the clean up function `() => clearInterval(interval);
-    //         return cleanup;
-    //     } else {
-    //         setVideoCall({...videoCall, receivingCall: false})
-    //     } 
-
-    // }, [timer, handleTimer, videoCall, setVideoCall]);
+    }, [timer, handleTimer, videoCall, setVideoCall]);
 
   return (
     <div className="dark:bg-dark_bg_1 rounded-lg fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg z-30">

@@ -25,7 +25,9 @@ export const Call = ({videoCall, setVideoCall, videoCallAccepted, videoCallEnded
                         <CallHeader></CallHeader>
 
                         {/* call area */}
-                        <CallArea name={`${name}`}></CallArea>
+                        <CallArea 
+                            name={`${name}`} 
+                            videoCallAccepted={videoCallAccepted}></CallArea>
 
                         {/* call actions */}
                         {
@@ -83,7 +85,8 @@ export const Call = ({videoCall, setVideoCall, videoCallAccepted, videoCallEnded
                 receivingCall && !videoCallAccepted ?
                 (
                     <Ringer 
-                        videoCall={videoCall} 
+                        videoCall={videoCall}
+                        setVideoCall={setVideoCall} 
                         answerCall={answerCall}
                         endCall={endCall}
                         >
