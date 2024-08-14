@@ -8,7 +8,7 @@ import { selectCurrentUser } from "../../redux/user/userSelector";
 import { selectActiveConversation, } from "../../redux/chat/chatSelector";
 
 //import redux actions
-import { getAllUserConversations, updateMessagesAndConversation, setOnlineUsers} from "../../redux/chat/chatReducer";
+import { getAllUserConversations, updateMessagesAndConversation, setOnlineUsers, getAllUsers} from "../../redux/chat/chatReducer";
 
 // import components
 import { Sidebar } from "../sidebar/sidebar-component";
@@ -222,15 +222,17 @@ const Home = ({socket}) => {
     //----------------------------------------------------------------
     // end call function
     const endCall = () => {
+        setVideoCallEnded(true);
+
+        setVideoCallAccepted(false);
+
         setShowCallComponent(false);
+
         setVideoCall({
             ...videoCall,
             callEnded: true,
             receivingCall: false,
         });
-
-        setVideoCallEnded(true);
-        setVideoCallAccepted(false);
 
         socket.emit("end call", videoCall.socketId);
 
@@ -243,6 +245,14 @@ const Home = ({socket}) => {
     };
 
     //---------------- define all of the useEffects ----------------------
+
+    //fetch all users from the database
+
+    useEffect(() => {
+        if(access_token){
+            dispatch(getAllUsers(access_token));
+        }
+    }, [access_token, dispatch]);
 
     //fetch conversation data from api to display in the sidebar ui
     useEffect(() => {

@@ -7,7 +7,7 @@ import { clearActiveConversation } from "../../../redux/chat/chatReducer";
 
 import { SocketContext } from "../../../context/socket-context";
 
-const Menu = forwardRef(({isMenuOpen, socket}, ref) => {
+const Menu = forwardRef(({isMenuOpen, socket, setShowCreateGroupChat}, ref) => {
     const dispatch = useDispatch();
 
     const currentUser = useSelector(selectCurrentUser);
@@ -25,15 +25,19 @@ const Menu = forwardRef(({isMenuOpen, socket}, ref) => {
         await dispatch(logoutUser({access_token}));
     };
 
+    const showCreateGroup = () => {
+        setShowCreateGroupChat(true);
+    };
+
   return (
     <div
         ref={ref}
         // style={{ display: isMenuOpen ? 'block' : 'none' }} // added as temporary check to see if style is being applied
-        className={`${isMenuOpen ? "absolute opacity-100 translate-y-3 -translate-x-14 pointer-events-auto transition-opacity transition-transform z-10" : "absolute pointer-events-none -translate-x-14 -translate-y-4 opacity-0 z-10"}`
+        className={`${isMenuOpen ? "absolute opacity-100 translate-y-3 -translate-x-14 pointer-events-auto transition-opacity transition-transform z-10" : "absolute pointer-events-none -translate-x-14 -translate-y-4 opacity-0 z-50"}`
             }
         >
         <ul className=" flex flex-col align-center justify-center list-none cursor-pointer dark:bg-dark_bg_3 text-white w-[200px] z-10">
-            <li className="p-4 hover:bg-dark_bg_2">New Group</li>
+            <li className="p-4 hover:bg-dark_bg_2" onClick={showCreateGroup}>New Group Chat</li>
             <li className="p-4 hover:bg-dark_bg_2">New Community</li>
             <li className="p-4 hover:bg-dark_bg_2">Starred Messages</li>
             <li className="p-4 hover:bg-dark_bg_2">Settings</li>

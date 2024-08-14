@@ -11,8 +11,8 @@ const API_ENDPOINT = import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT;
 // console.log(API_ENDPOINT);
 
 export const SearchInput = ({searchResults, setSearchResults}) => {
-  const [returnIcon, setReturnIcon] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
+  const [returnIcon, setReturnIcon] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>("");
 
   const currentUser = useSelector(selectCurrentUser);
   const {access_token} = currentUser
@@ -24,9 +24,8 @@ export const SearchInput = ({searchResults, setSearchResults}) => {
   };
 
   const handleUserSearch = async (event) => {
-    const typedInput = event.target.value;
-    if(typedInput && event.key === "Enter"){
-      const {data} = await axios.get(`${API_ENDPOINT}/user?search=${typedInput}`, {
+    if(searchInput && event.key === "Enter"){
+      const {data} = await axios.get(`${API_ENDPOINT}/user?search=${searchInput}`, {
         headers: {
           Authorization: `Bearer ${access_token}`
         }
@@ -39,7 +38,10 @@ export const SearchInput = ({searchResults, setSearchResults}) => {
     }
   };
 
-  const clearSearchResults = () => setSearchResults([]);
+  const clearSearchResults = () => {
+    setSearchResults([]);
+    setSearchInput("");
+  }
 
   const showReturnIcon = () => setReturnIcon(true);
 
@@ -50,12 +52,12 @@ export const SearchInput = ({searchResults, setSearchResults}) => {
           <div className="flex flex-initial">
             {
               returnIcon || searchInput.length > 0 
-                ? <div className="flex items-center justify-center px-2 rotateAnimation cursor-pointer" onClick={clearSearchResults}>
+                ? (<button className="flex items-center justify-center px-2 rotateAnimation cursor-pointer" onClick={clearSearchResults}>
                     <ReturnIcon className="dark:fill-green_1 h-full w-full"></ReturnIcon>
-                  </div>
-                : <div className="flex items-center justify-center px-2">
+                  </button>)
+                : (<button className="flex items-center justify-center px-2">
                     <SearchIcon className="dark:fill-dark_svg_2 dark:bg_dark_bg_2"></SearchIcon>
-                  </div>
+                  </button>)
             }
           </div>
 

@@ -11,7 +11,7 @@ export const CallArea = ({name, videoCallAccepted}) => {
       }, 1000);
 
       return () => clearInterval(timerInterval);
-      
+
   }, []);
 
   useEffect(() => {
@@ -19,6 +19,7 @@ export const CallArea = ({name, videoCallAccepted}) => {
       const cleanup = incrementSeconds();
       return cleanup;
     }
+    
   },[videoCallAccepted, incrementSeconds]);
 
   console.log(totalSecondsInCall);
@@ -45,8 +46,8 @@ export const CallArea = ({name, videoCallAccepted}) => {
                               //if hours that elapsed is a double digit number (i.e 13 hours), then it should display `13'
                               //edge case for 24 hours elapsing, maybe reset the timer to 0
                               Math.floor(totalSecondsInCall / 3600) < 1 ? null
-                              : Math.floor((totalSecondsInCall / 3600)).toString().length < 2 ? ":" + "0" + parseInt(Math.floor(totalSecondsInCall / 3600).toString())
-                              : ":" + parseInt(Math.floor(totalSecondsInCall / 3600).toString())
+                              : Math.floor((totalSecondsInCall / 3600)).toString().length < 2 ? "0" + parseInt(Math.floor(totalSecondsInCall / 3600).toString()) + ":" 
+                              : parseInt(Math.floor(totalSecondsInCall / 3600).toString()) + ":" 
                             }
                           </span>
 

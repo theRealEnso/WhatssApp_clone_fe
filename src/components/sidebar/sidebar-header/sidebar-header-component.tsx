@@ -2,13 +2,15 @@ import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux"
 import { selectCurrentUser } from "../../../redux/user/userSelector"
 
-import { CommunityIcon, StoryIcon, ChatIcon, DotsIcon } from "../../../svg"
-// import Menu from "./menu";
+// import components
 import MenuWithSocket from "./menu";
+import { CreateGroupChat } from "../create-group-chat/create-group-chat-component";
 
+//import SVG icons
+import { CommunityIcon, StoryIcon, ChatIcon, DotsIcon } from "../../../svg"
 
-export const SidebarHeader = ({onlineUsers}) => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+export const SidebarHeader = ({setShowCreateGroupChat}) => {
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const menuRef = useRef();
 
     const currentUser = useSelector(selectCurrentUser);
@@ -57,7 +59,7 @@ export const SidebarHeader = ({onlineUsers}) => {
 
                 <li className="px-2 cursor-pointer" onClick={toggleMenu}>
                     <DotsIcon className="dark:fill-dark_svg_1"></DotsIcon>
-                    <MenuWithSocket isMenuOpen={isMenuOpen} ref={menuRef}></MenuWithSocket>
+                    <MenuWithSocket isMenuOpen={isMenuOpen} ref={menuRef} setShowCreateGroupChat={setShowCreateGroupChat}></MenuWithSocket>
                 </li>
             </ul>
         </div>

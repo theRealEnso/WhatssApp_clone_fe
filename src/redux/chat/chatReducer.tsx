@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import axios from "axios";
 
+const API_ENDPOINT = `${import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT}`;
 const CONVERSATIONS_ENDPOINT = `${import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT}/conversations`;
 const MESSAGES_ENDPOINT = `${import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT}/messages`
 
@@ -14,6 +15,7 @@ type ChatState = {
     messages: [],
     notifications: [],
     onlineUsers: [],
+    allUsers: [],
     files: [],
     filesInViewer: []
 }
@@ -27,9 +29,25 @@ const CHAT_INITIAL_STATE: ChatState = {
     messages: [],
     notifications: [],
     onlineUsers: [],
+    allUsers: [],
     files: [],
     filesInViewer: [],
 };
+
+export const getAllUsers = createAsyncThunk("users/all", async(access_token, {rejectWithValue}) => {
+    try {
+        const {data} = await axios.get(`${API_ENDPOINT}/user/allUsers`, {
+            headers: {
+                Authorization: `Bearer ${access_token}`
+            }
+        });
+
+        return data;
+
+    } catch(error) {
+        return rejectWithValue(error.response.data.error.message);
+    }
+})
 
 export const getAllUserConversations = createAsyncThunk("conversations/all", async (access_token, {rejectWithValue}) => {
     // const {access_token} = payloadData;
@@ -92,7 +110,7 @@ export const sendMessage = createAsyncThunk("messages/send", async (payloadData,
     } catch(error){
         return rejectWithValue(error.response.data.error.message)
     }
-})
+});
 
 export const chatSlice = createSlice({
     name: "chat",
@@ -151,11 +169,23 @@ export const chatSlice = createSlice({
         addFilesToViewer: (state, action) => {
             state.filesInViewer = action.payload;
         },
-        
     },
 
     extraReducers(builder) {
         builder
+        .addCase(getAllUsers.pending, (state, action) => {
+            state.status = "loading";
+            state.error = "";
+        })
+        .addCase(getAllUsers.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.allUsers = action.payload;
+            state.error = "";
+        })
+        .addCase(getAllUsers.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.payload;
+        })
         .addCase(getAllUserConversations.pending, (state, action) => {
             state.status = "loading";
             state.error = "";
