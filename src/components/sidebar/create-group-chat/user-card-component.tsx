@@ -1,10 +1,21 @@
-export const UserCard = ({user, taggedUsers, setTaggedUsers}) => {
+import { useDispatch } from "react-redux";
 
-    const addTaggedUser = () => {
-        setTaggedUsers([...taggedUsers, user]);
+//import redux action(s)
+import { addTaggedUsers } from "../../../redux/chat/chatReducer";
+
+export const UserCard = ({user, index, setSearchInput}) => {
+    const dispatch = useDispatch();
+
+    const values = {
+        user,
+        index
     };
 
-    console.log(taggedUsers);
+    const addTaggedUser = () => {
+        dispatch(addTaggedUsers(values));
+        setSearchInput("");
+    };
+
   return (
     <div 
         className="flex flex-auto items-center space-x-4 mt-8 p-2 outline-0 cursor-pointer rounded-lg hover:bg-dark_bg_2 hover:border-2 hover:border-green_1 shadow-inner shadow-2xl shadow-dark_bg_5 focus:ring-2 focus:ring-green_1 active:ring-2 active:ring-green_1 active:transition-shadow duration-75"

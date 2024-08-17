@@ -16,6 +16,7 @@ type ChatState = {
     notifications: [],
     onlineUsers: [],
     allUsers: [],
+    taggedUsers: [],
     files: [],
     filesInViewer: []
 }
@@ -30,6 +31,7 @@ const CHAT_INITIAL_STATE: ChatState = {
     notifications: [],
     onlineUsers: [],
     allUsers: [],
+    taggedUsers: [],
     files: [],
     filesInViewer: [],
 };
@@ -169,6 +171,23 @@ export const chatSlice = createSlice({
         addFilesToViewer: (state, action) => {
             state.filesInViewer = action.payload;
         },
+
+        addTaggedUsers: (state, action) => {
+            const {user, index} = action.payload;
+            state.taggedUsers = [...state.taggedUsers, user];
+        },
+
+        removeTaggedUser: (state, action) => {
+            const userIndexToRemove = action.payload;
+
+            const updatedTagList = state.taggedUsers.filter((_, idx) => idx !== userIndexToRemove);
+
+            state.taggedUsers = [...updatedTagList];
+        },
+
+        clearTaggedUsers: (state) => {
+            state.taggedUsers = [];
+        }
     },
 
     extraReducers(builder) {
@@ -269,6 +288,6 @@ export const chatSlice = createSlice({
 
 });
 
-export const {clearActiveConversation, updateMessagesAndConversation, setOnlineUsers, addFiles, removeFiles, removeFileFromFiles, addFilesToViewer} = chatSlice.actions;
+export const {clearActiveConversation, updateMessagesAndConversation, setOnlineUsers, addFiles, removeFiles, removeFileFromFiles, addFilesToViewer, addTaggedUsers, removeTaggedUser, clearTaggedUsers} = chatSlice.actions;
 
 export const chatReducer = chatSlice.reducer;

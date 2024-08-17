@@ -13,3 +13,5 @@ export const selectFiles = (state) => state.chat.files;
 export const selectFilesInViewer = (state) => state.chat.filesInViewer;
 
 export const selectAllUsers = (state) => state.chat.allUsers;
+
+export const selectTaggedUsers = (state) => state.chat.taggedUsers;

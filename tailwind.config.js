@@ -29,6 +29,8 @@ export default {
         green_3: "#005C4B",
         green_4: "#025144",
         green_online_1: "#2afa23",
+        red_1: "#870707",
+        red_2: "#DA0707",
       }
     },
   },
