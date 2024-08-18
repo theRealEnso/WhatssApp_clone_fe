@@ -7,7 +7,7 @@ import { selectAllUsers, selectTaggedUsers,} from "../../../redux/chat/chatSelec
 import { selectCurrentUser } from "../../../redux/user/userSelector";
 
 //import redux action(s)
-import { openGroupConversation } from "../../../redux/chat/chatReducer";
+import { createGroupConversation, clearTaggedUsers } from "../../../redux/chat/chatReducer";
 
 //import components
 import { UnderlineInput } from "./underline-input-component";
@@ -46,7 +46,8 @@ export const CreateGroupChat = ({setShowCreateGroupChat}) => {
     };
 
     const openGroupConvo = async () => {
-        await dispatch(openGroupConversation(values));
+        await dispatch(createGroupConversation(values));
+        await dispatch(clearTaggedUsers());
         setShowCreateGroupChat(false);
     };
 

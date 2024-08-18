@@ -84,7 +84,7 @@ export const openConversation = createAsyncThunk("conversations/active", async (
     }
 });
 
-export const openGroupConversation = createAsyncThunk("conversation/group", async (payloadData, {rejectWithValue}) => {
+export const createGroupConversation = createAsyncThunk("conversation/group", async (payloadData, {rejectWithValue}) => {
     const {access_token, addedUsers, groupConversationName} = payloadData;
 
     try {
@@ -248,11 +248,11 @@ export const chatSlice = createSlice({
             state.status = "failed";
             state.error = action.payload;
         })
-        .addCase(openGroupConversation.pending, (state, action) => {
+        .addCase(createGroupConversation.pending, (state, action) => {
             state.status = "loading";
             state.error = "";
         })
-        .addCase(openGroupConversation.fulfilled, (state, action) => {
+        .addCase(createGroupConversation.fulfilled, (state, action) => {
             state.status = "succeeded";
             state.error = "";
             state.activeConversation = action.payload;
@@ -266,7 +266,7 @@ export const chatSlice = createSlice({
 
             state.conversations = currentConvoList;
         })
-        .addCase(openGroupConversation.rejected, (state, action) => {
+        .addCase(createGroupConversation.rejected, (state, action) => {
             state.status = "failed";
             state.error = action.payload;
         })
