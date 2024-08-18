@@ -257,6 +257,14 @@ export const chatSlice = createSlice({
             state.error = "";
             state.activeConversation = action.payload;
             state.files = [];
+
+            const newGroupConvo = action.payload;
+
+            const currentConvoList = [...state.conversations];
+
+            currentConvoList.unshift(newGroupConvo);
+
+            state.conversations = currentConvoList;
         })
         .addCase(openGroupConversation.rejected, (state, action) => {
             state.status = "failed";
