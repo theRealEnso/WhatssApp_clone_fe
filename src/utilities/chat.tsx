@@ -24,3 +24,20 @@ export const checkOnlineStatus = (onlineUsersArray, loggedInUserId, usersArray) 
 
     return onlineUser ? true : false;
 };
+
+export const onlineUsersInGroupChat = (onlineUsersArray, usersArrayOfIds) => {
+    const onlineIds = [];
+    let userCount = 0;
+
+    for (const user of onlineUsersArray){
+        onlineIds.push(user.userId);
+    }
+
+    for(const id of usersArrayOfIds){
+        if(onlineIds.includes(id)){
+            userCount ++;
+        }
+    }
+
+    return userCount;
+}

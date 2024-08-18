@@ -3,7 +3,7 @@ import { selectOnlineUsers } from '../../../redux/chat/chatSelector';
 
 import { SearchLargeIcon, DotsIcon, CallIcon, VideoCallIcon } from '../../../svg';
 
-export const ChatHeader = ({recipientUser, callUser, activeConversation}) => {
+export const ChatHeader = ({recipientUser, callUser, activeConversation, numUsersOnlineInGroup}) => {
     const onlineUsers = useSelector(selectOnlineUsers);
 
     const isRecipientUserOnline = () => {
@@ -23,9 +23,13 @@ export const ChatHeader = ({recipientUser, callUser, activeConversation}) => {
             <div className="flex flex-col">
                 <h1 className="text-white">{activeConversation.isGroupConversation ? activeConversation.name : recipientUser.firstName}</h1>
                 {
-                    isRecipientUserOnline() 
-                    ? <span className="text-green_1">online</span> 
-                    : <span>offline</span>
+                    activeConversation.isGroupConversation && numUsersOnlineInGroup > 1
+                        ? <span className="dark:text-green_1">{`${numUsersOnlineInGroup} users are online`}</span>
+                        : activeConversation.isGroupConversation && numUsersOnlineInGroup === 1
+                        ? <span className="dark:text-green_1">{`${numUsersOnlineInGroup} user is online`}</span>
+                        : isRecipientUserOnline() 
+                        ? <span className="text-green_1">online</span> 
+                        : <span>offline</span>
                 }
             </div>
         </div>

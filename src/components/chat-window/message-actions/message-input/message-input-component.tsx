@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { SocketContext } from "../../../../context/socket-context";
 
 import { useSelector, useDispatch } from "react-redux";
+
+//import redux selectors
 import { selectActiveConversation } from "../../../../redux/chat/chatSelector";
+import { selectCurrentUser } from "../../../../redux/user/userSelector";
 
 const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessage, socket}) => {
     const dispatch = useDispatch();
@@ -11,6 +14,9 @@ const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessag
 
     const activeConversation = useSelector(selectActiveConversation);
     const conversation_id = activeConversation._id;
+
+    const currentUser = useSelector(selectCurrentUser);
+    console.log(currentUser);
 
     const handleMessageInputChange = (event) => {
         const typedInput = event.target.value;
@@ -22,7 +28,7 @@ const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessag
         //on every subsequent keystroke, since the `typing` state variable is now true/truthy and no longer false/falsy, the code in the `if` block never runs again, because the if statement only runs if the `typing state variable is "false", which it no longer is with the state update. This ensures that the "typing" event is only emitted once
         if(!typing){
             setTyping(true);
-            socket.emit("typing", conversation_id);
+            socket.emit("typing", {conversation_id, userTyping: currentUser.firstName});
         } 
         
         // //if the user deletes everything in the input, and the `typing` state variable is still "true", then flip it back to "false" (because typing should be false in this case), and emit the "stopped typing" event
@@ -41,7 +47,7 @@ const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessag
             const timeNow = new Date().getTime();
             const timeDifference = timeNow - lastTypingTime;
             if(timeDifference >= timer && typing) {
-                socket.emit("stopped typing", conversation_id); 
+                socket.emit("stopped typing", {conversation_id, userTyping: currentUser.firstName}); 
                 setTyping(false);
             }
         }, timer);
@@ -53,21 +59,6 @@ const MessageInput = ({textMessage, setTextMessage, inputTextRef, sendTextMessag
             sendTextMessage();
         }
     };
-
-    useEffect(() => {
-        socket.on("typing", (typingStatusObject) => {
-            const {typingStatus} = typingStatusObject;
-            dispatch(setTypingStatus(typingStatus))
-        });
-
-    }, [typing, socket, dispatch]);
-
-    useEffect(() => {
-        socket.on("stopped typing", (typingStatusObject) => {
-            const {typingStatus} = typingStatusObject;
-            dispatch(setTypingStatus(typingStatus));
-        })
-    }, [typing, socket, dispatch]);
 
     // console.log(textMessage);
 

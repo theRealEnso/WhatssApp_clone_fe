@@ -13,6 +13,7 @@ import { checkOnlineStatus } from "../../../utilities/chat";
 
 const ConversationsList = ({onlineUsers, socket}) => {
     const [currentTypingStatus, setCurrentTypingStatus] = useState<string>("");
+    const [nameOfUserTyping, setNameOfUserTyping] = useState<string>("");
     const [convoId, setCurrentConvoId] = useState<string>("");
 
     const conversations = useSelector(selectAllUserConversations);
@@ -26,17 +27,19 @@ const ConversationsList = ({onlineUsers, socket}) => {
 
     useEffect(() => {
       socket.on("typing", (typingStatusObject) => {
-        const {typingStatus, conversationId} = typingStatusObject;
+        const {typingStatus, conversation_id, userTyping} = typingStatusObject;
         setCurrentTypingStatus(typingStatus);
-        setCurrentConvoId(conversationId);
+        setNameOfUserTyping(userTyping);
+        setCurrentConvoId(conversation_id);
       });
     },[socket]);
 
     useEffect(() => {
       socket.on("stopped typing", (typingStatusObject) => {
-        const {typingStatus, conversationId} = typingStatusObject;
+        const {typingStatus, conversation_id, userTyping} = typingStatusObject;
         setCurrentTypingStatus(typingStatus);
-        setCurrentConvoId(conversationId);
+        setNameOfUserTyping(userTyping);
+        setCurrentConvoId(conversation_id);
       });
     },[socket]);
 
@@ -62,6 +65,7 @@ const ConversationsList = ({onlineUsers, socket}) => {
                     isTyping={currentTypingStatus === "typing..." ? true : false} 
                     convoId={convoId}
                     currentTypingStatus={currentTypingStatus}
+                    nameOfUserTyping={nameOfUserTyping}
                     >
                   </Conversation>)
               })
