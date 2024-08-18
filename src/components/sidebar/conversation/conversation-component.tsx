@@ -51,12 +51,12 @@ const Conversation = ({convo, socket, online, isTyping, convoId, currentTypingSt
                 online && 
                 <div className="w-3 h-3 rounded-full bg-green_online_1 absolute top-[8px] right-[-5px]"></div>
             }
-            <img src={recipientUser.picture} className={`w-[45px] h-[45px] rounded-full object-cover ${online ? "border-4 border-green_1" : ""}`}></img>
+            <img src={convo.isGroupConversation ? convo.picture : recipientUser.picture} className={`w-[45px] h-[45px] rounded-full object-cover ${online ? "border-4 border-green_1" : ""}`}></img>
         </div>
 
         <div className="flex flex-col justify-center align-center w-full border-y-2 border-dark_bg_5">
             <div className="flex justify-between">
-                <h1 className="text-md font-bold text-white tracking-wide">{`${recipientUser.firstName} ${recipientUser.lastName}`}</h1>
+                <h1 className="text-md font-bold text-white tracking-wide">{convo.isGroupConversation ? convo.name : `${recipientUser.firstName} ${recipientUser.lastName}`}</h1>
                 {
                     convo.latestMessage ? <span className="text-dark_text_2">{timestampHandler(convo.latestMessage.createdAt)}</span> : null
                 }

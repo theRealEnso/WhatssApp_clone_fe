@@ -15,7 +15,8 @@ export const UserTag = ({userData, index}) => {
     }
   return (
     <div className="flex items-center cursor-pointer" onMouseEnter={() => setIsTagHovered(true)} onMouseLeave={() => setIsTagHovered(false)}>
-        <div className={`${isTagHovered ? "dark:bg-green_1 dark:text-dark_text_1 transition-all" : "dark:bg-green_3 dark:text-dark_text_2"}  rounded-lg p-2 flex space-x-4`}>
+        <div className={`flex items-center ${isTagHovered ? "dark:bg-green_1 dark:text-dark_text_1 transition-all" : "dark:bg-green_3 dark:text-dark_text_2"}  rounded-lg p-2 flex space-x-4`}>
+            <img src={userData.picture} className="w-[45px] h-[45px] object-cover rounded-full"></img>
             <span className={`font-semibold tracking-wide`}>
                 {`${userData.firstName} ${userData.lastName}`}
             </span>

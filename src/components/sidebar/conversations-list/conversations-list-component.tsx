@@ -45,7 +45,11 @@ const ConversationsList = ({onlineUsers, socket}) => {
         {
           // only show conversations that have a message. If a convo has no messages at all, then do not display it
             conversations && 
-              conversations.filter((conversation) => conversation.latestMessage !== null || conversation._id === activeConversation._id)
+              conversations.filter((conversation) => 
+                conversation.latestMessage !== null || 
+                conversation._id === activeConversation._id || 
+                conversation.isGroupConversation === true
+              )
               .map((convo) => {
                 // const isUserOnline = onlineUsers.find((user) => user.userId === getRecipientUserId(currentUser._id, convo.users));
 
