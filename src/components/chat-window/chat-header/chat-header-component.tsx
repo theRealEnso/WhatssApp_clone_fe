@@ -3,7 +3,7 @@ import { selectOnlineUsers } from '../../../redux/chat/chatSelector';
 
 import { SearchLargeIcon, DotsIcon, CallIcon, VideoCallIcon } from '../../../svg';
 
-export const ChatHeader = ({recipientUser, callUser}) => {
+export const ChatHeader = ({recipientUser, callUser, activeConversation}) => {
     const onlineUsers = useSelector(selectOnlineUsers);
 
     const isRecipientUserOnline = () => {
@@ -16,12 +16,12 @@ export const ChatHeader = ({recipientUser, callUser}) => {
         
         <div className="flex items-center align-center justify-center mt-2">
             <img 
-                src={recipientUser.picture} 
+                src={activeConversation.isGroupConversation ? activeConversation.picture : recipientUser.picture} 
                 className={`h-[50px] w-[50px] rounded-full object-cover mr-4 ${isRecipientUserOnline() ? "border-4 border-green_1" : ""}`}>
             </img>
 
             <div className="flex flex-col">
-                <h1 className="text-white">{recipientUser.firstName}</h1>
+                <h1 className="text-white">{activeConversation.isGroupConversation ? activeConversation.name : recipientUser.firstName}</h1>
                 {
                     isRecipientUserOnline() 
                     ? <span className="text-green_1">online</span> 

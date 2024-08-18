@@ -29,8 +29,9 @@ const Conversation = ({convo, socket, online, isTyping, convoId, currentTypingSt
 
     const values = {
         access_token,
-        recipient_id
-    }
+        recipient_id,
+        isGroupConversation: convo.isGroupConversation ? convo._id : false,
+    };
 
     //already have list of conversations in the state. We need to somehow write code that, when user clicks on a conversation in the list, that conversation gets added to the activeConversation state in order to displayed in the chat window.
     //Our backend api endpoint is expecting to receive a recipient_id in the body... so if this is the case, we already have the recipient user data in this component...

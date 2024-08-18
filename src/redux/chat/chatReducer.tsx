@@ -70,9 +70,9 @@ export const getAllUserConversations = createAsyncThunk("conversations/all", asy
 });
 
 export const openConversation = createAsyncThunk("conversations/active", async (payloadData, {rejectWithValue}) => {
-    const {access_token, recipient_id} = payloadData;
+    const {access_token, recipient_id, isGroupConversation} = payloadData;
     try {
-        const {data} = await axios.post(CONVERSATIONS_ENDPOINT, {recipient_id: recipient_id}, {
+        const {data} = await axios.post(CONVERSATIONS_ENDPOINT, {recipient_id, isGroupConversation}, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }

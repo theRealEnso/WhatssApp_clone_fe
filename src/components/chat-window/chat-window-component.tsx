@@ -23,7 +23,7 @@ export const ChatWindow = ({callUser, recipientUser, setRecipientUser}) => {
     const {access_token} = currentUser;
 
     const activeConversation = useSelector(selectActiveConversation);
-    // console.log(activeConversation);
+    console.log(activeConversation);
     const conversation_id = activeConversation._id;
 
     const files = useSelector(selectFiles);
@@ -45,7 +45,7 @@ export const ChatWindow = ({callUser, recipientUser, setRecipientUser}) => {
     return (
     <div className="h-fit text-white flex flex-col w-full">
         <div>
-            <ChatHeader recipientUser={recipientUser} callUser={callUser}></ChatHeader>
+            <ChatHeader recipientUser={recipientUser} callUser={callUser} activeConversation={activeConversation}></ChatHeader>
         </div>
         
         {
