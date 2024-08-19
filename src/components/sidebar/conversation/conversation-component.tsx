@@ -13,7 +13,7 @@ import { timestampHandler } from "../../../utilities/date";
 import { getRecipientUser } from "../../../utilities/chat";
 
 const Conversation = ({convo, socket, online, isTyping, convoId, currentTypingStatus, nameOfUserTyping}) => {
-    // console.log(convo);
+    console.log(convo);
     const dispatch = useDispatch();
 
     const currentUser = useSelector(selectCurrentUser);
@@ -52,7 +52,7 @@ const Conversation = ({convo, socket, online, isTyping, convoId, currentTypingSt
                 online && 
                 <div className="w-3 h-3 rounded-full bg-green_online_1 absolute top-[8px] right-[-5px]"></div>
             }
-            <img src={convo.isGroupConversation ? convo.picture : recipientUser.picture} className={`w-[45px] h-[45px] rounded-full object-cover ${online ? "border-4 border-green_1" : ""}`}></img>
+            <img src={activeConversation.isGroupConversation === true ? activeConversation.picture : recipientUser.picture} className={`w-[45px] h-[45px] rounded-full object-cover ${online ? "border-4 border-green_1" : ""}`}></img>
         </div>
 
         <div className="flex flex-col justify-center align-center w-full border-y-2 border-dark_bg_5">
