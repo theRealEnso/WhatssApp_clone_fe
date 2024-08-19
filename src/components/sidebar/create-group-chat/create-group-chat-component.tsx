@@ -25,9 +25,12 @@ export const CreateGroupChat = ({setShowCreateGroupChat}) => {
     const {access_token} = useSelector(selectCurrentUser);
 
     const [groupName, setGroupName] = useState<string>("");
+    const [searchInput, setSearchInput] = useState<string>("");
     const [userSearchResults, setUserSearchResults] = useState([]);
+    const [searchExecuted, setSearchExecuted] = useState<boolean>(false);
 
     const hideSelectGroupChat = () => {
+        dispatch(clearTaggedUsers());
         setShowCreateGroupChat(false);
     };
 
@@ -79,11 +82,11 @@ export const CreateGroupChat = ({setShowCreateGroupChat}) => {
             }
 
             {/* search input component */}
-            <SearchUserInput setUserSearchResults={setUserSearchResults} ></SearchUserInput>
+            <SearchUserInput searchInput={searchInput} setSearchInput={setSearchInput} setUserSearchResults={setUserSearchResults} setSearchExecuted={setSearchExecuted}></SearchUserInput>
 
             {/* user list */}
             {
-                !userSearchResults
+                userSearchResults.length === 0 && searchExecuted
                 ? (
                     <div className="mt-2">
                         <h1 className="text-white text-2xl tracking-wide">No users found!</h1>

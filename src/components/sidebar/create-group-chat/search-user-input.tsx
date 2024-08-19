@@ -13,10 +13,9 @@ import { ReturnIcon, SearchIcon } from "../../../svg";
 
 const API_ENDPOINT = import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT;
 
-export const SearchUserInput = ({setUserSearchResults}) => {
+export const SearchUserInput = ({searchInput, setSearchInput, setUserSearchResults, setSearchExecuted}) => {
     const {access_token} = useSelector(selectCurrentUser);
 
-    const [searchInput, setSearchInput] = useState<string>("");
     const [returnIcon, setReturnIcon] = useState<boolean>(false);
 
     const handleInputChange = (event) => {
@@ -25,6 +24,7 @@ export const SearchUserInput = ({setUserSearchResults}) => {
 
     const handleUserSearch = async (event) => {
         if(searchInput && event.key === "Enter"){
+            setSearchExecuted(false);
             const {data} = await axios.get(`${API_ENDPOINT}/user?search=${searchInput}`, {
                 headers: {
                     Authorization: `Bearer ${access_token}`
@@ -32,7 +32,8 @@ export const SearchUserInput = ({setUserSearchResults}) => {
             });
 
             if(data){
-                console.log(data);
+                // console.log(data);
+                setSearchExecuted(true);
                 setUserSearchResults(data);
                 setSearchInput("");
             }
