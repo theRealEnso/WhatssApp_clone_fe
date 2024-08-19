@@ -1,20 +1,42 @@
 import { useState, useEffect } from "react"
+
 import { useSelector } from "react-redux";
 
 //import redux selector(s)
-// import { selectAllUsers } from "../../../redux/chat/chatSelector";
+import { selectCurrentUser } from "../../../redux/user/userSelector";
+
+//import axios
+import axios from "axios";
 
 //import SVG icons
 import { ReturnIcon, SearchIcon } from "../../../svg";
 
-export const SearchUserInput = ({searchInput, setSearchInput, allUsers, filteredUsers, setFilteredUsers}) => {
+const API_ENDPOINT = import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT;
 
-    const fullUserNames = [];
+export const SearchUserInput = ({setUserSearchResults}) => {
+    const {access_token} = useSelector(selectCurrentUser);
 
+    const [searchInput, setSearchInput] = useState<string>("");
     const [returnIcon, setReturnIcon] = useState<boolean>(false);
 
-    const handleUserSearch = (event) => {
+    const handleInputChange = (event) => {
         setSearchInput(event.target.value);
+    };
+
+    const handleUserSearch = async (event) => {
+        if(searchInput && event.key === "Enter"){
+            const {data} = await axios.get(`${API_ENDPOINT}/user?search=${searchInput}`, {
+                headers: {
+                    Authorization: `Bearer ${access_token}`
+                }
+            });
+
+            if(data){
+                console.log(data);
+                setUserSearchResults(data);
+                setSearchInput("");
+            }
+        }
     };
 
     const showReturnIcon = () => {
@@ -23,29 +45,11 @@ export const SearchUserInput = ({searchInput, setSearchInput, allUsers, filtered
 
     const hideReturnIcon = () => {
         setReturnIcon(false);
-    }
-
-    useEffect(() => {
-        if(!searchInput){
-            setFilteredUsers([]);
-            return;
-        }
-
-        const searchUsers = allUsers.filter((user) => {
-            const fullName = `${user.firstName.toLowerCase()} ${user.lastName.toLowerCase()}`
-            return (
-                user.firstName.toLowerCase().includes(searchInput.toLowerCase()) || user.lastName.toLowerCase().includes(searchInput.toLowerCase()) || user.email.toLowerCase().includes(searchInput.toLowerCase()) || fullName.includes(searchInput.toLowerCase())
-            )
-        });
-
-        setFilteredUsers(searchUsers);
-
-
-    }, [allUsers, setFilteredUsers, searchInput]);
+    };
 
     // console.log(searchInput);
-    // console.log(filteredUsers);
-    // console.log(allUsers);
+    // console.log(API_ENDPOINT);
+
   return (
     <div className="mt-4 w-full">
         <div className="h-[50px] flex items-center justify-center w-full rounded-lg dark:bg-dark_bg_5 p-2 space-x-2">
@@ -69,10 +73,12 @@ export const SearchUserInput = ({searchInput, setSearchInput, allUsers, filtered
                 <input 
                     type="text"
                     placeholder="Search for a user by name or email address"
+                    name="searchInput"
                     value={searchInput}
-                    onChange={handleUserSearch}
+                    onChange={handleInputChange}
                     onFocus={showReturnIcon}
                     onBlur={hideReturnIcon}
+                    onKeyDown={handleUserSearch}
                     className="w-full p-2 rounded-lg dark:bg-dark_bg_5 dark:text-green_1 tracking-wide text-lg outline-none"
                     >
                 </input>

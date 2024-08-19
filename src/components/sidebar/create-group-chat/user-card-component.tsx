@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 //import redux action(s)
 import { addTaggedUsers } from "../../../redux/chat/chatReducer";
 
-export const UserCard = ({user, index, setSearchInput}) => {
+export const UserCard = ({user, index, setUserSearchResults}) => {
     const dispatch = useDispatch();
 
     const values = {
@@ -13,7 +13,7 @@ export const UserCard = ({user, index, setSearchInput}) => {
 
     const addTaggedUser = () => {
         dispatch(addTaggedUsers(values));
-        setSearchInput("");
+        setUserSearchResults([]);
     };
 
   return (

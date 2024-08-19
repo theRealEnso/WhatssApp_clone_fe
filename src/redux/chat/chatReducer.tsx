@@ -49,7 +49,7 @@ export const getAllUsers = createAsyncThunk("users/all", async(access_token, {re
     } catch(error) {
         return rejectWithValue(error.response.data.error.message);
     }
-})
+});
 
 export const getAllUserConversations = createAsyncThunk("conversations/all", async (access_token, {rejectWithValue}) => {
     // const {access_token} = payloadData;

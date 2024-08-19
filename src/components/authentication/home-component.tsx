@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback} from "react";
+import { useEffect, useState, useRef} from "react";
 import { SocketContext } from "../../context/socket-context";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -8,14 +8,13 @@ import { selectCurrentUser } from "../../redux/user/userSelector";
 import { selectActiveConversation, } from "../../redux/chat/chatSelector";
 
 //import redux actions
-import { getAllUserConversations, updateMessagesAndConversation, setOnlineUsers, getAllUsers} from "../../redux/chat/chatReducer";
+import { getAllUserConversations, updateMessagesAndConversation, setOnlineUsers,} from "../../redux/chat/chatReducer";
 
 // import components
 import { Sidebar } from "../sidebar/sidebar-component";
 import { Banner } from "../banner/banner-component";
 import { ChatWindow } from "../chat-window/chat-window-component";
 import { Call } from "../video-calling/call-component";
-import { Ringer } from "../video-calling/ringer-component";
 
 import Peer from "simple-peer";
 import { SignalData } from "simple-peer";
@@ -245,14 +244,6 @@ const Home = ({socket}) => {
     };
 
     //---------------- define all of the useEffects ----------------------
-
-    //fetch all users from the database
-
-    useEffect(() => {
-        if(access_token){
-            dispatch(getAllUsers(access_token));
-        }
-    }, [access_token, dispatch]);
 
     //fetch conversation data from api to display in the sidebar ui
     useEffect(() => {

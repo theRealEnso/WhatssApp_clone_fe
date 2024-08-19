@@ -1,15 +1,15 @@
 import { UserCard } from "./user-card-component";
 
-export const UserSearchList = ({filteredUsers, setSearchInput}) => {
+export const UserSearchList = ({userSearchResults, setUserSearchResults}) => {
 
   return (
     <div>
         {
-            !filteredUsers.length 
+            !userSearchResults.length 
             ? null
-            : filteredUsers.map((user, idx) => {
+            : userSearchResults.map((user, idx) => {
               return (
-                <UserCard key={user._id } user={user} index={idx} setSearchInput={setSearchInput}></UserCard>
+                <UserCard key={user._id } user={user} index={idx} setUserSearchResults={setUserSearchResults}></UserCard>
               )
             })
         }

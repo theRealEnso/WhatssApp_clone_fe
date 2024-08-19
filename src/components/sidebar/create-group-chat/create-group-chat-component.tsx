@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSelector, useDispatch} from "react-redux";
 
 //import selectors
-import { selectAllUsers, selectTaggedUsers,} from "../../../redux/chat/chatSelector";
+import { selectTaggedUsers } from "../../../redux/chat/chatSelector";
 import { selectCurrentUser } from "../../../redux/user/userSelector";
 
 //import redux action(s)
@@ -21,13 +21,11 @@ import { ReturnIcon } from "../../../svg";
 export const CreateGroupChat = ({setShowCreateGroupChat}) => {
     const dispatch = useDispatch();
 
-    const allUsers = useSelector(selectAllUsers);
     const taggedUsers = useSelector(selectTaggedUsers);
     const {access_token} = useSelector(selectCurrentUser);
 
     const [groupName, setGroupName] = useState<string>("");
-    const [searchInput, setSearchInput] = useState<string>("");
-    const [filteredUsers, setFilteredUsers] = useState([]);
+    const [userSearchResults, setUserSearchResults] = useState([]);
 
     const hideSelectGroupChat = () => {
         setShowCreateGroupChat(false);
@@ -76,22 +74,22 @@ export const CreateGroupChat = ({setShowCreateGroupChat}) => {
             {
                 taggedUsers && taggedUsers.length > 0
                 ? (
-                    <TaggedUserList taggedUsers={taggedUsers} setSearchInput={setSearchInput}></TaggedUserList>
+                    <TaggedUserList taggedUsers={taggedUsers}></TaggedUserList>
                 ) : null
             }
 
             {/* search input component */}
-            <SearchUserInput allUsers={allUsers} filteredUsers={filteredUsers} setFilteredUsers={setFilteredUsers} searchInput={searchInput} setSearchInput={setSearchInput}></SearchUserInput>
+            <SearchUserInput setUserSearchResults={setUserSearchResults} ></SearchUserInput>
 
             {/* user list */}
             {
-                filteredUsers.length === 0 && searchInput.length > 0
+                !userSearchResults
                 ? (
                     <div className="mt-2">
                         <h1 className="text-white text-2xl tracking-wide">No users found!</h1>
                     </div>
                 ) : (
-                    <UserSearchList filteredUsers={filteredUsers} setSearchInput={setSearchInput}></UserSearchList>
+                    <UserSearchList userSearchResults={userSearchResults} setUserSearchResults={setUserSearchResults}></UserSearchList>
                 )
             }
             
