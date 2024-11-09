@@ -52,11 +52,13 @@ export const CondensedPhotoViewer = ({message, me, setShowViewer}) => {
                             })
                         }
 
+                        {/* quadrant 4 in the condensed viewer needs to display to the user how many additional files are included  */}
                         <div 
                             className={`flex items-center justify-center relative border-4 border-dark_bg_3 dark: bg-dark_bg_1 ${isHovered ? "opacity-100 transition-opacity" : "opacity-50"}`} 
                             onMouseEnter={() => setIsHovered(true)} 
                             onMouseLeave={() => setIsHovered(false)}>
-                            <span className="absolute">{`+${message.files.length - 4} additional files`}</span>
+                            
+                            <span className="absolute text-white bg-black">{`+${message.files.length - 4} additional files`}</span>
                             <img src={message.files[4].file.secure_url} className="object-cover h-full w-full dark:bg-dark_bg_1"></img>
                         </div>
                     </div>

@@ -17,13 +17,19 @@ const Contacts = ({result, setSearchResults, socket}) => {
     const values = {
         access_token,
         recipient_id,
-    }
+        isGroupConversation: false,
+    };
 
     const openConvo = async () => {
-        const newConvo = await dispatch(openConversation(values));
-        await setSearchResults([]);
-        socket.emit("join conversation room", newConvo.payload._id);
-    }
+        try {
+            const newConvo = await dispatch(openConversation(values));
+            console.log(newConvo);
+            await setSearchResults([]);
+            socket.emit("join conversation room", newConvo.payload._id);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
   return (
     <div className="scrollbar cursor-pointer rounded-lg hover:bg-dark_bg_5 hover:border-green_1 shadow-inner shadow-2xl shadow-dark_bg_5 focus:ring-2 focus:ring-green_1 active:ring-2 active:ring-green_1 active:transition-shadow duration-75" onClick={openConvo}>

@@ -366,6 +366,7 @@ const Home = ({socket}) => {
                     <Sidebar></Sidebar>
 
                     {
+                        // check if activeConversation is truthy and if it is not an empty object
                         activeConversation && Object.keys(activeConversation).length > 0 ? <ChatWindow callUser={callUser} recipientUser={recipientUser} setRecipientUser={setRecipientUser}></ChatWindow> : <Banner></Banner>
                     }
 

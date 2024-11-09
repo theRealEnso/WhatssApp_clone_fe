@@ -22,6 +22,7 @@ const Conversation = ({convo, socket, online, isTyping, convoId, currentTypingSt
     const {access_token} = currentUser;
 
     const activeConversation = useSelector(selectActiveConversation);
+    console.log(activeConversation);
 
     // need to filter through the users array and extract the data (ID) of the other user (ie user that the currently signed in user is communicating with)
     const recipientUser = getRecipientUser(currentUserId, convo.users);

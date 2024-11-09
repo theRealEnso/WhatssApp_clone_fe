@@ -33,12 +33,19 @@ const USER_INITIAL_STATE: UserState = {
    } 
 };
 
+//create an action creator named registerUser using createAsyncThunk
+//1st parameter is a string representing the type of action => follows convention of `domain/action` where `domain` is the namespace for your actions, and `action` is the specific action being performed
+//2nd parameter is a payloadCreator. This is an async callback function that returns a promise. Receives two args:
+//  - a payload passed when the action is dispatched, which contains data needed for the async operation. Named it `payloadData` here. Ex: in our register form component, we use redux to dispatch this `registerUser` action with the data object from react-hook-forms that contains the data that the user types into the form (this data object is passed as the payload)
+// - thunkAPI object containing utility functions for handling async errors => `rejectWithValue` is used to reject the promise with a specific value, which will be captured as the payload of the `rejected` action. Also contains other utility functions like `dispatch` and `getState`
+// always generates three standard action creators `pending`, `fulfilled`, and `rejected`
+
 export const registerUser = createAsyncThunk("auth/register", async (payloadData, {rejectWithValue}) => {
     try {
         // const response = await axios.post(`${AUTH_ENDPOINT}/register`, payloadData);
         // console.log(response);
-        const {data} = await axios.post(`${AUTH_ENDPOINT}/register`, payloadData);
-        return data;
+        const {data} = await axios.post(`${AUTH_ENDPOINT}/register`, payloadData); // post request to the `register' backend endpoint with the payload from our frontend form
+        return data; //response that our backend endpoint sends back upon successful completion of post request, which is a payload object containing our user data
     } catch(error) {
         return rejectWithValue(error.response.data.error.message);
     }
@@ -102,7 +109,7 @@ export const userSlice = createSlice({
         .addCase(registerUser.fulfilled, (state, action) => {
             state.status = "succeeded";
             state.error = "";
-            state.user = action.payload.user; // server sends back a response object  that contains a nested user object
+            state.user = action.payload.user; // server sends back a response object that contains a nested user object. Set state of the user in the store with the received user data
         })
         .addCase(registerUser.rejected, (state, action) => {
             state.status = "failed";

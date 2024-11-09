@@ -15,7 +15,7 @@ export const SearchInput = ({searchResults, setSearchResults}) => {
   const [searchInput, setSearchInput] = useState<string>("");
 
   const currentUser = useSelector(selectCurrentUser);
-  const {access_token} = currentUser
+  const {access_token} = currentUser;
 
   const handleInputChange = (event) => {
     const typedInput = event.target.value;

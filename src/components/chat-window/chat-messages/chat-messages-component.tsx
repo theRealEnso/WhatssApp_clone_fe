@@ -64,7 +64,7 @@ const ChatMessages = ({setShowViewer, socket}) => {
                       message.message.length > 0 ? (<Message key={message._id} message={message} me={currentUser._id === message.sender._id}></Message>) : null
                     }
 
-                    {/* display message file attachments */}
+                    {/* display message file attachments-- if number of files in a message is less than 3, then display them separately as separate text bubbles per usual*/}
                     {
                       message.files.length < 3 ? 
                         (
@@ -76,6 +76,8 @@ const ChatMessages = ({setShowViewer, socket}) => {
                               })
                             }
                           </div>
+
+                          // if number of file attachments in message is greater than 3, then first text bubble needs to show the first item in the array of files. Next text bubble must show a 2x2 grid preview that shows images of the next 4 files in the files array
                         ) : message.files.length > 3 ? 
                         (
                           <div>

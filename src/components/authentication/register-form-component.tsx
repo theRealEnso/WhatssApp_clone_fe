@@ -36,7 +36,8 @@ const RegisterForm = () => {
         resolver: yupResolver(registerFormSchema),
     });
 
-    //handleSubmit from the useForm hook runs a callback function that automatically receives 'data' as an object, which captures what the user types in the input and registers those values to keys of the corresponding "name" property of the input
+    //handleSubmit from the useForm hook validates inputs before invoking callback function 'onSubmitHandler'
+    //onSubmitHandler is an async function that automatically receives 'data' as an object, which captures what the user types in the input and registers those values to keys of the corresponding "name" property of the input
     //ex: {firstName: "Enso", lastName: "the Great"}
     const onSubmitHandler = async (data) => {
         console.log(data);
@@ -55,6 +56,7 @@ const RegisterForm = () => {
         //    console.log(result);
         }
         
+        // console.log(result)
         if(result.payload.user){
             navigate("/");
         }
@@ -81,6 +83,7 @@ const RegisterForm = () => {
             </div>
 
             <form onSubmit={handleSubmit(onSubmitHandler)} className="mt-6 space-y-8">
+                {/* pass register function from react-hook-form as props to our custom input component--register function to be used in order to register inputs into the handleSubmit hook. Also pass in other props to custom input to be used*/}
                 <FormInput register={register} error={errors.firstName?.message} name="firstName" placeholder="First Name" type="text" required></FormInput>
                 <FormInput register={register} error={errors.lastName?.message} name="lastName" placeholder="Last Name" type="text" required></FormInput>
                 <FormInput register={register} error={errors.email?.message} name="email" placeholder="Email" type="email" required></FormInput>

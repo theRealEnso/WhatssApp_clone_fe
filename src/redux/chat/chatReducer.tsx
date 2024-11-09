@@ -311,7 +311,7 @@ export const chatSlice = createSlice({
             }
 
             const currentConvos = [...state.conversations];
-            let updatedConvos = currentConvos.filter((conversation) => conversation._id !== updatedConversation._id);
+            const updatedConvos = currentConvos.filter((conversation) => conversation._id !== updatedConversation._id);
             updatedConvos.unshift(updatedConversation);
 
             state.conversations = [...updatedConvos];
