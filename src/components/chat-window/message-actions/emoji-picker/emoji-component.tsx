@@ -6,7 +6,7 @@ import EmojiPicker from "emoji-picker-react";
 
 export const Emoji = forwardRef(({textMessage, setTextMessage, showEmojiPicker, setShowEmojiPicker, inputTextRef, setShowAttachmentMenu}, ref) => {
 
-  const [cursorPosition, setCursorPosition] = useState(0);
+  const [cursorPosition, setCursorPosition] = useState<number>(0);
 
   const toggleEmojiPicker = (event) => {
     event.stopPropagation();

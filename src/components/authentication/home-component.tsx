@@ -56,7 +56,7 @@ const callData: CallData = {
 
 const Home = ({socket}) => {
     // console.log(socket);
-    console.log("Home component rendered");
+    // console.log("Home component rendered");
     const myVideoFeed = useRef<HTMLVideoElement>();
     const recipientVideoFeed = useRef<HTMLVideoElement>();
     const connectionRef = useRef();
@@ -257,35 +257,27 @@ const Home = ({socket}) => {
     },[access_token, dispatch]);
 
     //emit the user id back to the server socket under the name "user logged in" to join user to socket io
+    // receive online users emitted from the server to store in our redux store
     useEffect(() => {
         socket.emit("user logged in", currentUser._id);
 
-        //get online users that is emmited from the server, then add this data to the redux store
+        //get online users that is emitted from the server, then add this data to the redux store
         socket.on("get-online-users", (users) => {
             dispatch(setOnlineUsers(users));
         });
 
-        return () => {
-            socket.off("get-online-users");
-        };
-
-    }, [currentUser, socket, dispatch]);
-
-    //video calls
-    //need socket ID's of all users  in order to start a joint stream call. SocketId connects to another SocketId.
-    //"setup socket" event emitted from the server sends over the socket ID's of users that logged into the app
-
-    useEffect(() => {
         const storeOnlineUsers = (users) => {
             dispatch(setOnlineUsers(users));
-        }
+        };
+
         socket.on("get-updated-online-users", storeOnlineUsers);
 
         return () => {
+            socket.off("get-online-users");
             socket.off("get-updated-online-users", storeOnlineUsers);
         };
 
-    },[dispatch, socket]);
+    }, [currentUser, socket, dispatch]);
 
     //listen on received message
     useEffect(() => {
@@ -301,12 +293,16 @@ const Home = ({socket}) => {
 
         //cleanup to address issue of strict mode double rendering, causing the message to emit twice
         // Cleanup / remove the `socket.on` listener that listens for `received message` emitted by the server on component unmount or when socket changes
-        //ensures that when the component re-renders due to strict mode, the previous event listener is removed before the new one is added, preventing accumulation of listeners. So, component mounts => socket.on listener is registered => strict mode causes react to re-render this component => on re-render, the component first unmounts + removes the registered  socket.on event listener, then mounts again and registers a new listener again
+        //ensures that when the component re-renders due to strict mode, the previous event listener is removed before the new one is added, preventing accumulation of listeners. So, component mounts => socket.on listener is registered => strict mode causes react to re-render this component => on re-render, the component first unmounts + removes the previously registered  socket.on event listener, then mounts again and registers a new listener again
         return () => {
             //socket.off(eventName, listener) => removes the specified listener from the listener array for the event named `eventName`
             socket.off("received message", handleMessage);
         };
     }, [socket, dispatch]);
+
+    //video calls
+    //need socket ID's of all users  in order to start a joint stream call. SocketId connects to another SocketId.
+    //"setup socket" event emitted from the server sends over the socket ID's of users that logged into the app
 
     useEffect(() => {
         setupMedia();
@@ -396,7 +392,10 @@ const Home = ({socket}) => {
 };
 
 const HomeWithSocket = (props) => (
+    // SocketContext.Consumer is a way to access the socket value from SocketContext.Provider
     // when `SocketContext.Consumer is used, the function inside the consumer receives the `value` prop that was provided in the `SocketContext.Provider`, which is the socket instance / connection that we assigned to it
+    // It also provides a render function by default. Here, it takes the current socket value (again, obtained from the provider) as an input and renders whatever JSX based on that value. In this case, it receives the socket value from the provider and passes it down as props to the Home component
+    //HomeWithSocket is a functional component => acts as a wrapper around the Home component. It allows the Home component to receive the socket instance as a prop without directly accessing the context in the Home component. This means that we avoid using the useContext hook
     <SocketContext.Consumer>
         {/* receive the socket instance, then pass this as props to the Home component */}
         {(socket) => <Home {...props} socket={socket}></Home>}
