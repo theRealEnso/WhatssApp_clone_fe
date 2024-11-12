@@ -40,6 +40,7 @@ export const PhotoAttachment = ({setShowAttachmentMenu}) => {
             } else if (file.size > 1024 * 1024 * 5){
                 files = files.filter((item) => item.name !== file.name);
                 return;
+                //otherwise, create data url for each file and add each file into the files array to be stored in our redux store
             } else {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
@@ -52,12 +53,12 @@ export const PhotoAttachment = ({setShowAttachmentMenu}) => {
                             type: getFileType(file.type),
                         }
                     ));
-                }
+                };
             }
-        })
+        });
 
         setShowAttachmentMenu(false);
-    }
+    };
 
   return (
     <div className="cursor-pointer hover:scale-125 transition-transform">

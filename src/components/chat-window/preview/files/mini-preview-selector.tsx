@@ -74,10 +74,11 @@ export const MiniPreviewSelector = ({activeIndex, setActiveIndex}) => {
         {/* list and display files as thumbnails */}
         
         {
-          filesToDisplay.map((file, index) => {
+          filesToDisplay.map((file, idx) => {
             // console.log(file);
             return (
-              <MiniPreview file={file} index={startingIndex + index} activeIndex={activeIndex} setActiveIndex={setActiveIndex}></MiniPreview>
+              //need to make sure that the index passed as props to the MiniPreview component tracks the global index of the entire files array in the redux store, not the filesToDisplay indices because these will always be starting from index 0-4
+              <MiniPreview file={file} index={startingIndex + idx} activeIndex={activeIndex} setActiveIndex={setActiveIndex}></MiniPreview>
             )
           })
         }
@@ -104,7 +105,7 @@ export const MiniPreviewSelector = ({activeIndex, setActiveIndex}) => {
       </div>
 
       <div className="relative left-[40px]">
-        {/* Add another file */}
+        {/* Add more files */}
         <Add></Add>
       </div>     
 

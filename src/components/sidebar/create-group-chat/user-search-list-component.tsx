@@ -1,6 +1,6 @@
 import { UserCard } from "./user-card-component";
 
-export const UserSearchList = ({userSearchResults, setUserSearchResults}) => {
+export const UserSearchList = ({userSearchResults, setUserSearchResults, setSearchExecuted}) => {
 
   return (
     <div>
@@ -9,7 +9,7 @@ export const UserSearchList = ({userSearchResults, setUserSearchResults}) => {
             ? null
             : userSearchResults.map((user, idx) => {
               return (
-                <UserCard key={user._id } user={user} index={idx} setUserSearchResults={setUserSearchResults}></UserCard>
+                <UserCard key={user._id } user={user} index={idx} setUserSearchResults={setUserSearchResults} setSearchExecuted={setSearchExecuted}></UserCard>
               )
             })
         }

@@ -31,7 +31,7 @@ const Conversation = ({convo, socket, online, isTyping, convoId, currentTypingSt
     const values = {
         access_token,
         recipient_id,
-        isGroupConversation: convo.isGroupConversation ? convo._id : false,
+        isGroupConversation: convo.isGroupConversation ? convo._id : false, // will contain the conversation ID of the group conversation or a false boolean value
     };
 
     //already have list of conversations in the state. We need to somehow write code that, when user clicks on a conversation in the list, that conversation gets added to the activeConversation state in order to displayed in the chat window.
@@ -53,7 +53,14 @@ const Conversation = ({convo, socket, online, isTyping, convoId, currentTypingSt
                 online && 
                 <div className="w-3 h-3 rounded-full bg-green_online_1 absolute top-[8px] right-[-5px]"></div>
             }
-            <img src={activeConversation.isGroupConversation === true ? activeConversation.picture : recipientUser.picture} className={`w-[45px] h-[45px] rounded-full object-cover ${online ? "border-4 border-green_1" : ""}`}></img>
+            <img src=
+                {
+                    convo.isGroupConversation === true ? convo.picture
+                    : recipientUser.picture
+                } 
+                className={`w-[45px] h-[45px] rounded-full object-cover ${online ? "border-4 border-green_1" : ""}`}>
+            
+            </img>
         </div>
 
         <div className="flex flex-col justify-center align-center w-full border-y-2 border-dark_bg_5">

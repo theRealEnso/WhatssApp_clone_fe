@@ -28,6 +28,7 @@ export const CreateGroupChat = ({setShowCreateGroupChat}) => {
     const [searchInput, setSearchInput] = useState<string>("");
     const [userSearchResults, setUserSearchResults] = useState([]);
     const [searchExecuted, setSearchExecuted] = useState<boolean>(false);
+    const [noSearchResults, setNoSearchResults] = useState<boolean>(false);
 
     const hideSelectGroupChat = () => {
         dispatch(clearTaggedUsers());
@@ -82,17 +83,17 @@ export const CreateGroupChat = ({setShowCreateGroupChat}) => {
             }
 
             {/* search input component */}
-            <SearchUserInput searchInput={searchInput} setSearchInput={setSearchInput} setUserSearchResults={setUserSearchResults} setSearchExecuted={setSearchExecuted}></SearchUserInput>
+            <SearchUserInput searchInput={searchInput} setSearchInput={setSearchInput} setUserSearchResults={setUserSearchResults} setSearchExecuted={setSearchExecuted} setNoSearchResults={setNoSearchResults}></SearchUserInput>
 
             {/* user list */}
             {
-                userSearchResults.length === 0 && searchExecuted
+                searchExecuted && noSearchResults
                 ? (
                     <div className="mt-2">
                         <h1 className="text-white text-2xl tracking-wide">No users found!</h1>
                     </div>
                 ) : (
-                    <UserSearchList userSearchResults={userSearchResults} setUserSearchResults={setUserSearchResults}></UserSearchList>
+                    <UserSearchList userSearchResults={userSearchResults} setUserSearchResults={setUserSearchResults} setSearchExecuted={setSearchExecuted}></UserSearchList>
                 )
             }
             

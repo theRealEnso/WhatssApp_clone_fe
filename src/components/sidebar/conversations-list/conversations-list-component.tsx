@@ -46,7 +46,9 @@ const ConversationsList = ({onlineUsers, socket}) => {
   return (
     <div className="convos scrollbar">
         {
-          // only show conversations that have a message. If a convo has no messages at all, then do not display it
+          // only show conversations that have a message (non null value) If a convo has no messages at all, then do not display it
+          // also display group conversations
+          // also display active conversations
             conversations && 
               conversations.filter((conversation) => 
                 conversation.latestMessage !== null || 
@@ -55,7 +57,7 @@ const ConversationsList = ({onlineUsers, socket}) => {
               )
               .map((convo) => {
                 // const isUserOnline = onlineUsers.find((user) => user.userId === getRecipientUserId(currentUser._id, convo.users));
-
+                // console.log(convo);
                 const isUserOnline = checkOnlineStatus(onlineUsers, currentUser._id, convo.users);
                 return (
                   <Conversation 

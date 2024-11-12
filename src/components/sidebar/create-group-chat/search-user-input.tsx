@@ -13,7 +13,7 @@ import { ReturnIcon, SearchIcon } from "../../../svg";
 
 const API_ENDPOINT = import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT;
 
-export const SearchUserInput = ({searchInput, setSearchInput, setUserSearchResults, setSearchExecuted}) => {
+export const SearchUserInput = ({searchInput, setSearchInput, setUserSearchResults, setSearchExecuted, setNoSearchResults}) => {
     const {access_token} = useSelector(selectCurrentUser);
 
     const [returnIcon, setReturnIcon] = useState<boolean>(false);
@@ -31,10 +31,15 @@ export const SearchUserInput = ({searchInput, setSearchInput, setUserSearchResul
                 }
             });
 
-            if(data){
+            if(data.length > 0){
                 // console.log(data);
                 setSearchExecuted(true);
+                setNoSearchResults(false);
                 setUserSearchResults(data);
+                setSearchInput("");
+            } else {
+                setSearchExecuted(true);
+                setNoSearchResults(true);
                 setSearchInput("");
             }
         }
