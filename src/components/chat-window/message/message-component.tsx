@@ -11,9 +11,17 @@ export const Message = ({message, me}) => {
   return (
     <div className="flex flex-col">
         <span className={`${me ? "ml-auto justify-end" : ""}`}>
-            {
-                me ? "You: " : `${message.sender.firstName}: `
-            }
+            <div className="flex flex-col">
+                <span>
+                    {
+                        me ? "You: " : `${message.sender.firstName}: `
+                    }
+                </span>
+                
+                <img src={message.sender.picture} className="rounded-full h-[50px] w-[50px] object-cover"></img>
+
+            </div>
+
         </span>
         <div className={`w-full flex mt-2 mb-6 space-x-3 max-w-xs ${me ? "ml-auto justify-end relative right-24" : ""}`}>
 
