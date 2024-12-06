@@ -6,6 +6,8 @@ import createFilter from "redux-persist-transform-filter";
 
 import { rootReducer, RootState } from "./rootReducer";
 
+import axiosInstance from "../api/axiosInstance";
+
 type ExtendedPersistConfig = PersistConfig<RootState> & {
     whitelist: (keyof RootState)[]
 };
@@ -32,4 +34,8 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
+
+export const apiClient = axiosInstance(store);
+
+export type StoreType = ReturnType<typeof store>;
 

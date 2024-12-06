@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import axios from "axios";
+import { apiClient } from "../store";
 
 const API_ENDPOINT = `${import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT}`;
 const CONVERSATIONS_ENDPOINT = `${import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT}/conversations`;
@@ -38,7 +39,7 @@ const CHAT_INITIAL_STATE: ChatState = {
 
 export const getAllUsers = createAsyncThunk("users/all", async(access_token, {rejectWithValue}) => {
     try {
-        const {data} = await axios.get(`${API_ENDPOINT}/user/allUsers`, {
+        const {data} = await apiClient.get(`${API_ENDPOINT}/user/allUsers`, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
@@ -55,14 +56,14 @@ export const getAllUserConversations = createAsyncThunk("conversations/all", asy
     // const {access_token} = payloadData;
 
     try {
-        const {data} = await axios.get(CONVERSATIONS_ENDPOINT, {
+        const {data} = await apiClient.get(CONVERSATIONS_ENDPOINT, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
         });
 
         // console.log(data);
-        return data; // response set back from server for this endpoint
+        return data; // response sent back from server for this endpoint
 
     } catch(error) {
         return rejectWithValue(error.response.data.error.message);
@@ -72,7 +73,7 @@ export const getAllUserConversations = createAsyncThunk("conversations/all", asy
 export const openConversation = createAsyncThunk("conversations/active", async (payloadData, {rejectWithValue}) => {
     const {access_token, recipient_id, isGroupConversation} = payloadData;
     try {
-        const {data} = await axios.post(CONVERSATIONS_ENDPOINT, {recipient_id, isGroupConversation}, {
+        const {data} = await apiClient.post(CONVERSATIONS_ENDPOINT, {recipient_id, isGroupConversation}, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
@@ -88,7 +89,7 @@ export const createGroupConversation = createAsyncThunk("conversation/group", as
     const {access_token, addedUsers, groupConversationName} = payloadData;
 
     try {
-        const {data} = await axios.post(`${CONVERSATIONS_ENDPOINT}/group`, {addedUsers, groupConversationName}, {
+        const {data} = await apiClient.post(`${CONVERSATIONS_ENDPOINT}/group`, {addedUsers, groupConversationName}, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
@@ -104,7 +105,7 @@ export const getAllConversationMessages = createAsyncThunk("messages/all", async
     const {access_token, conversation_id} = payloadData;
 
     try {
-        const {data} = await axios.get(`${MESSAGES_ENDPOINT}/${conversation_id}`, {
+        const {data} = await apiClient.get(`${MESSAGES_ENDPOINT}/${conversation_id}`, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
@@ -119,7 +120,7 @@ export const getAllConversationMessages = createAsyncThunk("messages/all", async
 export const sendMessage = createAsyncThunk("messages/send", async (payloadData, {rejectWithValue}) => {
     const {access_token, message, conversation_id, files} = payloadData;
     try {
-        const {data} = await axios.post(MESSAGES_ENDPOINT, {conversation_id, message, files}, {
+        const {data} = await apiClient.post(MESSAGES_ENDPOINT, {conversation_id, message, files}, {
             headers: {
                 Authorization: `Bearer ${access_token}`
             }
@@ -140,7 +141,9 @@ export const chatSlice = createSlice({
 
         updateMessagesAndConversation: (state, action) => {
 
-            //update messages
+            //update messages so that front end shows sent messages to the recipient user in real time
+
+            //only want the active conversation in which the recipient user receives the message to see the emitted message in real-time. No other conversations should be seeing this
             const convo = state.activeConversation;
             if(convo._id === action.payload.conversation._id){
                 state.messages = [...state.messages, action.payload];
@@ -307,8 +310,8 @@ export const chatSlice = createSlice({
             //create a new conversation object, spreading over the previous values of the conversation, and update the latest message field with the newest message. Use this to unshift into the new array
             const updatedConversation = {
                 ...conversationToUpdate,
-                latestMessage: newestMessage
-            }
+                latestMessage: newestMessage,
+            };
 
             const currentConvos = [...state.conversations];
             const updatedConvos = currentConvos.filter((conversation) => conversation._id !== updatedConversation._id);

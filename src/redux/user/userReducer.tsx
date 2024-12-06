@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import axios from "axios";
+import { apiClient } from "../store";
+
 const AUTH_ENDPOINT = `${import.meta.env.VITE_REACT_APP_WHATSAPP_API_ENDPOINT}/auth`;
 
 type User = {
@@ -44,7 +46,7 @@ export const registerUser = createAsyncThunk("auth/register", async (payloadData
     try {
         // const response = await axios.post(`${AUTH_ENDPOINT}/register`, payloadData);
         // console.log(response);
-        const {data} = await axios.post(`${AUTH_ENDPOINT}/register`, payloadData); // post request to the `register' backend endpoint with the payload from our frontend form
+        const {data} = await apiClient.post(`${AUTH_ENDPOINT}/register`, payloadData); // post request to the `register' backend endpoint with the payload from our frontend form
         return data; //response that our backend endpoint sends back upon successful completion of post request, which is a payload object containing our user data
     } catch(error) {
         return rejectWithValue(error.response.data.error.message);
@@ -55,7 +57,7 @@ export const loginUser = createAsyncThunk("auth/login", async (payloadData, {rej
     try {
         // const response = await axios.post(`${AUTH_ENDPOINT}/login`, payloadData);
         // console.log(response);
-        const {data} = await axios.post(`${AUTH_ENDPOINT}/login`, payloadData);
+        const {data} = await apiClient.post(`${AUTH_ENDPOINT}/login`, payloadData);
 
         return data;
 
@@ -69,7 +71,7 @@ export const logoutUser = createAsyncThunk("auth/logout", async (payloadData, {r
     try {
         const {access_token} = payloadData;
 
-        const {data} = await axios.post(`${AUTH_ENDPOINT}/logout`, {
+        const {data} = await apiClient.post(`${AUTH_ENDPOINT}/logout`, {
             headers: {
                 Authorization: `Bearer ${access_token}`,
             }
@@ -80,7 +82,18 @@ export const logoutUser = createAsyncThunk("auth/logout", async (payloadData, {r
     } catch(error){
         return rejectWithValue(error.response.data.error.message)
     }
-})
+});
+
+export const refreshAccessToken = createAsyncThunk("auth/refreshToken", async (_, {rejectWithValue}) => {
+    try {
+        const {data} = await apiClient.post(`${AUTH_ENDPOINT}/refreshToken`);
+
+        return data;
+
+    } catch(error){
+        return rejectWithValue(error.response.data.error.message);
+    }
+});
 
 export const userSlice = createSlice({
     name: "users",
@@ -144,6 +157,18 @@ export const userSlice = createSlice({
             };
         })
         .addCase(logoutUser.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.payload;
+        })
+        .addCase(refreshAccessToken.pending, (state, action) => {
+            state.status = "loading";
+            state.error = action.payload;
+        })
+        .addCase(refreshAccessToken.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.user = action.payload.user;
+        })
+        .addCase(refreshAccessToken.rejected, (state, action) => {
             state.status = "failed";
             state.error = action.payload;
         })
